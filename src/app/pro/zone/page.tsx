@@ -1,4 +1,4 @@
-import ZoneTable from "./component/zonetable";
+import ZoneTable from "./zonetable";
 
 const z = 2;
 

@@ -1,4 +1,4 @@
-import ProTable from "./component/protable";
+import ProTable from "./protable";
 
 export default async function Page() {
   return (

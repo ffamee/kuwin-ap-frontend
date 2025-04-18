@@ -34,11 +34,6 @@ export default async function ProTable() {
               <td>{row.c50}</td>
             </tr>
           ))}
-          <tr>
-            <td>
-              <Link href="pro/graph">รวม</Link>
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>

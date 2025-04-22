@@ -30,8 +30,9 @@ import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
-} from "./collapsible";
+} from "../ui/collapsible";
 import Link from "next/link";
+import NavZone from "./nav-zone";
 
 // This is sample data.
 const Pages = {
@@ -68,6 +69,78 @@ const Zones = {
 		},
 		{
 			title: "Zone 6",
+			url: "#",
+		},
+		{
+			title: "Zone 7",
+			url: "#",
+		},
+		{
+			title: "Zone 8",
+			url: "#",
+		},
+		{
+			title: "Zone 9",
+			url: "#",
+		},
+		{
+			title: "Zone 10",
+			url: "#",
+		},
+		{
+			title: "Zone 11",
+			url: "#",
+		},
+		{
+			title: "Zone 12",
+			url: "#",
+		},
+		{
+			title: "Zone 13",
+			url: "#",
+		},
+		{
+			title: "Zone 14",
+			url: "#",
+		},
+		{
+			title: "Zone 15",
+			url: "#",
+		},
+		{
+			title: "Zone 16",
+			url: "#",
+		},
+		{
+			title: "Zone 17",
+			url: "#",
+		},
+		{
+			title: "Zone 18",
+			url: "#",
+		},
+		{
+			title: "Zone 19",
+			url: "#",
+		},
+		{
+			title: "Zone 20",
+			url: "#",
+		},
+		{
+			title: "Zone 21",
+			url: "#",
+		},
+		{
+			title: "Zone 22",
+			url: "#",
+		},
+		{
+			title: "Zone 23",
+			url: "#",
+		},
+		{
+			title: "Zone 24",
 			url: "#",
 		},
 	],
@@ -117,26 +190,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
 	return (
 		<div>
-			{showNav && (
-				<div
-					className="left-10 top-28 absolute rounded-md bg-sidebar-accent text-sidebar-accent-foreground hover:block"
-					onMouseLeave={handleMouseLeave}
-					onMouseEnter={handleMouseEnter}
-				>
-					<ul className="flex flex-col p-2">
-						{Zones.items?.map((subItem) => (
-							<li
-								key={subItem.title}
-								className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md"
-							>
-								<Link href={subItem.url} className="block px-4 py-2">
-									{subItem.title}
-								</Link>
-							</li>
-						))}
-					</ul>
-				</div>
+			{!open && showNav && (
+				<NavZone hide={handleMouseLeave} show={handleMouseEnter} list={Zones} />
 			)}
+			{/* <NavZone hide={handleMouseLeave} show={handleMouseEnter} list={Zones} /> */}
 			<Sidebar collapsible="icon" {...props}>
 				<SidebarHeader className={open ? "p-0" : "py-2 px-1"}>
 					<SidebarMenu>
@@ -184,7 +241,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 										</SidebarMenuButton>
 									</CollapsibleTrigger>
 									<CollapsibleContent>
-										<SidebarMenuSub>
+										<SidebarMenuSub className="h-64 overflow-y-auto no-scrollbar">
 											{Zones.items?.map((subItem) => (
 												<SidebarMenuSubItem key={subItem.title}>
 													<SidebarMenuSubButton asChild>

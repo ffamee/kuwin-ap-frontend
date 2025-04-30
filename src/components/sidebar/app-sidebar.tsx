@@ -218,9 +218,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 						</SidebarGroupLabel>
 						<SidebarMenu>
 							<SidebarMenuItem key={Pages.title}>
-								<SidebarMenuButton tooltip={Pages.title}>
-									{Pages.icon && <Pages.icon />}
-									<span>{Pages.title}</span>
+								<SidebarMenuButton tooltip={Pages.title} asChild>
+									<Link href={Pages.url} className="flex items-center gap-2">
+										{Pages.icon && <Pages.icon />}
+										<span>{Pages.title}</span>
+									</Link>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 							<Collapsible
@@ -256,9 +258,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 								</SidebarMenuItem>
 							</Collapsible>
 							<SidebarMenuItem key={Graphs.title}>
-								<SidebarMenuButton tooltip={Graphs.title}>
-									{Graphs.icon && <Graphs.icon />}
-									<span>{Graphs.title}</span>
+								<SidebarMenuButton tooltip={Graphs.title} asChild>
+									<Link href={Graphs.url} className="flex items-center gap-2">
+										{Graphs.icon && <Graphs.icon />}
+										<span>{Graphs.title}</span>
+									</Link>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						</SidebarMenu>
@@ -271,9 +275,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							<SidebarMenu>
 								{Others.map((item) => (
 									<SidebarMenuItem key={item.title}>
-										<SidebarMenuButton tooltip={item.title}>
-											{item.icon && <item.icon />}
-											<span>{item.title}</span>
+										<SidebarMenuButton tooltip={item.title} asChild>
+											<Link href={item.url} className="flex items-center gap-2">
+												{item.icon && <item.icon />}
+												<span>{item.title}</span>
+											</Link>
 										</SidebarMenuButton>
 									</SidebarMenuItem>
 								))}

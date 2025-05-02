@@ -7,8 +7,8 @@ import {
 	BreadcrumbLink,
 	BreadcrumbList,
 	BreadcrumbPage,
-	BreadcrumbSeparator,
 } from "../ui/breadcrumb";
+import { ChevronRight } from "lucide-react";
 
 export default function DynamicBreadcrumbs() {
 	const pathname = usePathname();
@@ -23,15 +23,15 @@ export default function DynamicBreadcrumbs() {
 					if (segment === "pro") segment = "Home";
 					// else => format the segment to be more readable
 					return (
-						<BreadcrumbItem key={url}>
+						<BreadcrumbItem key={url} className="h-full">
 							{!isLastSegment ? (
-								<BreadcrumbLink href={url} asChild>
-									{segment}
-								</BreadcrumbLink>
+								<div className="flex space-x-1 items-center">
+									<BreadcrumbLink href={url}>{segment}</BreadcrumbLink>
+									<ChevronRight />
+								</div>
 							) : (
 								<BreadcrumbPage className="font-bold">{segment}</BreadcrumbPage>
 							)}
-							{!isLastSegment && <BreadcrumbSeparator />}
 						</BreadcrumbItem>
 					);
 				})}

@@ -33,117 +33,14 @@ import {
 } from "../ui/collapsible";
 import Link from "next/link";
 import NavZone from "./nav-zone";
+import { useLogout } from "@/hooks/use-logout";
+import { Zone } from "@/types/zone-type";
 
 // This is sample data.
 const Pages = {
 	title: "Home",
 	icon: House,
-	url: "#",
-};
-
-const Zones = {
-	title: "Zones",
-	url: "#",
-	icon: List,
-	isActive: true,
-	items: [
-		{
-			title: "Zone 1",
-			url: "#",
-		},
-		{
-			title: "Zone 2",
-			url: "#",
-		},
-		{
-			title: "Zone 3",
-			url: "#",
-		},
-		{
-			title: "Zone 4",
-			url: "#",
-		},
-		{
-			title: "Zone 5",
-			url: "#",
-		},
-		{
-			title: "Zone 6",
-			url: "#",
-		},
-		{
-			title: "Zone 7",
-			url: "#",
-		},
-		{
-			title: "Zone 8",
-			url: "#",
-		},
-		{
-			title: "Zone 9",
-			url: "#",
-		},
-		{
-			title: "Zone 10",
-			url: "#",
-		},
-		{
-			title: "Zone 11",
-			url: "#",
-		},
-		{
-			title: "Zone 12",
-			url: "#",
-		},
-		{
-			title: "Zone 13",
-			url: "#",
-		},
-		{
-			title: "Zone 14",
-			url: "#",
-		},
-		{
-			title: "Zone 15",
-			url: "#",
-		},
-		{
-			title: "Zone 16",
-			url: "#",
-		},
-		{
-			title: "Zone 17",
-			url: "#",
-		},
-		{
-			title: "Zone 18",
-			url: "#",
-		},
-		{
-			title: "Zone 19",
-			url: "#",
-		},
-		{
-			title: "Zone 20",
-			url: "#",
-		},
-		{
-			title: "Zone 21",
-			url: "#",
-		},
-		{
-			title: "Zone 22",
-			url: "#",
-		},
-		{
-			title: "Zone 23",
-			url: "#",
-		},
-		{
-			title: "Zone 24",
-			url: "#",
-		},
-	],
+	url: "/pro",
 };
 
 const Graphs = {
@@ -152,23 +49,41 @@ const Graphs = {
 	url: "#",
 };
 
-const Others = [
-	{
-		title: "Settings",
-		icon: Settings,
-		url: "#",
-	},
-	{
-		title: "Logout",
-		icon: LogOut,
-		url: "#",
-	},
-];
+const Setting = {
+	title: "Settings",
+	icon: Settings,
+	url: "#",
+};
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+const Logout = {
+	title: "Logout",
+	icon: LogOut,
+	url: "#",
+};
+
+export function AppSidebar({
+	zoneList,
+	token,
+	...props
+}: {
+	zoneList: Zone[];
+	token: string | undefined;
+	prop: React.ComponentProps<typeof Sidebar>;
+}) {
 	const { open } = useSidebar();
 	const [showNav, setShowNav] = React.useState<boolean>(false);
 	const hideTimeout = React.useRef<NodeJS.Timeout | null>(null);
+	const logout = useLogout();
+	const Zones = {
+		title: "Zones",
+		url: "#",
+		icon: List,
+		isActive: false,
+		items: zoneList.map((zone) => ({
+			...zone,
+			url: `/pro/${zone.id}`,
+		})), // Use the zoneList prop to create the items
+	};
 
 	const handleMouseEnter = () => {
 		if (hideTimeout.current) {
@@ -191,7 +106,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
 		<div>
 			{!open && showNav && (
-				<NavZone hide={handleMouseLeave} show={handleMouseEnter} list={Zones} />
+				<NavZone
+					hide={handleMouseLeave}
+					show={handleMouseEnter}
+					list={Zones.items}
+				/>
 			)}
 			{/* <NavZone hide={handleMouseLeave} show={handleMouseEnter} list={Zones} /> */}
 			<Sidebar collapsible="icon" {...props}>
@@ -243,12 +162,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 										</SidebarMenuButton>
 									</CollapsibleTrigger>
 									<CollapsibleContent>
-										<SidebarMenuSub className="h-64 overflow-y-auto no-scrollbar">
+										<SidebarMenuSub className="h-auto max-h-64 overflow-y-auto no-scrollbar">
 											{Zones.items?.map((subItem) => (
-												<SidebarMenuSubItem key={subItem.title}>
+												<SidebarMenuSubItem key={subItem.id}>
 													<SidebarMenuSubButton asChild>
 														<Link href={subItem.url}>
-															<span>{subItem.title}</span>
+															<span>{subItem.area}</span>
 														</Link>
 													</SidebarMenuSubButton>
 												</SidebarMenuSubItem>
@@ -273,16 +192,29 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 						</SidebarGroupLabel>
 						<SidebarGroupContent>
 							<SidebarMenu>
-								{Others.map((item) => (
-									<SidebarMenuItem key={item.title}>
-										<SidebarMenuButton tooltip={item.title} asChild>
-											<Link href={item.url} className="flex items-center gap-2">
-												{item.icon && <item.icon />}
-												<span>{item.title}</span>
-											</Link>
-										</SidebarMenuButton>
-									</SidebarMenuItem>
-								))}
+								<SidebarMenuItem key={Setting.title}>
+									<SidebarMenuButton tooltip={Setting.title} asChild>
+										<Link
+											href={Setting.url}
+											className="flex items-center gap-2"
+										>
+											{Setting.icon && <Setting.icon />}
+											<span>{Setting.title}</span>
+										</Link>
+									</SidebarMenuButton>
+								</SidebarMenuItem>
+								<SidebarMenuItem key={Logout.title}>
+									<SidebarMenuButton tooltip={Logout.title} asChild>
+										<button
+											className="flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-100 cursor-pointer"
+											onClick={logout}
+											disabled={!token}
+										>
+											{Logout.icon && <Logout.icon />}
+											<span>{Logout.title}</span>
+										</button>
+									</SidebarMenuButton>
+								</SidebarMenuItem>
 							</SidebarMenu>
 						</SidebarGroupContent>
 					</SidebarGroup>

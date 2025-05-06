@@ -73,7 +73,7 @@ export default async function ProLayout({
 							<User />
 						</Link>
 					</header>
-					<Separator className="mb-4" />
+					<Separator className="bg-none" />
 					<SidebarInset className="w-full h-full transition-[width,height] ease-linear overflow-auto no-scrollbar">
 						{children}
 					</SidebarInset>

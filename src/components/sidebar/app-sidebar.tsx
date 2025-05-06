@@ -9,6 +9,7 @@ import {
 	Settings,
 	LogOut,
 	Hexagon,
+	ClipboardList,
 } from "lucide-react";
 
 import {
@@ -47,6 +48,12 @@ const Graphs = {
 	title: "Graphs",
 	icon: ChartArea,
 	url: "#",
+};
+
+const Report = {
+	title: "Report",
+	icon: ClipboardList,
+	url: "/pro/report",
 };
 
 const Setting = {
@@ -90,7 +97,7 @@ export function AppSidebar({
 			clearTimeout(hideTimeout.current); // Clear timeout if mouse re-enters
 		}
 		hideTimeout.current = setTimeout(() => {
-			setShowNav(true); // Hide navigation after delay
+			setShowNav(true); // Open navigation after delay
 		}, 200); // Delay in milliseconds
 	};
 
@@ -181,6 +188,14 @@ export function AppSidebar({
 									<Link href={Graphs.url} className="flex items-center gap-2">
 										{Graphs.icon && <Graphs.icon />}
 										<span>{Graphs.title}</span>
+									</Link>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
+							<SidebarMenuItem key={Report.title}>
+								<SidebarMenuButton tooltip={Report.title} asChild>
+									<Link href={Report.url} className="flex items-center gap-2">
+										{Report.icon && <Report.icon />}
+										<span>{Report.title}</span>
 									</Link>
 								</SidebarMenuButton>
 							</SidebarMenuItem>

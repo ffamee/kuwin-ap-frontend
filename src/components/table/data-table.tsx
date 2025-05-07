@@ -147,7 +147,7 @@ export function DataTable<T extends object>({
               ?.setFilterValue(event.target.value)
           }
           className="w-full"
-        /> */}
+        /> 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="ml-auto h-8 flex">
@@ -211,7 +211,7 @@ export function DataTable<T extends object>({
               );
             })}
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu>*/}
         <DataTableViewOptions table={table} />
       </div>
       {Object.keys(rowSelection).length > 0 && (

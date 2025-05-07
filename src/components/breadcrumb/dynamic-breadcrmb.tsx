@@ -15,12 +15,11 @@ export default function DynamicBreadcrumbs() {
   const pathSegments = pathname.split("/").filter((segment) => segment !== "");
 
   return (
-    <Breadcrumb className="h-full">
-      <BreadcrumbList className="items-center flex">
+    <Breadcrumb>
+      <BreadcrumbList>
         {pathSegments.map((segment, index) => {
           const isLastSegment = index === pathSegments.length - 1;
           const url = `/${pathSegments.slice(0, index + 1).join("/")}`;
-          console.log(segment);
           if (segment === "pro") segment = "Home";
           // else => format the segment to be more readable
           return (

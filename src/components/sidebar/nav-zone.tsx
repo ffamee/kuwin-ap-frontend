@@ -1,6 +1,10 @@
 // import Link from "next/link";
 import React from "react";
 import { Separator } from "../ui/separator";
+import { Zone } from "@/types/zone-type";
+import Link from "next/link";
+
+type List = Zone & { url: string };
 
 type NavZoneProps = {
   show: () => void;
@@ -17,19 +21,19 @@ type NavZoneProps = {
   // 		url: string;
   // 	}[];
   // };
-  list: any;
+  list: List[];
 };
 
 export default function NavZone(props: NavZoneProps) {
-  const [paginatedItems, setPaginatedItems] = React.useState<
-    { title: string; url: string }[]
-  >(props.list?.items ? props.list.items : []); // Items to display on the current page
+  const [paginatedItems, setPaginatedItems] = React.useState<List[]>(
+    props.list ?? []
+  ); // Items to display on the current page
 
   // write function for search input to filter the items in the list
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toLowerCase();
-    const filteredItems = props.list?.items?.filter((item: { title: string }) =>
-      item.title.toLowerCase().includes(value)
+    const filteredItems = props.list.filter((item: List) =>
+      item.area.toLowerCase().includes(value)
     );
     setPaginatedItems(filteredItems);
   };
@@ -48,14 +52,14 @@ export default function NavZone(props: NavZoneProps) {
       />
       <Separator className="my-1 bg-slate-300" />
       <div className="overflow-y-auto no-scrollbar">
-        {paginatedItems.map((item: { title: string; url: string }) => (
+        {paginatedItems.map((item: List) => (
           <div
-            key={item.title}
+            key={item.id}
             className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md w-full mb-1"
           >
-            <p className="truncate pl-2" title={item.title}>
-              {item.title}: aaaaaaaaaaaaaaaaaaaaaaaaaaaa
-            </p>
+            <Link href={item.url} className="truncate pl-2" title={item.area}>
+              {item.area}
+            </Link>
             <Separator className="my-1" />
           </div>
         ))}

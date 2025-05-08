@@ -52,12 +52,15 @@ const ReportSelect = (props: selectProps) => {
 					open={open}
 					onOpenChange={handleOpen}
 				>
-					<SelectTrigger className="w-[calc(100vw-100px)] min-w-full text-md shadow border rounded py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline truncate">
+					<SelectTrigger
+						className="w-[calc(100vw-300px)] min-w-full text-md shadow border rounded py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline truncate"
+						id={props.type}
+					>
 						<SelectValue placeholder={`Select ${props.type}`} />
 					</SelectTrigger>
 					{/*make content of select items not going out of Select tabs size*/}
-					<SelectContent>
-						<SelectGroup className="w-[calc(100vw-100px)] min-w-full">
+					<SelectContent className="">
+						<SelectGroup className="w-[calc(100vw-300px)] min-w-full truncate">
 							<SelectLabel>{props.type}</SelectLabel>
 							{/* map zoneList to SelectItem */}
 							{props.items.map((item) => (
@@ -65,8 +68,9 @@ const ReportSelect = (props: selectProps) => {
 									key={item.id}
 									value={item.id.toString()}
 									title={item.area}
+									className=""
 								>
-									<div className="truncate">{item.area}</div>
+									<div className="w-full truncate">{item.area}</div>
 								</SelectItem>
 							))}
 						</SelectGroup>

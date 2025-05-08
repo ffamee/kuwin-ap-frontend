@@ -8,7 +8,6 @@ export default function Page() {
 	const router = useRouter();
 	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 		// after login complete, redirect to /pro
-
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
 		const username = formData.get("username");
@@ -55,6 +54,7 @@ export default function Page() {
 					placeholder="Username"
 					name="username"
 					className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					autoComplete="username"
 				/>
 				<input
 					type="password"

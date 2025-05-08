@@ -20,5 +20,5 @@ export default async function Page() {
 	const zoneList: Zone[] = await fetchData();
 	console.log("Report zone list: ", zoneList);
 
-	return <ReportForm zoneList={zoneList} />;
+	return <ReportForm zones={zoneList} />;
 }

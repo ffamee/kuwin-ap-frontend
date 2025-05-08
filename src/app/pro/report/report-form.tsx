@@ -49,7 +49,7 @@ const AccessPoints = [
 	},
 ];
 
-const ReportForm = ({ zoneList }: { zoneList: Zone[] }) => {
+const ReportForm = ({ zones }: { zones: Zone[] }) => {
 	const [selectedZone, setSelectedZone] = React.useState<string>("");
 	const [selectedFaculty, setSelectedFaculty] = React.useState<string>("");
 	const [selectedBuilding, setSelectedBuilding] = React.useState<string>("");
@@ -109,7 +109,7 @@ const ReportForm = ({ zoneList }: { zoneList: Zone[] }) => {
 				{/* with tabs for select zone, faculty, building*/}
 				<ReportSelect
 					type="Zone"
-					items={zoneList}
+					items={zones}
 					value={selectedZone}
 					set={setSelectedZone}
 				/>

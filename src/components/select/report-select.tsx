@@ -35,6 +35,12 @@ const ReportSelect = (props: selectProps) => {
 		}
 	};
 
+	React.useEffect(() => {
+		if (!props.disabled) {
+			setFocus(false);
+		}
+	}, [props.disabled]);
+
 	return (
 		<div className="mb-4 w-full max-w-full">
 			<label
@@ -43,8 +49,10 @@ const ReportSelect = (props: selectProps) => {
 			>
 				{props.type}
 			</label>
+			<input type="hidden" name={props.type} value={props.value ?? ""} />
 			<div className="w-full">
 				<Select
+					// name={props.type}
 					value={props.value}
 					onValueChange={(value) => {
 						props.set(value);

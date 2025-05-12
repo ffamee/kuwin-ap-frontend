@@ -1,10 +1,10 @@
 "use client";
 
 import { Zone } from "@/types/zone-type";
-import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import ReportSelect from "@/components/select/report-select";
+import { ReportAction } from "./report-action";
 
 const Faculties = [
 	{
@@ -49,63 +49,77 @@ const AccessPoints = [
 	},
 ];
 
-const ReportForm = ({ zones }: { zones: Zone[] }) => {
-	const [selectedZone, setSelectedZone] = React.useState<string>("");
-	const [selectedFaculty, setSelectedFaculty] = React.useState<string>("");
-	const [selectedBuilding, setSelectedBuilding] = React.useState<string>("");
-	const [selectedAccessPoint, setSelectedAccessPoint] =
-		React.useState<string>("");
-	// const [reportDetail, setReportDetail] = React.useState<string>("");
-	const [error, setError] = React.useState<string | null>(null);
-	const router = useRouter();
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		if (
-			selectedZone === "" ||
-			selectedFaculty === "" ||
-			selectedBuilding === "" ||
-			selectedAccessPoint === ""
-		) {
-			setError(
-				"All fields are required. Please make a selection for each field."
-			);
-			return;
-		}
-		console.log("Form submitted");
-		console.log("Selected Zone: ", selectedZone);
-		console.log("Selected Faculty: ", selectedFaculty);
-		console.log("Selected Building: ", selectedBuilding);
-		console.log("Selected Access Point: ", selectedAccessPoint);
-		router.push("/pro");
+const ReportForm = ({
+	zones,
+	prefilled,
+}: {
+	zones: Zone[];
+	prefilled: {
+		zone?: string;
+		faculty?: string;
+		building?: string;
+		accessPoint?: string;
 	};
+}) => {
+	const initialState = React.useRef(true);
+	const [selectedZone, setSelectedZone] = React.useState<string>(
+		prefilled.zone ?? ""
+	);
+	const [selectedFaculty, setSelectedFaculty] = React.useState<string>(
+		prefilled.faculty ?? ""
+	);
+	const [selectedBuilding, setSelectedBuilding] = React.useState<string>(
+		prefilled.building ?? ""
+	);
+	const [selectedAccessPoint, setSelectedAccessPoint] = React.useState<string>(
+		prefilled.accessPoint ?? ""
+	);
+	// const [reportDetail, setReportDetail] = React.useState<string>("");
+
+	const [error, formAction, isPending] = React.useActionState(
+		ReportAction,
+		null
+	);
 
 	React.useEffect(() => {
-		console.log("Selected Zone: ", selectedZone);
-		setSelectedFaculty("");
-		setSelectedBuilding("");
-		setSelectedAccessPoint("");
+		if (!initialState.current) {
+			console.log("Selected Zone: ", selectedZone);
+			setSelectedFaculty("");
+			setSelectedBuilding("");
+			setSelectedAccessPoint("");
+		}
 	}, [selectedZone]);
 
 	React.useEffect(() => {
-		console.log("Selected Faculty: ", selectedFaculty);
-		setSelectedBuilding("");
-		setSelectedAccessPoint("");
+		if (!initialState.current) {
+			console.log("Selected Faculty: ", selectedFaculty);
+			setSelectedBuilding("");
+			setSelectedAccessPoint("");
+		}
 	}, [selectedFaculty]);
 
 	React.useEffect(() => {
-		console.log("Selected Building: ", selectedBuilding);
-		setSelectedAccessPoint("");
+		if (!initialState.current) {
+			console.log("Selected Building: ", selectedBuilding);
+			setSelectedAccessPoint("");
+		}
 	}, [selectedBuilding]);
 
 	React.useEffect(() => {
-		console.log("Selected Access Point: ", selectedAccessPoint);
+		if (!initialState.current) {
+			console.log("Selected Access Point: ", selectedAccessPoint);
+		}
 	}, [selectedAccessPoint]);
+
+	React.useEffect(() => {
+		initialState.current = false;
+	}, []);
 
 	return (
 		<div className="flex flex-col items-start justify-start mt-4 px-4 h-auto w-full overflow-y-auto no-scrollbar">
 			<h1 className="text-4xl font-bold mb-4">Report Page</h1>
 			{/* Add your report form here */}
-			<form className="w-full" onSubmit={handleSubmit}>
+			<form className="w-full" action={formAction}>
 				{/* with tabs for select zone, faculty, building*/}
 				<ReportSelect
 					type="Zone"
@@ -149,13 +163,14 @@ const ReportForm = ({ zones }: { zones: Zone[] }) => {
 						placeholder="Enter report details..."
 					></textarea>
 				</div>
-				{error && <div className="text-red-500 text-sm mb-4">*{error}</div>}
-				{/* submit button and send to /pro after press*/}
-				{/* make the button full width */}
+				{error && !selectedAccessPoint && (
+					<div className="text-red-500 text-sm mb-4">*{error}</div>
+				)}
 				<div className="flex justify-center w-full h-auto mb-20">
 					<button
 						type="submit"
-						className="bg-card-foreground/90 hover:bg-card-foreground text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+						className="bg-card-foreground/90 hover:bg-card-foreground text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50"
+						disabled={isPending}
 					>
 						Submit Report
 					</button>

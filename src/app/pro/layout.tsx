@@ -45,6 +45,7 @@ export default async function ProLayout({
 		let zoneList: Zone[] = [];
 		const res = await fetch("http://localhost:3001/zones", {
 			credentials: "include",
+			next: { revalidate: 900 },
 		});
 		if (!res.ok) {
 			throw new Error("Failed to fetch zones.");

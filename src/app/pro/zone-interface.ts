@@ -1,5 +1,5 @@
 interface ZoneData {
-  zone: string;
+  fac_name: string;
   all: number;
   maintain: number;
   down: number;

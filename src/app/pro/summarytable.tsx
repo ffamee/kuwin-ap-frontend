@@ -1,7 +1,6 @@
 import { ZoneData } from "./zone-interface";
 
 export default function SummaryTable({ total }: { total: ZoneData }) {
-  console.log(total);
   return (
     <div className="flex justify-evenly w-full">
       <div className="bg-white w-1/6 h-[161] border rounded-xs">

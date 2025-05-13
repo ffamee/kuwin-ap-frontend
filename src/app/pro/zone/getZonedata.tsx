@@ -1,7 +1,7 @@
 export default async function GetZoneData() {
   // return /api/zone
   const response = await fetch(
-    "https://67f4bef5cbef97f40d2f310d.mockapi.io/api/faculty"
+    "https://67f4bef5cbef97f40d2f310d.mockapi.io/api/apData"
   );
   if (response.ok) {
     const data = await response.json();

@@ -4,7 +4,7 @@ import GetZoneData from "../zone/getZonedata";
 import { Apcount } from "../zone/building/apcount";
 
 const headTable = [
-  { accessorKey: "location", header: "Faculty/Organization" },
+  { accessorKey: "location", header: "Faculty" },
   { accessorKey: "all", header: "# AP (overall)" },
   { accessorKey: "maintain", header: "# AP (maintain)" },
   { accessorKey: "down", header: "# AP (down)" },
@@ -16,9 +16,9 @@ const headTable = [
 export default async function Page({
   params,
 }: {
-  params: Promise<{ zone: string }>;
+  params: Promise<{ section: string }>;
 }) {
-  const { zone } = await params;
+  const { section } = await params;
   const zoneData: ApData[] = await GetZoneData();
   const apSum = await Apcount();
   zoneData.forEach((element) => {
@@ -29,7 +29,7 @@ export default async function Page({
   return (
     <div className="bg-[#FFFEEA] font-sans">
       <h1 className="text-left font-bold m-4 text-[48px] italic">
-        Zone ที่ {zone} ในมหาวิทยาลัยเกษตรศาสตร์
+        Zone ที่ {section} ในมหาวิทยาลัยเกษตรศาสตร์
       </h1>
       {<DataTable column={headTable} data={zoneData} />}
     </div>

@@ -13,6 +13,7 @@ import Link from "next/link";
 import getToken from "@/lib/token";
 import { User as UserData } from "@/types/user-type";
 import { Zone } from "@/types/zone-type";
+import SearchButton from "@/components/sidebar/search-button";
 
 export default async function ProLayout({
   children,
@@ -44,6 +45,7 @@ export default async function ProLayout({
     let zoneList: Zone[] = [];
     const res = await fetch("http://localhost:3001/zones", {
       credentials: "include",
+      next: { revalidate: 900 },
     });
     if (!res.ok) {
       throw new Error("Failed to fetch zones.");
@@ -65,15 +67,18 @@ export default async function ProLayout({
               />
               <DynamicBreadcrumbs />
             </div>
-            <Link
-              href="/login"
-              className="mx-2 flex items-center h-auto gap-2 p-2 border border-accent rounded-md hover:border-accent-foreground hover:bg-accent transition-colors duration-200 ease-in-out"
-            >
-              <p className="text-foreground">{user.username}</p>
-              <User />
-            </Link>
+            <div className="flex items-center h-auto">
+              <SearchButton zoneList={zoneList} />
+              <Link
+                href="/login"
+                className="mx-2 flex items-center h-auto gap-2 p-2 border border-accent rounded-md hover:border-accent-foreground hover:bg-accent transition-colors duration-200 ease-in-out"
+              >
+                <p className="text-foreground">{user.username}</p>
+                <User />
+              </Link>
+            </div>
           </header>
-          <Separator className="mb-4" />
+          <Separator className="bg-none" />
           <SidebarInset className="w-full h-full transition-[width,height] ease-linear overflow-auto no-scrollbar">
             {children}
           </SidebarInset>

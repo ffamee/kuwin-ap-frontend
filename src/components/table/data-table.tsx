@@ -28,12 +28,12 @@ import { Button } from "@/components/ui/button";
 
 import { CircleX } from "lucide-react";
 
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+// import {
+//   DropdownMenu,
+//   DropdownMenuCheckboxItem,
+//   DropdownMenuContent,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableViewOptions } from "./data-table-viewoption";
 
@@ -53,6 +53,7 @@ interface TableColumn {
   ceil?: string;
   enableSorting?: boolean;
   enableFiltering?: boolean;
+  navRoute?: string;
 }
 
 interface DataTableProps<T extends object> {
@@ -128,7 +129,6 @@ export function DataTable<T extends object>({
 
   React.useEffect(() => {
     // fetch
-    console.log("Row Selection", rowSelection);
   }, [rowSelection]);
 
   return (

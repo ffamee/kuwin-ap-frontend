@@ -5,54 +5,55 @@ import { ZoneData } from "./zone-interface";
 import { DataTable } from "@/components/table/data-table";
 //import GetData from "./getdata";
 import SummaryTable from "./summarytable";
+import GetZoneData from "./zone/getZonedata";
 
 // mocking data
-const zone = [
-  {
-    building: "building 1",
-    fac: "engineer",
-    all: 45,
-    maintain: 3,
-    down: 10,
-    c24: 20,
-    c50: 21,
-    wlc: 15,
-  },
-  {
-    building: "building 2",
-    fac: "engineer",
-    all: 50,
-    maintain: 5,
-    down: 1,
-    c24: 30,
-    c50: 22,
-    wlc: 17,
-  },
-  {
-    building: "building 3",
-    fac: "agro",
-    all: 30,
-    maintain: 2,
-    down: 2,
-    c24: 24,
-    c50: 3,
-    wlc: 10,
-  },
-  {
-    building: "building 4",
-    fac: "science",
-    all: 42,
-    maintain: 13,
-    down: 11,
-    c24: 30,
-    c50: 12,
-    wlc: 8,
-  },
-];
+// const zone = [
+//   {
+//     building: "building 1",
+//     fac: "engineer",
+//     all: 45,
+//     maintain: 3,
+//     down: 10,
+//     c24: 20,
+//     c50: 21,
+//     wlc: 15,
+//   },
+//   {
+//     building: "building 2",
+//     fac: "engineer",
+//     all: 50,
+//     maintain: 5,
+//     down: 1,
+//     c24: 30,
+//     c50: 22,
+//     wlc: 17,
+//   },
+//   {
+//     building: "building 3",
+//     fac: "agro",
+//     all: 30,
+//     maintain: 2,
+//     down: 2,
+//     c24: 24,
+//     c50: 3,
+//     wlc: 10,
+//   },
+//   {
+//     building: "building 4",
+//     fac: "science",
+//     all: 42,
+//     maintain: 13,
+//     down: 11,
+//     c24: 30,
+//     c50: 12,
+//     wlc: 8,
+//   },
+// ];
 
 const headTable = [
+  { accessorKey: "fac_name", header: "Faculty" },
   { accessorKey: "building", header: "Building" },
-  { accessorKey: "fac", header: "Faculty" },
   { accessorKey: "all", header: "# AP (overall)" },
   { accessorKey: "maintain", header: "# AP (maintain)" },
   { accessorKey: "down", header: "# AP (down)" },
@@ -64,9 +65,9 @@ const headTable = [
 const date: Date = new Date();
 
 export default async function Page() {
-  //const zone: ZoneData[] = await GetData();
+  const zone: ZoneData[] = await GetZoneData();
   const Total: ZoneData = {
-    zone: "",
+    fac_name: "",
     all: 0,
     maintain: 0,
     down: 0,

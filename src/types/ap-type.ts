@@ -1,4 +1,4 @@
-interface apDetail {
+type AccessPoint = {
   ipAddress: string;
   apName: string;
   wlc: string;
@@ -16,6 +16,6 @@ interface apDetail {
   txRate: number;
   iqd: number;
   oqd: number;
-}
+};
 
-export type { apDetail };
+export type { AccessPoint };

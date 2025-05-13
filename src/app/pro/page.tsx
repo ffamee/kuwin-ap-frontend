@@ -5,7 +5,18 @@ import { ZoneData } from "./zone-interface";
 import { DataTable } from "@/components/table/data-table";
 //import GetData from "./getdata";
 import SummaryTable from "./summarytable";
-import GetZoneData from "./zone/getZonedata";
+import { notFound } from "next/navigation";
+
+const getZoneData = async () => {
+  const res = await fetch(
+    "https://67f4bef5cbef97f40d2f310d.mockapi.io/api/apData"
+  );
+  if (!res.ok) {
+    console.log("Fetch Data error");
+    return notFound();
+  }
+  return await res.json();
+};
 
 // mocking data
 // const zone = [
@@ -65,7 +76,7 @@ const headTable = [
 const date: Date = new Date();
 
 export default async function Page() {
-  const zone: ZoneData[] = await GetZoneData();
+  const zone: ZoneData[] = await getZoneData();
   const Total: ZoneData = {
     fac_name: "",
     all: 0,

@@ -1,7 +1,43 @@
 import { DataTable } from "@/components/table/data-table";
-import { ApData } from "../zone/faculty-interface";
-import GetZoneData from "../zone/getZonedata";
-import { Apcount } from "../zone/building/apcount";
+import { notFound } from "next/navigation";
+
+type ApData = {
+  status: boolean;
+  location: string;
+  building: string;
+  all: number;
+  maintain: number;
+  down: number;
+  c24: number;
+  c50: number;
+  cmax: number;
+  wlc: number;
+};
+
+const getZoneData = async () => {
+  const res = await fetch(
+    "https://67f4bef5cbef97f40d2f310d.mockapi.io/api/apData"
+  );
+  if (!res.ok) {
+    console.log("Fetch Data error");
+    return notFound();
+  }
+  return await res.json();
+};
+
+async function Apcount() {
+  const ap: ApData[] = await getZoneData();
+  let maintain: number = 0;
+  let down: number = 0;
+  ap.forEach((overap) => {
+    if (overap.status == true) {
+      maintain += 1;
+    } else {
+      down += 1;
+    }
+  });
+  return { maintain, down };
+}
 
 const headTable = [
   { accessorKey: "location", header: "Faculty" },
@@ -19,7 +55,7 @@ export default async function Page({
   params: Promise<{ section: string }>;
 }) {
   const { section } = await params;
-  const zoneData: ApData[] = await GetZoneData();
+  const zoneData: ApData[] = await getZoneData();
   const apSum = await Apcount();
   zoneData.forEach((element) => {
     element.maintain = apSum.maintain;

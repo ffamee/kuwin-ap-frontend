@@ -4,21 +4,21 @@ import * as React from "react";
 import { Button } from "../ui/button";
 import { Search } from "lucide-react";
 import NavZone from "./nav-zone";
-import { Zone } from "@/types/zone-type";
+import { Entity } from "@/types/entity-type";
 
-export default function SearchButton({ zoneList }: { zoneList: Zone[] }) {
+export default function SearchButton({ lists }: { lists: Entity[][] }) {
 	const [showSearch, setShowSearch] = React.useState<boolean>(false);
 
 	const handleSearchClick = () => {
 		setShowSearch((prev) => !prev);
 	};
 
-	const items = zoneList.map((item) => {
-		return {
-			...item,
-			url: `/pro/${item.id}`,
-		};
-	});
+	// const items = lists.map((list) => {
+	// 	return {
+	// 		...item,
+	// 		url: `/pro/${item.id}`,
+	// 	};
+	// });
 
 	return (
 		<div>
@@ -31,7 +31,7 @@ export default function SearchButton({ zoneList }: { zoneList: Zone[] }) {
 			>
 				<Search className="size-5" />
 			</Button>
-			{showSearch && <NavZone list={items} close={setShowSearch} />}
+			{showSearch && <NavZone lists={lists} close={setShowSearch} />}
 		</div>
 	);
 }

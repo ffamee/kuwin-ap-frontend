@@ -18,13 +18,18 @@ export default function SectionPage({
   data: ApData[];
 }) {
   const headerName: string = section;
+  const entity = data.map((e) => ({
+    ...e,
+    name: { url: section + "/" + e.id, name: e.name },
+  }));
+  // console.log(entity);
   return (
     <div className="bg-[#FFFEEA] font-sans w-full p-4 h-auto overflow-y-auto no-scrollbar">
       <h1 className="text-left font-bold m-4 text-[48px] italic">
         {headerName} ในมหาวิทยาลัยเกษตรศาสตร์
       </h1>
       <div className="w-full">
-        <DataTable column={columns} data={data} />
+        <DataTable column={columns} data={entity} />
       </div>
     </div>
   );

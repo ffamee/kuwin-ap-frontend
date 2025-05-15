@@ -2,16 +2,17 @@ import { notFound } from "next/navigation";
 import SectionPage from "./section-page";
 
 export type ApData = {
-  status: boolean;
-  location: string;
-  building: string;
-  all: number;
+  id: number;
+  name: string;
+  numAp: number;
+  numCl: number;
+
   maintain: number;
   down: number;
-  c24: number;
-  c50: number;
+  status: boolean;
   cmax: number;
   wlc: number;
+  building: string;
 };
 
 // const getZoneData = async () => {
@@ -79,5 +80,5 @@ export default async function Page({
   });
   console.log("Entities: ", entities);
   // return <SectionPage section={section} data={entities} />;
-  return <SectionPage section={section} data={entities} />; // Pass the zoneData to SectionPage
+  return <SectionPage section={section} data={entities} />; // Pass the entities to SectionPage
 }

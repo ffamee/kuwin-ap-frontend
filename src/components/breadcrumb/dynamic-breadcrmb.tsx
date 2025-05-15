@@ -31,7 +31,7 @@ export default function DynamicBreadcrumbs() {
 										{segment}
 									</BreadcrumbLink>
 								) : (
-									<BreadcrumbPage className="font-bold">
+									<BreadcrumbPage className="font-bold capitalize">
 										{segment}
 									</BreadcrumbPage>
 								)}

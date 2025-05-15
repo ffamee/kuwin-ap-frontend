@@ -12,7 +12,6 @@ import Link from "next/link";
 import getToken from "@/lib/token";
 import { User as UserData } from "@/types/user-type";
 import SearchButton from "@/components/sidebar/search-button";
-import { Entity } from "@/types/entity-type";
 
 export default async function SectionLayout({
 	children,
@@ -41,7 +40,7 @@ export default async function SectionLayout({
 		} else {
 			console.log("No token found.");
 		}
-		const entities: Entity[][] = await fetch("http://localhost:3001/entities", {
+		const entities = await fetch("http://localhost:3001/entities", {
 			credentials: "include",
 			next: { revalidate: 900 },
 		}).then((res) => {

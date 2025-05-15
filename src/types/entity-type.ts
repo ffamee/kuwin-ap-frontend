@@ -15,7 +15,7 @@ type Entity = {
 	// style: string;
 	// pic: string;
 	// secId: number;
-	section: Section;
+	section?: Section;
 };
 
 export type { Entity };

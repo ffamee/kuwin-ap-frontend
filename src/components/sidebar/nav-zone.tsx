@@ -9,19 +9,19 @@ import { Entity } from "@/types/entity-type";
 // type List = Zone & { url: string };
 
 type NavZoneProps = {
-	lists: Entity[][];
+	lists: { faculty: Entity[]; organization: Entity[]; dormitory: Entity[] };
 	close: (b: boolean) => void;
 };
 
 export default function NavZone(props: NavZoneProps) {
 	const [faculties, setFaculties] = React.useState<Entity[]>(
-		props.lists[0] ?? []
+		props.lists.faculty ?? []
 	);
 	const [organizations, setOrganizations] = React.useState<Entity[]>(
-		props.lists[1] ?? []
+		props.lists.organization ?? []
 	);
 	const [dormitories, setDormitories] = React.useState<Entity[]>(
-		props.lists[2] ?? []
+		props.lists.dormitory ?? []
 	);
 	const { state } = useSidebar();
 
@@ -31,20 +31,20 @@ export default function NavZone(props: NavZoneProps) {
 		const [filteredFaculties, filteredOrganizations, filteredDormitories] =
 			await Promise.all([
 				new Promise<Entity[]>((resolve) => {
-					const filteredFaculties = props.lists[0].filter((item: Entity) =>
+					const filteredFaculties = props.lists.faculty.filter((item: Entity) =>
 						item.name.toLowerCase().includes(value)
 					);
 					resolve(filteredFaculties);
 				}),
 				new Promise<Entity[]>((resolve) => {
-					const filteredOrganizations = props.lists[1].filter((item: Entity) =>
-						item.name.toLowerCase().includes(value)
+					const filteredOrganizations = props.lists.organization.filter(
+						(item: Entity) => item.name.toLowerCase().includes(value)
 					);
 					resolve(filteredOrganizations);
 				}),
 				new Promise<Entity[]>((resolve) => {
-					const filteredDormitories = props.lists[2].filter((item: Entity) =>
-						item.name.toLowerCase().includes(value)
+					const filteredDormitories = props.lists.dormitory.filter(
+						(item: Entity) => item.name.toLowerCase().includes(value)
 					);
 					resolve(filteredDormitories);
 				}),
@@ -123,7 +123,7 @@ export default function NavZone(props: NavZoneProps) {
 							<div className="overflow-y-auto no-scrollbar flex flex-col p-2">
 								{faculties.map((item: Entity) => (
 									<Link
-										href={`/${item.section.secType}/${item.id}`}
+										href={`/faculty/${item.id}`}
 										className="rounded-md hover:bg-slate-100 truncate py-2 pl-2"
 										title={item.name}
 										key={item.id}
@@ -143,7 +143,7 @@ export default function NavZone(props: NavZoneProps) {
 							<div className="overflow-y-auto no-scrollbar flex flex-col p-2">
 								{organizations.map((item: Entity) => (
 									<Link
-										href={`/${item.section.secType}/${item.id}`}
+										href={`/organization/${item.id}`}
 										className="rounded-md hover:bg-slate-100 truncate py-2 pl-2"
 										title={item.name}
 										key={item.id}
@@ -163,7 +163,7 @@ export default function NavZone(props: NavZoneProps) {
 							<div className="overflow-y-auto no-scrollbar flex flex-col p-2">
 								{dormitories.map((item: Entity) => (
 									<Link
-										href={`/${item.section.secType}/${item.id}`}
+										href={`/dormitory/${item.id}`}
 										className="rounded-md hover:bg-slate-100 truncate py-2 pl-2"
 										title={item.name}
 										key={item.id}

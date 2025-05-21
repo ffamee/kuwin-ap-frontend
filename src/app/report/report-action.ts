@@ -1,5 +1,6 @@
 "use server";
 
+// import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function ReportAction(
@@ -27,5 +28,6 @@ export async function ReportAction(
 	console.log("Selected Entity: ", selectedEntity);
 	console.log("Selected Building: ", selectedBuilding);
 	console.log("Selected Access Point: ", selectedAccessPoint);
+	// revalidatePath("/report");
 	redirect("/");
 }

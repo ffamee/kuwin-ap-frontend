@@ -1,5 +1,9 @@
 import { Section } from "./section-type";
-import { Building, BuildingAccessPointName } from "./building-type";
+import {
+	Building,
+	BuildingAccessPointName,
+	BuildingName,
+} from "./building-type";
 
 // 1. Pick เอาเฉพาะ id กับ name
 // type BuildingSummary = Pick<Building, "id" | "name">;
@@ -35,6 +39,10 @@ type EntityFull = Entity & {
 	buildings?: Building[];
 };
 
+type EntityBuildingName = Entity & {
+	buildings: BuildingName[];
+};
+
 type EntityAccessPointName = EntityName & {
 	buildings: BuildingAccessPointName[];
 };
@@ -43,6 +51,7 @@ export type {
 	Entity,
 	EntityName,
 	EntityWithBuildings,
+	EntityBuildingName,
 	EntityFull,
 	EntityAccessPointName,
 };

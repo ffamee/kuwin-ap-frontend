@@ -1,6 +1,16 @@
+import { EntityAccessPointName, EntityName } from "./entity-type";
+
 type Section = {
 	id: number;
-	secType: string;
+	name: string;
 };
 
-export type { Section };
+type SectionEntityName = Section & {
+	entities: EntityName[];
+};
+
+type SectionAccessPointName = Section & {
+	entities: EntityAccessPointName[];
+};
+
+export type { Section, SectionAccessPointName, SectionEntityName };

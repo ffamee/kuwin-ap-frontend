@@ -8,7 +8,45 @@ export function middleware(request: NextRequest) {
 
 	// If the user is authenticated and trying to access the login page, redirect them to the pro page
 	if (isAuthenticated && request.nextUrl.pathname === "/login") {
-		return NextResponse.redirect(new URL("/pro", request.url));
+		return NextResponse.redirect(new URL("/", request.url));
+	}
+
+	// If the user use old URL, redirect them to the new URL
+	if (
+		request.nextUrl.pathname === "/monitor" &&
+		request.nextUrl.searchParams.has("sec")
+	) {
+		const url = new URL(request.url);
+		if (request.nextUrl.searchParams.has("entity")) {
+			const raw = request.nextUrl.searchParams.get("entity");
+			if (raw && raw.includes("/")) {
+				const [entity, build] = raw.split("/", 2);
+				url.searchParams.delete("entity");
+				if (entity) {
+					url.searchParams.set("entity", entity);
+				}
+				if (build) {
+					url.searchParams.set("build", build);
+				}
+				return NextResponse.redirect(url);
+			}
+		} else {
+			const raw = request.nextUrl.searchParams.get("sec");
+			if (raw && raw.includes("/")) {
+				const [sec, entity, build] = raw.split("/");
+				url.searchParams.delete("sec");
+				if (sec) {
+					url.searchParams.set("sec", sec);
+				}
+				if (entity) {
+					url.searchParams.set("entity", entity);
+				}
+				if (build) {
+					url.searchParams.set("build", build);
+				}
+				return NextResponse.redirect(url);
+			}
+		}
 	}
 
 	return NextResponse.next();
@@ -17,5 +55,5 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-	matcher: ["/login"],
+	matcher: ["/login", "/monitor/:path*"],
 };

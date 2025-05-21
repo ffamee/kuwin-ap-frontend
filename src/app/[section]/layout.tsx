@@ -13,6 +13,18 @@ import getToken from "@/lib/token";
 import { User as UserData } from "@/types/user-type";
 import SearchButton from "@/components/sidebar/search-button";
 
+export async function getServerEntities() {
+	const res = await fetch("http://localhost:3001/entities/name", {
+		credentials: "include",
+		next: { revalidate: 900 },
+	});
+	if (!res.ok) {
+		throw new Error("Failed to fetch entities.");
+	}
+	const serverEntities = await res.json();
+	return serverEntities;
+}
+
 export default async function SectionLayout({
 	children,
 }: {
@@ -35,21 +47,12 @@ export default async function SectionLayout({
 				user.id = data.id;
 				user.username = data.username;
 			} else {
-				console.log("Failed to fetch user data.", res);
+				throw new Error("Failed to fetch user data.");
 			}
 		} else {
 			console.log("No token found.");
 		}
-		const entities = await fetch("http://localhost:3001/entities", {
-			credentials: "include",
-			next: { revalidate: 900 },
-		}).then((res) => {
-			if (!res.ok) {
-				throw new Error("Failed to fetch entities.");
-			}
-			return res.json();
-		});
-		console.log("Entities: ", entities);
+		const entities = await getServerEntities();
 		return (
 			<SidebarProvider
 				defaultOpen={defaultOpen}
@@ -64,7 +67,7 @@ export default async function SectionLayout({
 								orientation="vertical"
 								className="mr-4 data-[orientation=vertical]:h-6"
 							/>
-							<DynamicBreadcrumbs />
+							<DynamicBreadcrumbs entities={entities} />
 						</div>
 						<div className="flex items-center h-auto w-auto">
 							<SearchButton lists={entities} />

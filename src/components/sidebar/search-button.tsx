@@ -4,12 +4,16 @@ import * as React from "react";
 import { Button } from "../ui/button";
 import { Search } from "lucide-react";
 import NavZone from "./nav-zone";
-import { Entity } from "@/types/entity-type";
+import { EntityName } from "@/types/entity-type";
 
 export default function SearchButton({
 	lists,
 }: {
-	lists: { faculty: Entity[]; organization: Entity[]; dormitory: Entity[] };
+	lists: {
+		faculty: EntityName[];
+		organization: EntityName[];
+		dormitory: EntityName[];
+	};
 }) {
 	const [showSearch, setShowSearch] = React.useState<boolean>(false);
 

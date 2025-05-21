@@ -13,16 +13,42 @@ import getToken from "@/lib/token";
 import { User as UserData } from "@/types/user-type";
 import SearchButton from "@/components/sidebar/search-button";
 
-export async function getServerEntities() {
-	const res = await fetch("http://localhost:3001/entities/name", {
+export async function getServerData() {
+	const res = await fetch("http://localhost:3001/section/all", {
 		credentials: "include",
 		next: { revalidate: 900 },
 	});
 	if (!res.ok) {
-		throw new Error("Failed to fetch entities.");
+		throw new Error("Failed to fetch data.");
 	}
-	const serverEntities = await res.json();
-	return serverEntities;
+	const serverData = await res.json();
+	return serverData;
+}
+
+export async function getServerEntities() {
+	const [facultyRes, organizationRes, dormitoryRes] = await Promise.all([
+		fetch("http://localhost:3001/entities/faculty", {
+			credentials: "include",
+			next: { revalidate: 900 },
+		}),
+		fetch("http://localhost:3001/entities/organization", {
+			credentials: "include",
+			next: { revalidate: 900 },
+		}),
+		fetch("http://localhost:3001/entities/dormitory", {
+			credentials: "include",
+			next: { revalidate: 900 },
+		}),
+	]);
+	if (!facultyRes.ok || !organizationRes.ok || !dormitoryRes.ok) {
+		throw new Error("Failed to fetch data.");
+	}
+	const [faculty, organization, dormitory] = await Promise.all([
+		facultyRes.json(),
+		organizationRes.json(),
+		dormitoryRes.json(),
+	]);
+	return { faculty, organization, dormitory };
 }
 
 export default async function SectionLayout({
@@ -52,6 +78,7 @@ export default async function SectionLayout({
 		} else {
 			console.log("No token found.");
 		}
+		const data = await getServerData();
 		const entities = await getServerEntities();
 		return (
 			<SidebarProvider
@@ -67,7 +94,7 @@ export default async function SectionLayout({
 								orientation="vertical"
 								className="mr-4 data-[orientation=vertical]:h-6"
 							/>
-							<DynamicBreadcrumbs entities={entities} />
+							<DynamicBreadcrumbs data={data} />
 						</div>
 						<div className="flex items-center h-auto w-auto">
 							<SearchButton lists={entities} />

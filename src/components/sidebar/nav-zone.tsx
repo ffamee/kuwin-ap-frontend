@@ -4,23 +4,27 @@ import { Separator } from "../ui/separator";
 import Link from "next/link";
 import { CircleX, Search, SearchX } from "lucide-react";
 import { useSidebar } from "../ui/sidebar";
-import { Entity } from "@/types/entity-type";
+import { EntityName } from "@/types/entity-type";
 
 // type List = Zone & { url: string };
 
 type NavZoneProps = {
-	lists: { faculty: Entity[]; organization: Entity[]; dormitory: Entity[] };
+	lists: {
+		faculty: EntityName[];
+		organization: EntityName[];
+		dormitory: EntityName[];
+	};
 	close: (b: boolean) => void;
 };
 
 export default function NavZone(props: NavZoneProps) {
-	const [faculties, setFaculties] = React.useState<Entity[]>(
+	const [faculties, setFaculties] = React.useState<EntityName[]>(
 		props.lists.faculty ?? []
 	);
-	const [organizations, setOrganizations] = React.useState<Entity[]>(
+	const [organizations, setOrganizations] = React.useState<EntityName[]>(
 		props.lists.organization ?? []
 	);
-	const [dormitories, setDormitories] = React.useState<Entity[]>(
+	const [dormitories, setDormitories] = React.useState<EntityName[]>(
 		props.lists.dormitory ?? []
 	);
 	const { state } = useSidebar();
@@ -30,21 +34,21 @@ export default function NavZone(props: NavZoneProps) {
 		const value = e.target.value.toLowerCase();
 		const [filteredFaculties, filteredOrganizations, filteredDormitories] =
 			await Promise.all([
-				new Promise<Entity[]>((resolve) => {
-					const filteredFaculties = props.lists.faculty.filter((item: Entity) =>
-						item.name.toLowerCase().includes(value)
+				new Promise<EntityName[]>((resolve) => {
+					const filteredFaculties = props.lists.faculty.filter(
+						(item: EntityName) => item.name.toLowerCase().includes(value)
 					);
 					resolve(filteredFaculties);
 				}),
-				new Promise<Entity[]>((resolve) => {
+				new Promise<EntityName[]>((resolve) => {
 					const filteredOrganizations = props.lists.organization.filter(
-						(item: Entity) => item.name.toLowerCase().includes(value)
+						(item: EntityName) => item.name.toLowerCase().includes(value)
 					);
 					resolve(filteredOrganizations);
 				}),
-				new Promise<Entity[]>((resolve) => {
+				new Promise<EntityName[]>((resolve) => {
 					const filteredDormitories = props.lists.dormitory.filter(
-						(item: Entity) => item.name.toLowerCase().includes(value)
+						(item: EntityName) => item.name.toLowerCase().includes(value)
 					);
 					resolve(filteredDormitories);
 				}),
@@ -121,7 +125,7 @@ export default function NavZone(props: NavZoneProps) {
 								Faculty
 							</p>
 							<div className="overflow-y-auto no-scrollbar flex flex-col p-2">
-								{faculties.map((item: Entity) => (
+								{faculties.map((item: EntityName) => (
 									<Link
 										href={`/faculty/${item.id}`}
 										className="rounded-md hover:bg-slate-100 truncate py-2 pl-2"
@@ -141,7 +145,7 @@ export default function NavZone(props: NavZoneProps) {
 								Organization
 							</p>
 							<div className="overflow-y-auto no-scrollbar flex flex-col p-2">
-								{organizations.map((item: Entity) => (
+								{organizations.map((item: EntityName) => (
 									<Link
 										href={`/organization/${item.id}`}
 										className="rounded-md hover:bg-slate-100 truncate py-2 pl-2"
@@ -161,7 +165,7 @@ export default function NavZone(props: NavZoneProps) {
 								Dormitory
 							</p>
 							<div className="overflow-y-auto no-scrollbar flex flex-col p-2">
-								{dormitories.map((item: Entity) => (
+								{dormitories.map((item: EntityName) => (
 									<Link
 										href={`/dormitory/${item.id}`}
 										className="rounded-md hover:bg-slate-100 truncate py-2 pl-2"

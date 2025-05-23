@@ -72,7 +72,6 @@ export function DataTable<T extends object>({
     }
     const accessorKey = col.accessorKey ?? col.id!;
     const id = col.id ?? col.accessorKey!;
-    console.log(data);
     return {
       accessorKey,
       id,
@@ -97,7 +96,6 @@ export function DataTable<T extends object>({
         }
         if (accessorKey === "name") {
           const name: { name: string; url: string } = row.getValue("name");
-          console.log(name);
           return (
             <div>
               <Link href={name.url}>{name.name}</Link>

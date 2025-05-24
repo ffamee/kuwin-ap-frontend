@@ -28,6 +28,17 @@ type Entity = {
 	// secId: number;
 };
 
+type EntityOverview = {
+	id: number;
+	name: string;
+	apAll: number;
+	apMaintain: number;
+	apDown: number;
+	// totalUser: number;
+	user1: number;
+	user2: number;
+};
+
 type EntityName = Pick<Entity, "id" | "name">;
 
 type EntityWithBuildings = Entity & {
@@ -54,4 +65,5 @@ export type {
 	EntityBuildingName,
 	EntityFull,
 	EntityAccessPointName,
+	EntityOverview,
 };

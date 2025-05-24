@@ -13,4 +13,18 @@ type SectionAccessPointName = Section & {
 	entities: EntityAccessPointName[];
 };
 
-export type { Section, SectionAccessPointName, SectionEntityName };
+type SectionOverview = {
+	id: number;
+	name: string;
+	apAll: number;
+	apMaintain: number;
+	apDown: number;
+	totalUser: number;
+};
+
+export type {
+	Section,
+	SectionAccessPointName,
+	SectionEntityName,
+	SectionOverview,
+};

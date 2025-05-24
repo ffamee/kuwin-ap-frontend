@@ -4,41 +4,12 @@ import SectionPage from "./section-page";
 export type ApData = {
   id: number;
   name: string;
-  numAp: number;
-  numCl: number;
-
-  maintain: number;
-  down: number;
-  status: boolean;
-  cmax: number;
-  wlc: number;
-  building: string;
+  apALL: number;
+  apMaintain: number;
+  apDown: number;
+  user1: number;
+  user2: number;
 };
-
-// const getZoneData = async () => {
-//   const res = await fetch(
-//     "https://67f4bef5cbef97f40d2f310d.mockapi.io/api/apData"
-//   );
-//   if (!res.ok) {
-//     console.log("Fetch Data error");
-//     return notFound();
-//   }
-//   return await res.json();
-// };
-
-// async function Apcount() {
-//   const ap: ApData[] = await getZoneData();
-//   let maintain: number = 0;
-//   let down: number = 0;
-//   ap.forEach((overap) => {
-//     if (overap.status == true) {
-//       maintain += 1;
-//     } else {
-//       down += 1;
-//     }
-//   });
-//   return { maintain, down };
-// }
 
 export default async function Page({
   params,
@@ -52,33 +23,17 @@ export default async function Page({
     return notFound();
   }
 
-  //const zoneData: ApData[] = await getZoneData();
-  //   const apSum = await Apcount();
-  //   zoneData.forEach((element) => {
-  //     element.maintain = apSum.maintain;
-  //     element.down = apSum.down;
-  //     element.all = apSum.maintain + apSum.down;
-  //   });
-  // return (
-  // 	<div className="bg-[#FFFEEA] font-sans w-full">
-  // 		<h1 className="text-left font-bold m-4 text-[48px] italic">
-  // 			Zone ที่ {section} ในมหาวิทยาลัยเกษตรศาสตร์
-  // 		</h1>
-  // 		<div className="w-full">
-  // 			{<DataTable column={headTable} data={zoneData} />}
-  // 		</div>
-  // 	</div>
-  // );
-
   const entities = await fetch(
-    `http://localhost:3001/entities/${section}`
+    `http://localhost:3001/section/overview/${section}`
   ).then((res) => {
     if (!res.ok) {
       throw new Error(`Failed to fetch data for section: ${section}`);
     }
     return res.json();
   });
+
+  //const summarySection = ...entities{};
+  //console.log(...entities);
   console.log("Entities: ", entities);
-  // return <SectionPage section={section} data={entities} />;
   return <SectionPage section={section} data={entities} />; // Pass the entities to SectionPage
 }

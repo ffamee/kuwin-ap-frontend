@@ -12,8 +12,6 @@ export default function SummaryCard({
     totalUser: number;
   };
 }) {
-  console.log(sumData);
-  console.log(typeof sumData);
   return (
     <div className="flex flex-row gap-x-4 w-full h-fit">
       <Card className="w-full">

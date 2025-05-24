@@ -4,64 +4,36 @@ import * as React from "react";
 
 import ReportSelect from "@/components/select/report-select";
 import { ReportAction } from "./report-action";
+import { Section } from "@/types/section-type";
+import { EntityName } from "@/types/entity-type";
+import { BuildingName } from "@/types/building-type";
+import { AccessPointName } from "@/types/ap-type";
 
-const sections = [
-	{ id: 1, area: "Faculty" },
-	{ id: 2, area: "Organization" },
-	{ id: 3, area: "Dormitory" },
-];
-
-const Faculties = [
-	{
-		id: 1,
-		area: "Faculty of Science",
-	},
-	{
-		id: 2,
-		area: "Faculty of Engineering",
-	},
-	{
-		id: 3,
-		area: "Faculty of Arts",
-	},
-];
-const Buildings = [
-	{
-		id: 1,
-		area: "Building A",
-	},
-	{
-		id: 2,
-		area: "Building B",
-	},
-	{
-		id: 3,
-		area: "Building C",
-	},
-];
-const AccessPoints = [
-	{
-		id: 1,
-		area: "Access Point 1",
-	},
-	{
-		id: 2,
-		area: "Access Point 2",
-	},
-	{
-		id: 3,
-		area: "Access Point 3",
-	},
-];
+type SectionEntity = {
+	[id: string]: Section & {
+		entities: EntityName[];
+	};
+};
+type EntityBuilding = {
+	[id: string]: EntityName & {
+		buildings: BuildingName[];
+	};
+};
 
 const ReportForm = ({
+	sections,
+	entities,
+	buildings,
 	prefilled,
 }: {
+	sections: Section[];
+	entities: SectionEntity;
+	buildings: EntityBuilding;
 	prefilled: {
 		sec?: string;
 		entity?: string;
-		building?: string;
-		accessPoint?: string;
+		build?: string;
+		ap?: string;
 	};
 }) => {
 	const initialState = React.useRef(true);
@@ -72,12 +44,22 @@ const ReportForm = ({
 		prefilled.entity ?? ""
 	);
 	const [selectedBuilding, setSelectedBuilding] = React.useState<string>(
-		prefilled.building ?? ""
+		prefilled.build ?? ""
 	);
 	const [selectedAccessPoint, setSelectedAccessPoint] = React.useState<string>(
-		prefilled.accessPoint ?? ""
+		prefilled.ap ?? ""
 	);
-	// const [reportDetail, setReportDetail] = React.useState<string>("");
+	const [entitiesList, setEntitiesList] = React.useState<EntityName[]>(
+		prefilled.sec ? (entities[prefilled.sec].entities as EntityName[]) : []
+	);
+	const [buildingsList, setBuildingsList] = React.useState<BuildingName[]>(
+		prefilled.entity
+			? (buildings[prefilled.entity].buildings as BuildingName[])
+			: []
+	);
+	const [accessPointsList, setAccessPointsList] = React.useState<
+		AccessPointName[]
+	>([]);
 
 	const [error, formAction, isPending] = React.useActionState(
 		ReportAction,
@@ -85,33 +67,51 @@ const ReportForm = ({
 	);
 
 	React.useEffect(() => {
+		console.log("Selected Section: ", selectedSection);
 		if (!initialState.current) {
-			console.log("Selected Section: ", selectedSection);
 			setSelectedEntity("");
+			setEntitiesList(entities[selectedSection]?.entities as EntityName[]);
 			setSelectedBuilding("");
+			setBuildingsList([]);
 			setSelectedAccessPoint("");
+			setAccessPointsList([]);
 		}
-	}, [selectedSection]);
+	}, [selectedSection, entities]);
 
 	React.useEffect(() => {
+		console.log("Selected Entity: ", selectedEntity);
 		if (!initialState.current) {
-			console.log("Selected Entity: ", selectedEntity);
 			setSelectedBuilding("");
+			setBuildingsList(buildings[selectedEntity]?.buildings as BuildingName[]);
 			setSelectedAccessPoint("");
+			setAccessPointsList([]);
 		}
-	}, [selectedEntity]);
+	}, [selectedEntity, buildings]);
 
 	React.useEffect(() => {
+		console.log("Selected Building: ", selectedBuilding);
 		if (!initialState.current) {
-			console.log("Selected Building: ", selectedBuilding);
 			setSelectedAccessPoint("");
+			if (selectedBuilding === "") {
+				setAccessPointsList([]);
+			} else {
+				fetch(
+					`http://localhost:3001/accesspoints/building/name/${selectedBuilding}`
+				)
+					.then(async (res) => await res.json())
+					.then((data: AccessPointName[]) => {
+						setAccessPointsList(data);
+					})
+					.catch((err) => {
+						console.log("Error fetching access points: ", err);
+						throw new Error("Error fetching access points");
+					});
+			}
 		}
 	}, [selectedBuilding]);
 
 	React.useEffect(() => {
-		if (!initialState.current) {
-			console.log("Selected Access Point: ", selectedAccessPoint);
-		}
+		console.log("Selected Access Point: ", selectedAccessPoint);
 	}, [selectedAccessPoint]);
 
 	React.useEffect(() => {
@@ -132,21 +132,21 @@ const ReportForm = ({
 				/>
 				<ReportSelect
 					type="Entity"
-					items={Faculties}
+					items={entitiesList}
 					value={selectedEntity}
 					set={setSelectedEntity}
 					disabled={!selectedSection}
 				/>
 				<ReportSelect
 					type="Building"
-					items={Buildings}
+					items={buildingsList}
 					value={selectedBuilding}
 					set={setSelectedBuilding}
 					disabled={!selectedEntity}
 				/>
 				<ReportSelect
 					type="AccessPoint"
-					items={AccessPoints}
+					items={accessPointsList}
 					value={selectedAccessPoint}
 					set={setSelectedAccessPoint}
 					disabled={!selectedBuilding}

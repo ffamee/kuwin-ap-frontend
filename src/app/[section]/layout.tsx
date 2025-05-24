@@ -49,7 +49,7 @@ export default async function SectionLayout({
 			}
 			return res.json();
 		});
-		console.log("Entities: ", entities);
+		// console.log("Entities: ", entities);
 		return (
 			<SidebarProvider
 				defaultOpen={defaultOpen}

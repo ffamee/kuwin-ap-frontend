@@ -28,7 +28,7 @@ import { DataTablePagination } from "./data-table-pagination";
 import { Input } from "@/components/ui/input";
 import { DataTableFilter } from "./data-table-filter";
 import { Button } from "../ui/button";
-import { X } from "lucide-react";
+import { Search, X } from "lucide-react";
 
 interface SectionTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -73,15 +73,16 @@ export function SectionTable<TData, TValue>({
 	const isFiltered = table.getState().columnFilters.length > 0;
 
 	return (
-		<div className="w-full space-y-4">
-			<div className="flex items-center space-x-2 w-full">
+		<div className="w-full space-y-4 overscroll-y-none">
+			<div className="flex items-center space-x-2">
+				<Search className="text-gray-400" />
 				<Input
 					placeholder="Filter Entity ..."
 					value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
 					onChange={(event) =>
 						table.getColumn("name")?.setFilterValue(event.target.value)
 					}
-					className="w-full"
+					className=""
 				/>
 				{table.getColumn("apMaintain") && (
 					<DataTableFilter

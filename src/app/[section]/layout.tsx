@@ -53,11 +53,11 @@ export default async function SectionLayout({
 		return (
 			<SidebarProvider
 				defaultOpen={defaultOpen}
-				className="flex h-screen w-screen overflow-hidden"
+				className="flex h-screen w-screen"
 			>
 				<AppSidebar prop={{}} token={token} />
-				<div className="w-full h-full">
-					<header className="flex items-center h-auto justify-between w-full">
+				<div className="w-full h-full flex flex-col">
+					<header className="flex items-center-safe h-auto justify-between w-full sticky top-0 z-10">
 						<div className="flex items-center h-auto w-full">
 							<SidebarTrigger className="size-12" />
 							<Separator
@@ -78,7 +78,7 @@ export default async function SectionLayout({
 						</div>
 					</header>
 					<Separator className="bg-none" />
-					<SidebarInset className="w-[calc(100vw-300px)] min-w-full h-full transition-[width,height] ease-linear overflow-auto no-scrollbar">
+					<SidebarInset className="w-[calc(100vw-300px)] min-w-full h-full min-h-0 transition-[width,height] ease-linear overflow-auto no-scrollbar">
 						{children}
 					</SidebarInset>
 				</div>

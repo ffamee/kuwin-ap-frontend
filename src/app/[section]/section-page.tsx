@@ -1,23 +1,17 @@
 "use client";
 
 import React from "react";
-import { ApData } from "./page";
+//import { ApData } from "./page";
 import SummaryCard from "@/components/card/summary-card";
 
-const columns = [
-  { accessorKey: "name", header: "Name" },
-  { accessorKey: "apALL", header: "# AP (overall)" },
-  { accessorKey: "apMaintain", header: "# AP (maintain)" },
-  { accessorKey: "apDown", header: "# AP (down)" },
-  { accessorKey: "user1", header: "# User" },
-];
+// const columns = [
+//   { accessorKey: "name", header: "Name" },
+//   { accessorKey: "apALL", header: "# AP (overall)" },
+//   { accessorKey: "apMaintain", header: "# AP (maintain)" },
+//   { accessorKey: "apDown", header: "# AP (down)" },
+//   { accessorKey: "user1", header: "# User" },
+// ];
 
-const sumData = {
-  totalAP: 40,
-  totalAPMaintain: 2,
-  totalAPDown: 5,
-  totalUser: 20,
-};
 import { ColumnDef } from "@tanstack/react-table";
 import { EntityOverview } from "@/types/entity-type";
 import { SectionOverview } from "@/types/section-type";
@@ -32,6 +26,14 @@ export default function SectionPage({
   section: string;
   data: SectionOverview & { entities: EntityOverview[] };
 }) {
+  const headerName: string = section.charAt(0).toUpperCase() + section.slice(1);
+  console.log(data);
+  const sumData = {
+    totalAP: data.apAll,
+    totalAPMaintain: data.apMaintain,
+    totalAPDown: data.apDown,
+    totalUser: data.totalUser,
+  };
   const columns: ColumnDef<EntityOverview>[] = [
     {
       accessorKey: "name",
@@ -99,10 +101,9 @@ export default function SectionPage({
   ];
 
   return (
-    <div className="font-sans w-full p-4 h-auto overflow-y-auto no-scrollbar">
-      <h1 className="text-left font-bold m-4 text-[48px] italic">
-        Zone ที่ {section} ในมหาวิทยาลัยเกษตรศาสตร์
-      </h1>
+    <div className="w-full p-4 h-auto overflow-y-auto no-scrollbar">
+      <h1 className="text-left font-bold m-4 text-[48px]">{headerName}</h1>
+      <SummaryCard sumData={sumData} />
       <div className="w-full">
         <SectionTable columns={columns} data={data.entities} />
       </div>

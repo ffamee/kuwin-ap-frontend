@@ -13,7 +13,7 @@ export default function SummaryCard({
   };
 }) {
   return (
-    <div className="flex flex-row gap-x-4 w-full h-fit">
+    <div className="flex flex-row gap-x-4 w-full h-fit m-4">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Total Access Point</CardTitle>

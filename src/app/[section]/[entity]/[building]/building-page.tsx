@@ -6,7 +6,6 @@ import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -19,6 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 import { AccessPoint } from "@/types/ap-type";
 import { BuildingOverview } from "@/types/building-type";
+import { Activity, Clock, Users } from "lucide-react";
 import * as React from "react";
 
 const chartData = [
@@ -123,36 +123,83 @@ export default function BuildingPage({
 									</CardHeader>
 									<CardContent>
 										<div className="grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-4">
-											{data.accesspoints.map((ap) => (
-												<Card className="w-full max-w-[500px]" key={ap.id}>
-													<CardHeader className="grid grid-cols-4 space-x-2">
-														<div className="col-span-3 space-y-1 w-full whitespace-normal break-words line-clamp-3">
-															<CardTitle>{ap.name ?? "-"}</CardTitle>
-															<Tooltip>
-																<TooltipTrigger asChild>
-																	<CardDescription title={ap.location}>
-																		{ap.location ?? "-"}
-																	</CardDescription>
-																</TooltipTrigger>
-																<TooltipContent>
-																	<p>{ap.location ?? "-"}</p>
-																</TooltipContent>
-															</Tooltip>
-														</div>
-														<div className="flex flex-col items-end-safe">
-															<div
-																className={`w-9/12 h-3 rounded-full ${
-																	colorsMap[ap.status]
-																}`}
-															></div>
+											{data.accesspoints?.map((ap) => (
+												<Card
+													className="w-full max-w-[500px] grid! grid-rows-5! gap-4!"
+													key={ap.id}
+												>
+													<CardHeader className="row-span-2">
+														<div className="grid grid-cols-4 space-x-2">
+															<div className="col-span-3 space-y-1 w-full whitespace-normal break-words line-clamp-3">
+																<CardTitle className="text-lg/6 tracking-wider">
+																	{ap.name ?? "-"}
+																</CardTitle>
+																<Tooltip>
+																	<TooltipTrigger asChild>
+																		<CardDescription className="text-sm">
+																			{ap.location ?? "-"}
+																		</CardDescription>
+																	</TooltipTrigger>
+																	<TooltipContent>
+																		<p>{ap.location ?? "-"}</p>
+																	</TooltipContent>
+																</Tooltip>
+															</div>
+															<div className="flex flex-col items-end-safe">
+																<div
+																	className={`w-1/2 h-3 rounded-full ${
+																		colorsMap[ap.status]
+																	}`}
+																></div>
+															</div>
 														</div>
 													</CardHeader>
-													<CardContent>
-														<p>Card Content</p>
+													<CardContent className="row-span-3">
+														<div className="flex flex-col gap-4">
+															<div className="grid grid-cols-2">
+																<div className="flex flex-col">
+																	<div className="text-muted-foreground text-xs">
+																		IP Address
+																	</div>
+																	<div className="text-md font-medium">
+																		{ap.ip}
+																	</div>
+																</div>
+																<div className="flex flex-col">
+																	<div className="text-muted-foreground text-xs">
+																		MAC Address
+																	</div>
+																	<div className="text-md font-medium uppercase">
+																		{ap.ethMac}
+																	</div>
+																</div>
+															</div>
+															<div className="grid grid-rows-3 space-y-2">
+																<div className="flex flex-row gap-2 text-sm items-baseline">
+																	<Users size={14} />
+																	<div className="text-muted-foreground align-middle">
+																		Connected Users:
+																	</div>
+																	{Number(ap.numberClient ?? 0) +
+																		Number(ap.numberClient_2 ?? 0)}
+																</div>
+																<div className="flex flex-row gap-2 text-sm items-baseline">
+																	<Activity size={14} />
+																	<div className="text-muted-foreground align-middle">
+																		Bandwidth:
+																	</div>
+																	{ap.channel} / {ap.channel_2} Mbps
+																</div>
+																<div className="flex flex-row gap-2 text-sm items-baseline">
+																	<Clock size={14} />
+																	<div className="text-muted-foreground align-middle">
+																		Time:
+																	</div>
+																	{new Date(ap.timestamp2).toLocaleString()}
+																</div>
+															</div>
+														</div>
 													</CardContent>
-													<CardFooter>
-														<p>Card Footer</p>
-													</CardFooter>
 												</Card>
 											))}
 										</div>

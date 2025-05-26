@@ -1,6 +1,6 @@
 "use client";
 
-import SummaryCard from "@/components/card/summary-card";
+import SummaryCard from "@/components/card/section-card";
 import SectionTab from "./section-tab";
 
 import { ColumnDef } from "@tanstack/react-table";

@@ -24,7 +24,8 @@ export default async function Page({
   }
 
   const entities = await fetch(
-    `http://localhost:3001/section/overview/${section}`
+    `http://localhost:3001/section/overview/${section}`,
+    {}
   ).then((res) => {
     if (!res.ok) {
       throw new Error(`Failed to fetch data for section: ${section}`);

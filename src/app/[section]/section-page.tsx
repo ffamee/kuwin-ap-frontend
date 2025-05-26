@@ -18,6 +18,8 @@ import { SectionOverview } from "@/types/section-type";
 import { SectionTable } from "@/components/table/section-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-header";
 import Link from "next/link";
+import { Tabs } from "@/components/ui/tabs";
+import { TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 
 export default function SectionPage({
   section,
@@ -26,7 +28,10 @@ export default function SectionPage({
   section: string;
   data: SectionOverview & { entities: EntityOverview[] };
 }) {
-  const headerName: string = section.charAt(0).toUpperCase() + section.slice(1);
+  const [tab, setTab] = React.useState<string>("list");
+  setTimeout(() => {
+    console.log("loading");
+  }, 10000);
   console.log(data);
   const sumData = {
     totalAP: data.apAll,
@@ -101,12 +106,33 @@ export default function SectionPage({
   ];
 
   return (
-    <div className="w-full p-4 h-auto overflow-y-auto no-scrollbar">
-      <h1 className="text-left font-bold m-4 text-[48px]">{headerName}</h1>
+    <div className="w-screen p-4 m-4 h-screen overflow-y-auto no-scrollbar">
+      <h1 className="text-left font-bold m-4 text-[48px] capitalize">
+        {section}
+      </h1>
       <SummaryCard sumData={sumData} />
-      <div className="w-full">
-        <SectionTable columns={columns} data={data.entities} />
-      </div>
+      <Tabs
+        value={tab}
+        onValueChange={() => setTab("overview")}
+        className="w-full"
+      >
+        <TabsList className="grid w-fit grid-cols-2 border">
+          <TabsTrigger value="overview" className="text-center m-2">
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="list" className="text-center m-2">
+            List
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          This should be The MF Overview
+        </TabsContent>
+        <TabsContent value="list">
+          <div className="w-full">
+            <SectionTable columns={columns} data={data.entities} />
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

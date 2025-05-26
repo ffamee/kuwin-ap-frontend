@@ -18,7 +18,7 @@ export default async function page({
   return (
     <div>
       Entity page : {entity}
-      {building}
+      {/* {building} */}
     </div>
   );
 }

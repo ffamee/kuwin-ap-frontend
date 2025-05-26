@@ -35,6 +35,5 @@ export default async function Page({
 
   //const summarySection = ...entities{};
   //console.log(...entities);
-  console.log("Entities: ", entities);
   return <SectionPage section={section} data={entities} />; // Pass the entities to SectionPage
 }

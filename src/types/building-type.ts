@@ -20,6 +20,7 @@ type BuildingOverview = {
 	apDown: number;
 	user1: number;
 	user2: number;
+	totalUser?: number;
 };
 
 type BuildingName = {

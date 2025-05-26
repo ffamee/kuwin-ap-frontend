@@ -21,6 +21,7 @@ import { Collapsible, CollapsibleContent } from "../ui/collapsible";
 import { BuildingOverview } from "@/types/building-type";
 import { AccessPointOverview } from "@/types/ap-type";
 import { Separator } from "../ui/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 const colorsMap: Record<string, string> = {
 	up: "bg-green-500",
@@ -45,7 +46,7 @@ export function BuildingCard({
 	};
 
 	return (
-		<Card key={building.id} className="overflow-hidden w-full">
+		<Card key={building.id} className="w-full">
 			<CardHeader className="pb-2">
 				<CardTitle className="flex items-center justify-between">
 					<div className="flex items-center gap-2">
@@ -94,7 +95,7 @@ export function BuildingCard({
 					</div>
 				</div>
 				<Collapsible open={expanded} className="w-full rounded-md">
-					<CollapsibleContent className="transition-[max-height] duration-300 ease-in-out overflow-hidden">
+					<CollapsibleContent className="transition-[max-height] duration-300 ease-in-out">
 						<Separator className="my-4" />
 						<div className="w-full flex flex-col">
 							<div className="grid grid-cols-10 font-medium mb-2">
@@ -109,7 +110,7 @@ export function BuildingCard({
 								</div>
 								<div className="items-center-safe">IP Address</div>
 								<div className="flex items-center-safe justify-center-safe">
-									Clients
+									Client
 								</div>
 							</div>
 							<Separator className="mb-2" />
@@ -147,10 +148,34 @@ export function BuildingCard({
 												<Users size={16} className="mx-2" />
 											</div>
 											<div className="flex items-center-safe justify-evenly">
-												<SquarePen size={16} />
-												<Link href={`./${entityId}/${building.id}/${ap.id}`}>
-													<ClipboardList size={16} />
-												</Link>
+												<Tooltip>
+													<TooltipTrigger asChild>
+														<Link
+															href={`./${entityId}/${building.id}/${ap.id}`}
+														>
+															<span className="cursor-pointer">
+																<SquarePen size={16} />
+															</span>
+														</Link>
+													</TooltipTrigger>
+													<TooltipContent side="top">
+														Edit Access Point
+													</TooltipContent>
+												</Tooltip>
+												<Tooltip>
+													<TooltipTrigger asChild>
+														<Link
+															href={`./${entityId}/${building.id}/${ap.id}`}
+														>
+															<span className="cursor-pointer">
+																<ClipboardList size={16} />
+															</span>
+														</Link>
+													</TooltipTrigger>
+													<TooltipContent side="top">
+														Access Point Detail
+													</TooltipContent>
+												</Tooltip>
 											</div>
 										</div>
 									))}

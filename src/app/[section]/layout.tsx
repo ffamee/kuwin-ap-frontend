@@ -59,7 +59,7 @@ export default async function SectionLayout({
 				<div className="w-full h-full flex flex-col">
 					<header className="flex items-center-safe h-auto justify-between w-full sticky top-0 z-10">
 						<div className="flex items-center h-auto w-full">
-							<SidebarTrigger className="size-12" />
+							<SidebarTrigger className="size-12 cursor-pointer" />
 							<Separator
 								orientation="vertical"
 								className="mr-4 data-[orientation=vertical]:h-6"

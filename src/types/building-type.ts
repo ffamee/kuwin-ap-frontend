@@ -12,6 +12,16 @@ type Building = {
 	// codeId: 1
 };
 
+type BuildingOverview = {
+	id: number;
+	name: string;
+	apAll: number;
+	apMaintain: number;
+	apDown: number;
+	user1: number;
+	user2: number;
+};
+
 type BuildingName = {
 	id: number;
 	name: string;
@@ -21,4 +31,9 @@ type BuildingAccessPointName = BuildingName & {
 	accesspoints: AccessPointName[];
 };
 
-export type { Building, BuildingName, BuildingAccessPointName };
+export type {
+	Building,
+	BuildingName,
+	BuildingAccessPointName,
+	BuildingOverview,
+};

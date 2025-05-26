@@ -23,4 +23,15 @@ type AccessPointName = {
 	name: string;
 };
 
-export type { AccessPoint, AccessPointName };
+type AccessPointOverview = {
+	id: number;
+	name: string;
+	status: string;
+	ip: string;
+	location: string;
+	// connectedClients: number;
+	numberClient: number;
+	numberClients_2: number;
+};
+
+export type { AccessPoint, AccessPointName, AccessPointOverview };

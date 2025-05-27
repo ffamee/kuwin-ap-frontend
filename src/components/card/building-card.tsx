@@ -28,6 +28,7 @@ const colorsMap: Record<string, string> = {
 	down: "bg-red-500",
 	ma: "bg-yellow-500",
 	rOff: "bg-cyan-500",
+	second: "bg-gray-500",
 };
 
 export function BuildingCard({

@@ -21,7 +21,7 @@ interface SummaryCardProps {
 export default function SummaryCard({
 	title,
 	data,
-	color = "gray-500",
+	color = "text-gray-500",
 	Icon,
 	description,
 }: SummaryCardProps) {
@@ -43,7 +43,7 @@ export default function SummaryCard({
 					>
 						{Icon && (
 							<span className="flex items-center">
-								<Icon size={24} className={`text-${color}`} />
+								<Icon size={24} className={`${color}`} />
 							</span>
 						)}
 						<div>{data}</div>

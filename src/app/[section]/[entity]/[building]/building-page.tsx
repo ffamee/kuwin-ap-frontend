@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
+import SummaryCard from "@/components/card/summary-card";
 
 const chartData = [
 	{ browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -67,70 +68,32 @@ export default function BuildingPage({
 				{data.name}
 			</div>
 			<div className="grid grid-cols-4 gap-4">
-				<Card className="w-full grid grid-rows-5! gap-2!">
-					<CardHeader className="row-span-2 text-lg">
-						<CardTitle>Total Access Points</CardTitle>
-					</CardHeader>
-					<CardContent className="row-span-3">
-						<div className="flex flex-col gap-2">
-							<div className="text-2xl font-semibold flex flex-row gap-4">
-								<span className="flex items-center">
-									<Wifi size={24} className="text-green-500" />
-								</span>
-								<div>{data.apAll}</div>
-							</div>
-							<CardDescription>some description</CardDescription>
-						</div>
-					</CardContent>
-				</Card>
-				<Card className="w-full grid grid-rows-5! gap-2!">
-					<CardHeader className="row-span-2 text-lg">
-						<CardTitle>Maintain Access Points</CardTitle>
-					</CardHeader>
-					<CardContent className="row-span-3">
-						<div className="flex flex-col gap-2">
-							<div className="text-2xl font-semibold flex flex-row gap-4">
-								<span className="flex items-center">
-									<CircleAlert size={24} className="text-yellow-500" />
-								</span>
-								<div>{data.apMaintain}</div>
-							</div>
-							<CardDescription>some description</CardDescription>
-						</div>
-					</CardContent>
-				</Card>
-				<Card className="w-full grid grid-rows-5! gap-2!">
-					<CardHeader className="row-span-2 text-lg">
-						<CardTitle>Down Access Points</CardTitle>
-					</CardHeader>
-					<CardContent className="row-span-3">
-						<div className="flex flex-col gap-2">
-							<div className="text-2xl font-semibold flex flex-row gap-4">
-								<span className="flex items-center">
-									<WifiOff size={24} className="text-red-500" />
-								</span>
-								<div>{data.apDown}</div>
-							</div>
-							<CardDescription>some description</CardDescription>
-						</div>
-					</CardContent>
-				</Card>
-				<Card className="w-full grid grid-rows-5! gap-2!">
-					<CardHeader className="row-span-2 text-lg">
-						<CardTitle>Total Users</CardTitle>
-					</CardHeader>
-					<CardContent className="row-span-3">
-						<div className="flex flex-col gap-2">
-							<div className="text-2xl font-semibold flex flex-row gap-4">
-								<span className="flex items-center">
-									<Users size={24} />
-								</span>
-								<div>{data.totalUser}</div>
-							</div>
-							<CardDescription>some description</CardDescription>
-						</div>
-					</CardContent>
-				</Card>
+				<SummaryCard
+					title="Total Access Points"
+					data={data.apAll}
+					Icon={Wifi}
+					color="green-500"
+					description="some description"
+				/>
+				<SummaryCard
+					title="Maintain Access Points"
+					data={data.apMaintain}
+					Icon={CircleAlert}
+					color="yellow-500"
+					description="some description"
+				/>
+				<SummaryCard
+					title="Down Access Points"
+					data={data.apDown}
+					Icon={WifiOff}
+					color="red-500"
+				/>
+				<SummaryCard
+					title="Total Users"
+					data={data.totalUser ?? 0}
+					Icon={Users}
+					description="some description"
+				/>
 			</div>
 			<Tabs value={tab} onValueChange={handleChange} className="w-full">
 				<TabsList className="grid w-fit h-fit grid-cols-2 border mb-2">

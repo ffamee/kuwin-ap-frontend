@@ -1,6 +1,6 @@
 "use client";
 
-import SummaryCard from "@/components/card/section-card";
+import SectionCard from "@/app/[section]/section-card";
 import SectionTab from "./section-tab";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -111,13 +111,10 @@ export default function SectionPage({
       },
     },
   ];
-  {
-    console.log(columns);
-  }
   return (
     <div className="flex flex-col gap-4 w-full p-4 min-h-0 h-screen overflow-y-auto no-scrollbar overscroll-y-contain">
       <h1 className="text-left font-bold text-[48px] capitalize">{section}</h1>
-      <SummaryCard sumData={sumData} />
+      <SectionCard sumData={sumData} />
 
       <SectionTab header={columns} data={data.entities} />
     </div>

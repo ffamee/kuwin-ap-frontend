@@ -1,6 +1,8 @@
 import { BuildingCard } from "@/components/card/building-card";
 import { BuildingOverview } from "@/types/building-type";
 import React from "react";
+import EntityCard from "./entity-card";
+import EntityTab from "./entity-tab";
 
 export default async function Page({
   params,
@@ -14,18 +16,24 @@ export default async function Page({
       console.error("Error fetching entity data:", error);
       throw new Error("Failed to fetch entity data");
     });
+  const sumData = {
+    totalAP: data.apAll,
+    totalAPMaintain: data.apMaintain,
+    totalAPDown: data.apDown,
+    totalUser: data.totalUser,
+  };
 
   return (
     <div className="flex flex-col p-4 gap-4">
-      Entity page : {entity}
-      {data.buildings.map((b: BuildingOverview) => (
-        <BuildingCard
-          key={b.id}
-          entityId={entity}
-          building={b}
-          accessPoints={data.accesspoints[b.id]}
-        />
-      ))}
+      <h1 className="text-left font-bold text-[48px] capitalize">
+        {data.name}
+      </h1>
+      <EntityCard sumData={sumData} />
+      <EntityTab
+        buildings={data.buildings}
+        accessPoints={data.accesspoints}
+        entityId={entity}
+      />
     </div>
   );
 }

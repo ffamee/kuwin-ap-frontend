@@ -1,8 +1,8 @@
 import React from "react";
 
 import { SectionTable } from "@/components/table/section-table";
-import { ExAreaChart } from "@/components/chart/example-area-chart";
-import { ExBarChart } from "@/components/chart/example-bar-chart";
+// import { ExAreaChart } from "@/components/chart/example-area-chart";
+// import { ExBarChart } from "@/components/chart/example-bar-chart";
 import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,7 +19,7 @@ export default function SectionTab({
   data: EntityOverview[];
 }) {
   //console.log(header);
-  const [tab, setTab] = React.useState<string>("list");
+  const [tab, setTab] = React.useState<string>("overview");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const handleChange = (value: string) => {
     setIsLoading(true);
@@ -30,16 +30,13 @@ export default function SectionTab({
   };
 
   return (
-    <Tabs value={tab} onValueChange={handleChange} className="w-full">
-      <TabsList className="grid w-fit h-fit  grid-cols-3 border">
+    <Tabs value={tab} onValueChange={handleChange} className="w-full space-y-1">
+      <TabsList className="grid w-fit h-fit  grid-cols-2 border">
         <TabsTrigger value="overview" className="text-center">
           Overview
         </TabsTrigger>
         <TabsTrigger value="list" className="text-center">
           List
-        </TabsTrigger>
-        <TabsTrigger value="something" className="text-center">
-          something
         </TabsTrigger>
       </TabsList>
       <div>
@@ -55,7 +52,6 @@ export default function SectionTab({
                 <SectionTable columns={header} data={data} />
               </div>
             </TabsContent>
-            <TabsContent value="something">Something</TabsContent>
           </div>
         )}
       </div>

@@ -13,7 +13,7 @@ export default function SectionCard({
   };
 }) {
   return (
-    <div className="w-full flex flex-row gap-x-4 h-fit m-2 p-2">
+    <div className="w-full flex flex-row gap-x-4 h-fit p-2">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Total Access Point</CardTitle>

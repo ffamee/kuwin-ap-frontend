@@ -33,16 +33,13 @@ export default function EntityTab({
   };
 
   return (
-    <Tabs value={tab} onValueChange={handleChange} className="w-full">
-      <TabsList className="grid w-fit h-fit  grid-cols-3 border">
+    <Tabs value={tab} onValueChange={handleChange} className="w-full space-y-1">
+      <TabsList className="grid w-fit h-fit  grid-cols-2 border">
         <TabsTrigger value="overview" className="text-center">
           Overview
         </TabsTrigger>
         <TabsTrigger value="list" className="text-center">
           List
-        </TabsTrigger>
-        <TabsTrigger value="something" className="text-center">
-          something
         </TabsTrigger>
       </TabsList>
       <div>
@@ -53,7 +50,7 @@ export default function EntityTab({
             <TabsContent value="overview">
               <ExInteractiveChart />
             </TabsContent>
-            <TabsContent value="list">
+            <TabsContent value="list" className="space-y-1">
               {buildings.map((b: BuildingOverview) => (
                 <BuildingCard
                   key={b.id}
@@ -63,7 +60,6 @@ export default function EntityTab({
                 />
               ))}
             </TabsContent>
-            <TabsContent value="something">Something</TabsContent>
           </div>
         )}
       </div>

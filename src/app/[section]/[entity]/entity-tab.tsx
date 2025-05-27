@@ -1,24 +1,27 @@
+"use client";
+
 import React from "react";
 
-import { SectionTable } from "@/components/table/section-table";
+// import { SectionTable } from "@/components/table/section-table";
 // import { ExAreaChart } from "@/components/chart/example-area-chart";
 // import { ExBarChart } from "@/components/chart/example-bar-chart";
 import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
+import { BuildingCard } from "@/components/card/building-card";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { EntityOverview } from "@/types/entity-type";
-import { ColumnDef } from "@tanstack/react-table";
+import { BuildingOverview } from "@/types/building-type";
 
-export default function SectionTab({
-  header,
-  data,
+export default function EntityTab({
+  buildings,
+  accessPoints,
+  entityId,
 }: {
-  header: ColumnDef<EntityOverview>[];
-  data: EntityOverview[];
+  buildings: BuildingOverview[];
+  accessPoints: [];
+  entityId: string;
 }) {
-  //console.log(header);
   const [tab, setTab] = React.useState<string>("overview");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const handleChange = (value: string) => {
@@ -47,10 +50,15 @@ export default function SectionTab({
             <TabsContent value="overview">
               <ExInteractiveChart />
             </TabsContent>
-            <TabsContent value="list">
-              <div className="w-full">
-                <SectionTable columns={header} data={data} />
-              </div>
+            <TabsContent value="list" className="space-y-1">
+              {buildings.map((b: BuildingOverview) => (
+                <BuildingCard
+                  key={b.id}
+                  entityId={entityId}
+                  building={b}
+                  accessPoints={accessPoints[b.id]}
+                />
+              ))}
             </TabsContent>
           </div>
         )}

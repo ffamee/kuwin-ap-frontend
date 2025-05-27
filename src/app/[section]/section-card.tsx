@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function SummaryCard({
+export default function SectionCard({
   sumData,
 }: {
   sumData: {
@@ -13,7 +13,7 @@ export default function SummaryCard({
   };
 }) {
   return (
-    <div className="w-full flex flex-row gap-x-4 h-fit m-2 p-2">
+    <div className="w-full flex flex-row gap-x-4 h-fit p-2">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Total Access Point</CardTitle>

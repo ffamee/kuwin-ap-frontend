@@ -1,4 +1,4 @@
-import { error } from "console";
+import ApTab from "./ap-tab";
 
 export default async function Page({
   params,
@@ -12,12 +12,12 @@ export default async function Page({
       console.error("Error at fetching access point data :", error);
       throw new Error("failed to fetching access point data");
     });
-  console.log(apData);
   return (
-    <div>
+    <div className="p-4 gap-4">
       <h1 className="text-left font-bold text-[48px] capitalize">
         {apData.name}
       </h1>
+      <ApTab data={apData} />
     </div>
   );
 }

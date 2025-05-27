@@ -1,5 +1,3 @@
-import { BuildingCard } from "@/components/card/building-card";
-import { BuildingOverview } from "@/types/building-type";
 import React from "react";
 import EntityCard from "./entity-card";
 import EntityTab from "./entity-tab";

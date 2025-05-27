@@ -2,9 +2,9 @@
 
 import React from "react";
 
-import { SectionTable } from "@/components/table/section-table";
-import { ExAreaChart } from "@/components/chart/example-area-chart";
-import { ExBarChart } from "@/components/chart/example-bar-chart";
+// import { SectionTable } from "@/components/table/section-table";
+// import { ExAreaChart } from "@/components/chart/example-area-chart";
+// import { ExBarChart } from "@/components/chart/example-bar-chart";
 import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
 import { BuildingCard } from "@/components/card/building-card";
 

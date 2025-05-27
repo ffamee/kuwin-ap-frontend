@@ -19,6 +19,7 @@ import {
 import { AccessPoint } from "@/types/ap-type";
 import { BuildingOverview } from "@/types/building-type";
 import { Activity, Clock, Users } from "lucide-react";
+import Link from "next/link";
 import * as React from "react";
 
 const chartData = [
@@ -37,8 +38,10 @@ const colorsMap: Record<string, string> = {
 };
 
 export default function BuildingPage({
+	buildingId,
 	data,
 }: {
+	buildingId: string;
 	data: BuildingOverview & { accesspoints: AccessPoint[] };
 }) {
 	const [tab, setTab] = React.useState<string>("overview");
@@ -132,7 +135,9 @@ export default function BuildingPage({
 														<div className="grid grid-cols-4 space-x-2">
 															<div className="col-span-3 space-y-1 w-full whitespace-normal break-words line-clamp-3">
 																<CardTitle className="text-lg/6 tracking-wider">
-																	{ap.name ?? "-"}
+																	<Link href={`./${buildingId}/${ap.id}`}>
+																		{ap.name ?? "-"}
+																	</Link>
 																</CardTitle>
 																<Tooltip>
 																	<TooltipTrigger asChild>

@@ -15,5 +15,5 @@ export default async function Page({
 			throw new Error("Failed to fetch building data");
 		});
 
-	return <BuildingPage data={data} />;
+	return <BuildingPage buildingId={building} data={data} />;
 }

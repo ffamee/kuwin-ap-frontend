@@ -30,14 +30,8 @@ export default function Home() {
 					<li className="mb-2 tracking-[-.01em]">
 						<Link href="/report">Go to report</Link>
 					</li>
-					<li className="mb-2 tracking-[-.01em]">
-						<Link href="/faculty">Go to section: faculty</Link>
-					</li>
-					<li className="mb-2 tracking-[-.01em]">
-						<Link href="/organization">Go to section: organization</Link>
-					</li>
 					<li className="tracking-[-.01em]">
-						<Link href="/dormitory">Go to section: dormitory</Link>
+						<Link href="/monitor">Go to monitor</Link>
 					</li>
 				</ol>
 

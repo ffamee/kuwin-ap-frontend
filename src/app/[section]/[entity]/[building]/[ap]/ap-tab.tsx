@@ -18,7 +18,7 @@ export default function ApTab({
     };
   };
 }) {
-  const [tab, setTab] = React.useState<string>("overview");
+  const [tab, setTab] = React.useState<string>("detail");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const handleChange = (value: string) => {
     setIsLoading(true);
@@ -35,8 +35,8 @@ export default function ApTab({
       className="w-full space-y-1 h-full"
     >
       <TabsList className="grid w-fit h-fit grid-cols-2 border">
-        <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="detail">Details</TabsTrigger>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
       </TabsList>
       <div>
         {isLoading ? (

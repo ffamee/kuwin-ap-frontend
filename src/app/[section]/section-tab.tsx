@@ -19,7 +19,7 @@ export default function SectionTab({
   data: EntityOverview[];
 }) {
   //console.log(header);
-  const [tab, setTab] = React.useState<string>("overview");
+  const [tab, setTab] = React.useState<string>("list");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const handleChange = (value: string) => {
     setIsLoading(true);
@@ -32,11 +32,11 @@ export default function SectionTab({
   return (
     <Tabs value={tab} onValueChange={handleChange} className="w-full space-y-1">
       <TabsList className="grid w-fit h-fit  grid-cols-2 border">
-        <TabsTrigger value="overview" className="text-center">
-          Overview
-        </TabsTrigger>
         <TabsTrigger value="list" className="text-center">
           List
+        </TabsTrigger>
+        <TabsTrigger value="overview" className="text-center">
+          Overview
         </TabsTrigger>
       </TabsList>
       <div>

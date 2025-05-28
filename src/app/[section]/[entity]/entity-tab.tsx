@@ -5,7 +5,7 @@ import React from "react";
 // import { SectionTable } from "@/components/table/section-table";
 import { ExAreaChart } from "@/components/chart/example-area-chart";
 import { ExBarChart } from "@/components/chart/example-bar-chart";
-import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
+//import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
 import { BuildingCard } from "@/components/card/building-card";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -40,7 +40,7 @@ export default function EntityTab({
   accessPoints: [];
   entityId: string;
 }) {
-  const [tab, setTab] = React.useState<string>("overview");
+  const [tab, setTab] = React.useState<string>("list");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const handleChange = (value: string) => {
     setIsLoading(true);
@@ -53,11 +53,11 @@ export default function EntityTab({
   return (
     <Tabs value={tab} onValueChange={handleChange} className="w-full space-y-1">
       <TabsList className="grid w-fit h-fit  grid-cols-2 border">
-        <TabsTrigger value="overview" className="text-center">
-          Overview
-        </TabsTrigger>
         <TabsTrigger value="list" className="text-center">
           List
+        </TabsTrigger>
+        <TabsTrigger value="overview" className="text-center">
+          Overview
         </TabsTrigger>
       </TabsList>
       <div>

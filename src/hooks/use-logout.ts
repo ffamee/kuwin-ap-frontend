@@ -4,6 +4,6 @@ export function useLogout() {
 			credentials: "include",
 		});
 
-		window.location.href = "/pro";
+		window.location.href = "/monitor";
 	};
 }

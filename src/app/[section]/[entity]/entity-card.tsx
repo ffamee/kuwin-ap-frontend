@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import SummaryCard from "@/components/card/summary-card";
+import { CircleAlert, Users, Wifi, WifiOff } from "lucide-react";
 
 export default function EntityCard({
   sumData,
@@ -14,41 +15,34 @@ export default function EntityCard({
 }) {
   return (
     <div className="w-full flex flex-row gap-x-4 h-fit m-2 p-2">
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Total Access Point</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>{sumData.totalAP}</p>
-        </CardContent>
-      </Card>
+      <SummaryCard
+        title="Total Access Point"
+        data={sumData.totalAP}
+        Icon={Wifi}
+        color="text-green-500"
+        description=""
+      />
 
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Total AP Maintain</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>{sumData.totalAPMaintain}</p>
-        </CardContent>
-      </Card>
+      <SummaryCard
+        title="Maintain Access Point"
+        data={sumData.totalAPMaintain}
+        Icon={CircleAlert}
+        color="text-yellow-400"
+        description=""
+      />
 
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Total AP Down</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>{sumData.totalAPDown}</p>
-        </CardContent>
-      </Card>
+      <SummaryCard
+        title="Down Access Point"
+        data={sumData.totalAPDown}
+        Icon={WifiOff}
+        color="text-red-500"
+      />
 
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Total User</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>{sumData.totalUser}</p>
-        </CardContent>
-      </Card>
+      <SummaryCard
+        title="Total Users"
+        data={sumData.totalUser ?? 0}
+        Icon={Users}
+      />
     </div>
   );
 }

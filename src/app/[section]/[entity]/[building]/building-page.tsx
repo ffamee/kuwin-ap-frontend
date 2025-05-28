@@ -250,8 +250,8 @@ export default function BuildingPage({
       </div>
       <Tabs value={tab} onValueChange={handleChange} className="w-full">
         <TabsList className="grid w-fit h-fit grid-cols-3 border mb-2">
-          <TabsTrigger value="table" className="text-center">
-            Table
+          <TabsTrigger value="list" className="text-center">
+            List
           </TabsTrigger>
           <TabsTrigger value="overview" className="text-center">
             Overview
@@ -275,7 +275,7 @@ export default function BuildingPage({
                   </div>
                 </div>
               </TabsContent>
-              <TabsContent value="table">
+              <TabsContent value="list">
                 <BuildingTable columns={columns} data={data.accesspoints} />
               </TabsContent>
               <TabsContent value="card">

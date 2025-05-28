@@ -37,7 +37,7 @@ export function DataTableColumnHeader<TData, TValue>({
 			<Button
 				variant="ghost"
 				size="sm"
-				className="-ml-4 h-8 data-[state=open]:bg-accent justify-baseline"
+				className="-ml-4 h-auto data-[state=open]:bg-accent justify-baseline"
 				onClick={handleSortToggle}
 			>
 				<span>{title}</span>

@@ -17,6 +17,18 @@ import { CircleAlert, Users, Wifi, WifiOff } from "lucide-react";
 import * as React from "react";
 import SummaryCard from "@/components/card/summary-card";
 import ApOverviewCard from "@/components/card/ap-overview-card";
+import { ColumnDef } from "@tanstack/react-table";
+import { BuildingTable } from "@/components/table/building-table";
+import { DataTableColumnHeader } from "@/components/table/data-table-header";
+import Link from "next/link";
+
+const colorsMap: Record<string, string> = {
+	up: "bg-green-500",
+	down: "bg-red-500",
+	ma: "bg-yellow-500",
+	rOff: "bg-cyan-500",
+	second: "bg-gray-500",
+};
 
 const chartData = [
 	{ browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -42,6 +54,167 @@ export default function BuildingPage({
 			setTab(value);
 		}, 300);
 	};
+	const columns: ColumnDef<AccessPoint>[] = [
+		{
+			accessorKey: "status",
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Status" className="" />
+			),
+			cell: ({ row }) => {
+				return (
+					<div className="px-4">
+						<div
+							className={`rounded-full size-4 ${
+								colorsMap[row.getValue("status") as string]
+							}`}
+						/>
+					</div>
+				);
+			},
+			filterFn: (row, columnId, filterValue: string[]) => {
+				const value = row.getValue(columnId) as string;
+
+				// const matchUp = filterValue.includes("up") && value === "up";
+				// const matchDown = filterValue.includes("down") && value === "down";
+				// const matchMA = filterValue.includes("ma") && value === "ma";
+				// const matchROff = filterValue.includes("rOff") && value === "rOff";
+				// const matchSecond =
+				// 	filterValue.includes("second") && value === "second";
+
+				if (filterValue.length === 0) return true;
+
+				return filterValue.includes(value);
+			},
+		},
+		{
+			accessorKey: "name",
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Name" />
+			),
+			filterFn: (row, columnId, value) => {
+				const rowData: string = row.getValue("name") ?? "-";
+				return rowData.toLowerCase().includes(value.toLowerCase());
+			},
+			cell: ({ row }) => {
+				const url = "./" + buildingId + "/" + row.original.id;
+				return (
+					<Link href={url} className="max-w-xs whitespace-normal break-words">
+						{row.getValue("name") ?? "-"}
+					</Link>
+				);
+			},
+		},
+		{
+			accessorKey: "problem",
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="Problem" />
+			),
+			enableSorting: false,
+		},
+		{
+			id: "client",
+			accessorFn: (row) => Number(row.numberClient),
+			header: ({ column }) => (
+				<DataTableColumnHeader
+					column={column}
+					title="#Client 2.4GHz"
+					// className="w-20 whitespace-normal break-words"
+				/>
+			),
+			filterFn: (row, columnId, filterValue: string[]) => {
+				const value = Number(row.getValue(columnId));
+
+				const matchEqual = filterValue.includes("eq") && value === 0;
+				const matchGtZero = filterValue.includes("gt") && value > 0;
+
+				if (filterValue.length === 0) return true;
+
+				return matchEqual || matchGtZero;
+			},
+			cell: ({ row }) => {
+				const value = row.original.numberClient ?? 0;
+				return <div>{value}</div>;
+			},
+		},
+		{
+			id: "client2",
+			accessorFn: (row) => Number(row.numberClient_2),
+			header: ({ column }) => (
+				<DataTableColumnHeader
+					column={column}
+					title="#Client 5GHz"
+					// className="w-20 whitespace-normal break-words"
+				/>
+			),
+			filterFn: (row, columnId, filterValue: string[]) => {
+				const value = Number(row.getValue(columnId));
+
+				const matchEqual = filterValue.includes("eq") && value === 0;
+				const matchGtZero = filterValue.includes("gt") && value > 0;
+
+				if (filterValue.length === 0) return true;
+
+				return matchEqual || matchGtZero;
+			},
+			cell: ({ row }) => {
+				const value = row.original.numberClient_2 ?? 0;
+				return <div>{value}</div>;
+			},
+		},
+		{
+			id: "join",
+			accessorFn: (row) => row.wlcActive,
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="AP Join" />
+			),
+			// filterFn: (row, columnId, filterValue: string[]) => {
+			// 	const value = row.getValue(columnId);
+
+			// 	const matchEqual = filterValue.includes("eq") && value === 0;
+			// 	const matchGtZero = filterValue.includes("gt") && value > 0;
+
+			// 	if (filterValue.length === 0) return true;
+
+			// 	return matchEqual || matchGtZero;
+			// },
+			cell: ({ row }) => {
+				const value = row.original.wlcActive ?? "";
+				return <div>{value}</div>;
+			},
+		},
+		{
+			accessorKey: "wlc",
+			header: ({ column }) => (
+				<DataTableColumnHeader column={column} title="WLC" />
+			),
+			filterFn: (row, columnId, filterValue: string[]) => {
+				const value = row.getValue(columnId);
+
+				const matchYes = filterValue.includes("Yes") && value === "Yes";
+				const matchNo = filterValue.includes("No") && value === "No";
+
+				if (filterValue.length === 0) return true;
+
+				return matchYes || matchNo;
+			},
+			cell: ({ row }) => {
+				const value = row.original.wlc ?? "-";
+				return <div>{value}</div>;
+			},
+		},
+		// {
+		// 	id: "totalUser",
+		// 	accessorFn: (row) => Number(row.user1) + Number(row.user2),
+		// 	header: ({ column }) => (
+		// 		<DataTableColumnHeader column={column} title="#User" />
+		// 	),
+		// 	cell: ({ row }) => {
+		// 		const total = Number(row.original.user1) + Number(row.original.user2);
+		// 		return <div>{total}</div>;
+		// 	},
+		// },
+	];
+
 	return (
 		<div className="flex flex-col gap-4 w-full p-4 min-h-0 h-screen overflow-y-auto no-scrollbar overscroll-y-contain">
 			<div className="text-left font-bold capitalize text-6xl my-4">
@@ -76,9 +249,12 @@ export default function BuildingPage({
 				/>
 			</div>
 			<Tabs value={tab} onValueChange={handleChange} className="w-full">
-				<TabsList className="grid w-fit h-fit grid-cols-2 border mb-2">
+				<TabsList className="grid w-fit h-fit grid-cols-3 border mb-2">
 					<TabsTrigger value="overview" className="text-center">
 						Overview
+					</TabsTrigger>
+					<TabsTrigger value="table" className="text-center">
+						Table
 					</TabsTrigger>
 					<TabsTrigger value="list" className="text-center">
 						List
@@ -98,6 +274,9 @@ export default function BuildingPage({
 										<ExInteractiveChart />
 									</div>
 								</div>
+							</TabsContent>
+							<TabsContent value="table">
+								<BuildingTable columns={columns} data={data.accesspoints} />
 							</TabsContent>
 							<TabsContent value="list">
 								<Card>

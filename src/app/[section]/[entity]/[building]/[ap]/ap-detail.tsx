@@ -1,12 +1,21 @@
 import { AccessPoint } from "@/types/ap-type";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { CircleAlert, LucideIcon, Wifi, WifiOff } from "lucide-react";
 
 const colorsMap: Record<string, string> = {
-  up: "bg-green-500",
-  down: "bg-red-500",
-  ma: "bg-yellow-500",
-  rOff: "bg-cyan-500",
-  second: "bg-gray-500",
+  up: "text-green-500",
+  down: "text-red-500",
+  ma: "text-yellow-500",
+  rOff: "text-cyan-500",
+  second: "text-gray-500",
+};
+
+const statusMap: Record<string, LucideIcon> = {
+  up: Wifi,
+  down: WifiOff,
+  ma: CircleAlert,
+  rOff: WifiOff,
+  second: CircleAlert,
 };
 
 export default function ApDetail({
@@ -19,6 +28,8 @@ export default function ApDetail({
     };
   };
 }) {
+  console.log(statusMap);
+  const Icon = statusMap[data.status];
   return (
     <div className="grid grid-cols-5 gap-4">
       <Card className="col-span-3">
@@ -41,7 +52,9 @@ export default function ApDetail({
         </CardContent>
         <CardTitle className="px-6 text-3xl flex gap-6">
           <div>Status</div>
-          <p className={`${colorsMap[data.status]}`}>{data.status}</p>
+          <div className={`${colorsMap[data.status]}`}>
+            <Icon />
+          </div>
         </CardTitle>
         <CardContent>
           <div className="grid grid-cols-3">

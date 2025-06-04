@@ -4,5 +4,5 @@ export default function AdminLayout({
 	children: React.ReactNode;
 }) {
 	// User who accesses the admin section should have admin privileges
-	return <div>{children}</div>;
+	return <>{children}</>;
 }

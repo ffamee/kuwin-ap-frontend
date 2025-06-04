@@ -1,7 +1,7 @@
 "use client";
 import SummaryCard from "@/components/card/summary-card";
 import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
-import { ExPieChart } from "@/components/chart/example-pie-chart";
+// import { ExPieChart } from "@/components/chart/example-pie-chart";
 import { DataTableColumnHeader } from "@/components/table/data-table-header";
 import { MonitorTable } from "@/components/table/monitor-table";
 import {
@@ -18,13 +18,13 @@ import { CircleAlert, Users, Wifi, WifiOff } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 
-const chartData = [
-	{ browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-	{ browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-	{ browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-	{ browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-	{ browser: "other", visitors: 90, fill: "var(--color-other)" },
-];
+// const chartData = [
+// 	{ browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
+// 	{ browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+// 	{ browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
+// 	{ browser: "edge", visitors: 173, fill: "var(--color-edge)" },
+// 	{ browser: "other", visitors: 90, fill: "var(--color-other)" },
+// ];
 
 const columns: ColumnDef<SectionOverview>[] = [
 	{
@@ -117,7 +117,7 @@ export default function Page() {
 			<div className="text-center font-semibold capitalize text-4xl my-6">
 				Status Access Point
 			</div>
-			<div className="text-center my-3 bg-red-200">menu admin</div>
+			{/* <div className="text-center my-3 bg-red-200">menu admin</div> */}
 			<div>
 				{data ? (
 					<div className="flex flex-col gap-4 w-full">

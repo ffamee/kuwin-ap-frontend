@@ -27,7 +27,6 @@ export default function ApTab({
 			setTab(value);
 		}, 300);
 	};
-	console.log(data);
 	return (
 		<Tabs
 			value={tab}

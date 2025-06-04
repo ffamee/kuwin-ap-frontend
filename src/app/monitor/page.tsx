@@ -37,7 +37,7 @@ const columns: ColumnDef<SectionOverview>[] = [
 			return rowData.toLowerCase().includes(value.toLowerCase());
 		},
 		cell: ({ row }) => {
-			const url = "/monitor/" + row.original.name;
+			const url = "/monitor/" + row.original.id;
 			return (
 				<Link href={url} className="max-w-xs whitespace-normal break-words">
 					{row.getValue("name")}

@@ -55,7 +55,6 @@ export default function SectionPage({
 				const url = "/monitor/" + section + "/" + row.original.id;
 				return (
 					<Link href={url} className="max-w-xs whitespace-normal break-words">
-						{" "}
 						{row.getValue("name")}
 					</Link>
 				);
@@ -113,7 +112,9 @@ export default function SectionPage({
 	];
 	return (
 		<div className="flex flex-col p-4 gap-4 w-full min-h-0 h-screen overflow-y-auto no-scrollbar overscroll-y-contain">
-			<h1 className="text-left font-bold text-[48px] capitalize">{section}</h1>
+			<h1 className="text-left font-bold text-[48px] capitalize">
+				{data.name}
+			</h1>
 			<SectionCard sumData={sumData} />
 
 			<SectionTab header={columns} data={data.entities} />

@@ -38,17 +38,17 @@ const sections = [
 	{
 		title: "Faculty",
 		icon: University,
-		url: "/monitor/faculty",
+		url: "/monitor/1",
 	},
 	{
 		title: "Organization",
 		icon: BriefcaseBusiness,
-		url: "/monitor/organization",
+		url: "/monitor/2",
 	},
 	{
 		title: "Dormitory",
 		icon: Hotel,
-		url: "/monitor/dormitory",
+		url: "/monitor/3",
 	},
 ];
 

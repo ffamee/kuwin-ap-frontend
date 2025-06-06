@@ -5,7 +5,6 @@ import * as React from "react";
 import {
 	ColumnDef,
 	ColumnFiltersState,
-	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
@@ -15,16 +14,7 @@ import {
 	VisibilityState,
 } from "@tanstack/react-table";
 
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
-
-import { DataTablePagination } from "./data-table-pagination";
+import DataTable from "./data-table";
 // import { Input } from "@/components/ui/input";
 // import { DataTableFilter } from "./data-table-filter";
 // import { Button } from "../ui/button";
@@ -74,57 +64,7 @@ export function MonitorTable<TData, TValue>({
 
 	return (
 		<div className="w-full space-y-4 overscroll-y-none">
-			<div className="rounded-md border">
-				<Table className="border-b">
-					<TableHeader>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => {
-									return (
-										<TableHead key={header.id} colSpan={header.colSpan}>
-											{header.isPlaceholder
-												? null
-												: flexRender(
-														header.column.columnDef.header,
-														header.getContext()
-												  )}
-										</TableHead>
-									);
-								})}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-								>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell key={cell.id}>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext()
-											)}
-										</TableCell>
-									))}
-								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell
-									colSpan={columns.length}
-									className="h-24 text-center"
-								>
-									No results.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-				<DataTablePagination table={table} />
-			</div>
+			<DataTable columns={columns} table={table} />
 		</div>
 	);
 }

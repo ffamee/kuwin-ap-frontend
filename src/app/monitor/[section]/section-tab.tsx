@@ -12,49 +12,48 @@ import { EntityOverview } from "@/types/entity-type";
 import { ColumnDef } from "@tanstack/react-table";
 
 export default function SectionTab({
-	header,
-	data,
+  header,
+  data,
 }: {
-	header: ColumnDef<EntityOverview>[];
-	data: EntityOverview[];
+  header: ColumnDef<EntityOverview>[];
+  data: EntityOverview[];
 }) {
-	//console.log(header);
-	const [tab, setTab] = React.useState<string>("list");
-	const [isLoading, setIsLoading] = React.useState<boolean>(false);
-	const handleChange = (value: string) => {
-		setIsLoading(true);
-		setTimeout(() => {
-			setIsLoading(false);
-			setTab(value);
-		}, 300);
-	};
+  const [tab, setTab] = React.useState<string>("list");
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const handleChange = (value: string) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setTab(value);
+    }, 300);
+  };
 
-	return (
-		<Tabs value={tab} onValueChange={handleChange} className="w-full space-y-1">
-			<TabsList className="grid w-fit h-fit  grid-cols-2 border">
-				<TabsTrigger value="list" className="text-center">
-					List
-				</TabsTrigger>
-				<TabsTrigger value="overview" className="text-center">
-					Overview
-				</TabsTrigger>
-			</TabsList>
-			<div>
-				{isLoading ? (
-					<Skeleton className="w-full h-52" />
-				) : (
-					<div>
-						<TabsContent value="overview">
-							<ExInteractiveChart />
-						</TabsContent>
-						<TabsContent value="list">
-							<div className="w-full">
-								<SectionTable columns={header} data={data} />
-							</div>
-						</TabsContent>
-					</div>
-				)}
-			</div>
-		</Tabs>
-	);
+  return (
+    <Tabs value={tab} onValueChange={handleChange} className="w-full space-y-1">
+      <TabsList className="grid w-fit h-fit  grid-cols-2 border">
+        <TabsTrigger value="list" className="text-center">
+          List
+        </TabsTrigger>
+        <TabsTrigger value="overview" className="text-center">
+          Overview
+        </TabsTrigger>
+      </TabsList>
+      <div>
+        {isLoading ? (
+          <Skeleton className="w-full h-52" />
+        ) : (
+          <div>
+            <TabsContent value="overview">
+              <ExInteractiveChart />
+            </TabsContent>
+            <TabsContent value="list">
+              <div className="w-full">
+                <SectionTable columns={header} data={data} />
+              </div>
+            </TabsContent>
+          </div>
+        )}
+      </div>
+    </Tabs>
+  );
 }

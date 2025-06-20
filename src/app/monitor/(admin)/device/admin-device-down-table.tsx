@@ -74,20 +74,7 @@ export default function AdminDownDeviceTable({ data }: { data: DownApTab[] }) {
       ),
       cell: ({ row }) => {
         if (!row.original.downtimeStart) return <div>NaN</div>;
-        // const diff = moment.duration(
-        //   moment(Date.now()).diff(moment(row.original.downtimeStart))
-        // );
-        return (
-          // <div>
-          //   {diff.years() ? diff.years() + "Y " : ""}
-          //   {diff.months() ? diff.months() + "M " : ""}
-          //   {diff.days() ? diff.days() + "D " : ""}
-          //   {diff.hours() + "hr "}
-          //   {diff.minutes() + "min"}
-          // </div>
-          // <div>{moment(moment(row.original.downtimeStart)).fromNow()}</div>
-          <DataTableDuration d={row.original.downtimeStart} />
-        );
+        return <DataTableDuration d={row.original.downtimeStart} />;
       },
     },
   ];

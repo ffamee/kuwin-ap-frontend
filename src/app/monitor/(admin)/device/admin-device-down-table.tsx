@@ -7,13 +7,16 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 import { DownApTab } from "@/types/ap-type";
+import { GetDownAccessPoint } from "./device-handler";
 
 const DataTableDuration = dynamic(
   () => import("@/components/table/data-table-duration"),
   { ssr: false }
 );
 
-export default function AdminDownDeviceTable({ data }: { data: DownApTab[] }) {
+const data = await GetDownAccessPoint();
+
+export default function AdminDownDeviceTable() {
   const columns: ColumnDef<DownApTab>[] = [
     {
       accessorKey: "name",

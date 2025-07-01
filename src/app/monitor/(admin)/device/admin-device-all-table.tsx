@@ -7,8 +7,11 @@ import { ColumnDef } from "@tanstack/react-table";
 import { AllApTab } from "@/types/ap-type";
 
 import { DataTableColumnHeader } from "@/components/table/data-table-header";
+import { GetAllAccessPoint } from "./device-handler";
 
-export default function AdminAllDeviceTable({ data }: { data: AllApTab[] }) {
+const data = await GetAllAccessPoint();
+
+export default function AdminAllDeviceTable() {
   const columns: ColumnDef<AllApTab>[] = [
     {
       accessorKey: "name",

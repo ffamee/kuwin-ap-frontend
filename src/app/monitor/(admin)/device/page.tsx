@@ -1,7 +1,7 @@
 import AdminDeviceTabs from "./admin-device-tab";
 
 async function GetAllAccessPoint() {
-  const res = await fetch(`http://localhost:3001/accesspoints`);
+  const res = await fetch(`${process.env.BACKEND_URL}/accesspoints`);
   if (!res.ok) {
     throw new Error("fail to fetching GetAllAccessPoint");
   }
@@ -9,7 +9,7 @@ async function GetAllAccessPoint() {
 }
 
 async function GetDownAccessPoint() {
-  const res = await fetch(`http://localhost:3001/accesspoints/down`);
+  const res = await fetch(`${process.env.BACKEND_URL}/accesspoints/down`);
   if (!res.ok) {
     throw new Error("fail to fetching GetDownAccessPoint");
   }
@@ -17,6 +17,10 @@ async function GetDownAccessPoint() {
 }
 
 export default async function Page() {
+  // const [alldata, downdata] = await Promise.all([
+  //   GetAllAccessPoint(),
+  //   GetDownAccessPoint(),
+  // ]);
   const alldata = await GetAllAccessPoint();
   const downdata = await GetDownAccessPoint();
   return (

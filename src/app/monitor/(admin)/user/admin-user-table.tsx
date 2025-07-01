@@ -4,11 +4,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-header";
 import { UserTable } from "@/components/table/user-table";
 
-import { useState } from "react";
+import { startTransition, useOptimistic, useState } from "react";
 import { Button } from "@/components/ui/button";
 import UserEdit from "@/components/modal/user-edit";
 import UserAdding from "@/components/modal/user-adding";
 import { User } from "@/types/user-type";
+import { AddUser, DeleteUser } from "./user-handler";
 
 // type User = {
 //   id: string;
@@ -17,24 +18,47 @@ import { User } from "@/types/user-type";
 // };
 
 export default function UserManageTable({ data }: { data: User[] }) {
+  // handler for Users Display
   const [users, setUsers] = useState(data);
+  const [optimisticUsers, setOptimisticUsers] = useOptimistic(
+    users,
+    (currentUsers, optimisticUsers: User) => [optimisticUsers, ...currentUsers]
+  );
 
-  const handleDelete = async (id: string) => {
-    try {
-      const confirmed = confirm("Are you sure to delete this user");
-      if (!confirmed) return;
-      const res = await fetch(`http://localhost:3001/users/delete/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to try delete");
-      setUsers((prev) => prev.filter((user) => user.id !== id));
-    } catch (err) {
-      console.error(err);
-      alert("Failed to delete user");
-    }
+  //handler for Add User
+  const handleAddUser = async (user: {
+    username: string;
+    password: string;
+    privilege: number;
+  }) => {
+    // startTransition(() => {
+    //   setOptimisticUsers({
+    //     id: "#",
+    //     username: user.username,
+    //     privilege: user.privilege,
+    //   });
+    // });
+    const data = await AddUser(user);
+    setUsers((prev) => [data, ...prev]);
+    alert("Add User Success");
   };
 
+  // handler for delete user
+  const handleDelete = async (id: string) => {
+    DeleteUser(id);
+    setUsers((prev) => prev.filter((user) => user.id !== id));
+  };
+
+  // handler for edit user
+  const handleEdit = (editedUser: User) => {
+    //console.log(editedUser);
+    setUsers((prev) =>
+      prev.map((user) => (user.id === editedUser.id ? editedUser : user))
+    );
+    //setOptimisticUsers(editedUser);
+  };
+
+  // Create Table's Header
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: "username",
@@ -56,16 +80,7 @@ export default function UserManageTable({ data }: { data: User[] }) {
       cell: ({ row }) => {
         return (
           <div>
-            <UserEdit
-              data={row.original}
-              onUserEdited={(editedUser: User) => {
-                setUsers((prev) =>
-                  prev.map((user) =>
-                    user.id === editedUser.id ? editedUser : user
-                  )
-                );
-              }}
-            />
+            <UserEdit data={row.original} onUserEdited={handleEdit} />
             <Button
               variant="outline"
               onClick={() => handleDelete(row.original.id)}
@@ -77,15 +92,11 @@ export default function UserManageTable({ data }: { data: User[] }) {
       },
     },
   ];
-
+  //console.log(optimisticUsers);
   return (
     <div>
-      <UserAdding
-        onUserAdded={(newUser: User) => {
-          setUsers((prev) => [newUser, ...prev]);
-        }}
-      />
-      <UserTable columns={columns} data={users} />
+      <UserAdding onUserAdded={handleAddUser} />
+      <UserTable columns={columns} data={optimisticUsers} />
     </div>
   );
 }

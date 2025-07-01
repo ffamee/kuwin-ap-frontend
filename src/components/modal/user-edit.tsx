@@ -14,19 +14,20 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import UserMenu from "../dropdown-menu/user-menu";
 import { User } from "@/types/user-type";
+import { EditUser } from "@/app/monitor/(admin)/user/user-handler";
 
-// type User = {
-//   id: string;
-//   privilege: number;
-//   username: string;
+// type EditModalProps = {
+//   data: User;
+//   onUserEdited: (editedUser: User) => void;
 // };
 
-type EditModalProps = {
+export default function UserEdit({
+  data,
+  onUserEdited,
+}: {
   data: User;
-  onUserEdited: (user: User) => void;
-};
-
-export default function UserEdit({ data, onUserEdited }: EditModalProps) {
+  onUserEdited: (editedUser: User) => void;
+}) {
   const [formData, setFormData] = useState(data);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,37 +36,27 @@ export default function UserEdit({ data, onUserEdited }: EditModalProps) {
       [name]: value,
     }));
   };
-  console.log(formData.username);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
       setOpen(true);
       return;
     }
-    const res = await fetch(`http://localhost:3001/users/edit/${formData.id}`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    if (res.status === 409) {
-      alert("Username already exists");
-      throw new Error("Username already exists");
-    }
-    if (!res.ok) {
-      alert("failed to submit");
-      throw new Error("Failed to submit");
-    } else {
-      console.log("post success");
-      const editedUser = await res.json();
-      onUserEdited(editedUser);
-    }
+    console.log("going to EditUser...");
+    const editedUser = await EditUser(data.id, formData);
+    console.log("finishing EditUser...");
+    console.log(editedUser);
+
+    setOpen(false);
+    onUserEdited(formData);
   };
 
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState({
     username: "",
   });
+
   const validate = () => {
     const newError = {
       username: "",
@@ -78,10 +69,13 @@ export default function UserEdit({ data, onUserEdited }: EditModalProps) {
     setErrors(newError);
     return isValid;
   };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit</Button>
+        <Button variant="outline" onClick={() => setFormData(data)}>
+          Edit
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit} autoComplete="off">

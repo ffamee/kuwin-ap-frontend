@@ -12,19 +12,35 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { User } from "@/types/user-type";
+//import { User } from "@/types/user-type";
 import UserMenu from "../dropdown-menu/user-menu";
 
-type AddModalProps = {
-  onUserAdded: (user: User) => void;
-};
+// type AddModalProps = {
+//   onUserAdded: (user: User) => void;
+// };
 
-export default function UserAdding({ onUserAdded }: AddModalProps) {
+export default function UserAdding({
+  onUserAdded,
+}: {
+  onUserAdded: ({
+    username,
+    password,
+    privilege,
+  }: {
+    username: string;
+    password: string;
+    privilege: number;
+  }) => void;
+}) {
+  // handler for form in Adding Modal
+  const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     privilege: 0,
   });
+
+  // handler for changing in form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -33,6 +49,7 @@ export default function UserAdding({ onUserAdded }: AddModalProps) {
     }));
   };
 
+  // handler when form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
@@ -40,27 +57,10 @@ export default function UserAdding({ onUserAdded }: AddModalProps) {
       return;
     }
     setOpen(false);
-    const res = await fetch(`http://localhost:3001/users/add`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    if (res.status === 409) {
-      alert("Username already exists");
-      throw new Error("Username already exists");
-    }
-    if (!res.ok) {
-      alert("Failed to submit");
-      throw new Error("Failed to submit");
-    } else {
-      console.log("post success", res.statusText);
-      const newUser = await res.json();
-      onUserAdded(newUser);
-    }
+    onUserAdded(formData);
   };
 
-  const [open, setOpen] = useState(false);
+  // check if form is validate
   const [errors, setErrors] = useState({
     username: "",
     password: "",
@@ -86,7 +86,18 @@ export default function UserAdding({ onUserAdded }: AddModalProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Add New User</Button>
+        <Button
+          variant="outline"
+          onClick={() =>
+            setFormData({
+              username: "",
+              password: "",
+              privilege: 0,
+            })
+          }
+        >
+          Add New User
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit} autoComplete="off">

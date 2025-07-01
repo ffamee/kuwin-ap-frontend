@@ -31,14 +31,14 @@ export default function UserManageTable({ data }: { data: User[] }) {
     password: string;
     privilege: number;
   }) => {
-    // startTransition(() => {
-    //   setOptimisticUsers({
-    //     id: "#",
-    //     username: user.username,
-    //     privilege: user.privilege,
-    //   });
-    // });
     const data = await AddUser(user);
+    startTransition(() => {
+      setOptimisticUsers({
+        id: "#",
+        username: user.username,
+        privilege: user.privilege,
+      });
+    });
     setUsers((prev) => [data, ...prev]);
     alert("Add User Success");
   };

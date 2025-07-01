@@ -2,18 +2,11 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AllApTab, DownApTab } from "@/types/ap-type";
 import React from "react";
 import AdminAllDeviceTable from "./admin-device-all-table";
 import AdminDownDeviceTable from "./admin-device-down-table";
 
-export default function AdminDeviceTabs({
-  alldata,
-  downdata,
-}: {
-  alldata: AllApTab[];
-  downdata: DownApTab[];
-}) {
+export default function AdminDeviceTabs() {
   const [tab, setTab] = React.useState<string>("all");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const handleChange = (value: string) => {
@@ -36,10 +29,10 @@ export default function AdminDeviceTabs({
         ) : (
           <div>
             <TabsContent value="all">
-              <AdminAllDeviceTable data={alldata} />
+              <AdminAllDeviceTable />
             </TabsContent>
             <TabsContent value="down">
-              <AdminDownDeviceTable data={downdata} />
+              <AdminDownDeviceTable />
             </TabsContent>
           </div>
         )}

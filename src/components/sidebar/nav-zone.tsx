@@ -123,7 +123,7 @@ export default function NavZone(props: NavZoneProps) {
 							<div className="overflow-y-auto no-scrollbar flex flex-col p-2">
 								{faculties.map((item: Entity) => (
 									<Link
-										href={`/faculty/${item.id}`}
+										href={`/monitor/faculty/${item.id}`}
 										className="rounded-md hover:bg-slate-100 truncate py-2 pl-2"
 										title={item.name}
 										key={item.id}
@@ -143,7 +143,7 @@ export default function NavZone(props: NavZoneProps) {
 							<div className="overflow-y-auto no-scrollbar flex flex-col p-2">
 								{organizations.map((item: Entity) => (
 									<Link
-										href={`/organization/${item.id}`}
+										href={`/monitor/organization/${item.id}`}
 										className="rounded-md hover:bg-slate-100 truncate py-2 pl-2"
 										title={item.name}
 										key={item.id}
@@ -163,7 +163,7 @@ export default function NavZone(props: NavZoneProps) {
 							<div className="overflow-y-auto no-scrollbar flex flex-col p-2">
 								{dormitories.map((item: Entity) => (
 									<Link
-										href={`/dormitory/${item.id}`}
+										href={`/monitor/dormitory/${item.id}`}
 										className="rounded-md hover:bg-slate-100 truncate py-2 pl-2"
 										title={item.name}
 										key={item.id}

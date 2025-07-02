@@ -58,4 +58,40 @@ type AccessPointOverview = {
   numberClients_2: number;
 };
 
-export type { AccessPoint, AccessPointName, AccessPointOverview };
+type AllApTab = Pick<
+  AccessPoint,
+  | "id"
+  | "name"
+  | "status"
+  | "ip"
+  | "location"
+  | "numberClient"
+  | "numberClient_2"
+  | "wlc"
+  | "wlcActive"
+> & {
+  building: {
+    id: number;
+    entity: { id: number; section: { id: number } };
+  };
+};
+
+type DownApTab = Pick<
+  AccessPoint,
+  "id" | "name" | "status" | "ip" | "location"
+> & {
+  downtimeStart: Date;
+  jobStatus: string;
+  building: {
+    id: number;
+    entity: { id: number; section: { id: number } };
+  };
+};
+
+export type {
+  AccessPoint,
+  AccessPointName,
+  AccessPointOverview,
+  AllApTab,
+  DownApTab,
+};

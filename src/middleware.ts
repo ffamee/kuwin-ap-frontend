@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
 
 	// If the user is authenticated and trying to access the login page, redirect them to the pro page
 	if (isAuthenticated && request.nextUrl.pathname === "/login") {
-		return NextResponse.redirect(new URL("/pro", request.url));
+		return NextResponse.redirect(new URL("/monitor", request.url));
 	}
 
 	return NextResponse.next();

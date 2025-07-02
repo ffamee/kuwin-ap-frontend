@@ -134,7 +134,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ExInteractiveChart() {
-	const [timeRange, setTimeRange] = React.useState("90d");
+	const [timeRange, setTimeRange] = React.useState("30d");
 
 	const filteredData = chartData.filter((item) => {
 		const date = new Date(item.date);

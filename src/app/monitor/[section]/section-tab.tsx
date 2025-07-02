@@ -18,7 +18,6 @@ export default function SectionTab({
   header: ColumnDef<EntityOverview>[];
   data: EntityOverview[];
 }) {
-  //console.log(header);
   const [tab, setTab] = React.useState<string>("list");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const handleChange = (value: string) => {
@@ -26,7 +25,7 @@ export default function SectionTab({
     setTimeout(() => {
       setIsLoading(false);
       setTab(value);
-    }, 1000);
+    }, 300);
   };
 
   return (

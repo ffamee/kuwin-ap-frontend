@@ -3,7 +3,6 @@
 import * as React from "react";
 import {
 	House,
-	ChartArea,
 	Settings,
 	LogOut,
 	Hexagon,
@@ -39,25 +38,19 @@ const sections = [
 	{
 		title: "Faculty",
 		icon: University,
-		url: "/faculty",
+		url: "/monitor/1",
 	},
 	{
 		title: "Organization",
 		icon: BriefcaseBusiness,
-		url: "/organization",
+		url: "/monitor/2",
 	},
 	{
 		title: "Dormitory",
 		icon: Hotel,
-		url: "/dormitory",
+		url: "/monitor/3",
 	},
 ];
-
-const graphs = {
-	title: "Graphs",
-	icon: ChartArea,
-	url: "/graph",
-};
 
 const report = {
 	title: "Report",
@@ -129,14 +122,6 @@ export function AppSidebar({
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						))}
-						<SidebarMenuItem key={graphs.title}>
-							<SidebarMenuButton tooltip={graphs.title} asChild>
-								<Link href={graphs.url} className="flex items-center gap-2">
-									{graphs.icon && <graphs.icon />}
-									<span>{graphs.title}</span>
-								</Link>
-							</SidebarMenuButton>
-						</SidebarMenuItem>
 						<SidebarMenuItem key={report.title}>
 							<SidebarMenuButton tooltip={report.title} asChild>
 								<Link href={report.url} className="flex items-center gap-2">

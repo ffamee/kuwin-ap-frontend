@@ -39,7 +39,10 @@ const columns: ColumnDef<SectionOverview>[] = [
     cell: ({ row }) => {
       const url = "/monitor/" + row.original.id;
       return (
-        <Link href={url} className="max-w-xs whitespace-normal break-words">
+        <Link
+          href={url}
+          className="max-w-xs whitespace-normal break-words capitalize"
+        >
           {row.getValue("name")}
         </Link>
       );
@@ -92,7 +95,9 @@ export default function Page() {
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const data = await fetch(`${process.env.BACKEND_URL}/section/monitor`);
+        const data = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/monitor`
+        );
         if (!data.ok) {
           throw new Error("Network response was not ok");
         }

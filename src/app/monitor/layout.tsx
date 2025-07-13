@@ -24,12 +24,15 @@ export default async function SectionLayout({
     const token = await getToken();
     const user: UserData = { id: "", username: "Guest" };
     if (token) {
-      const res = await fetch(`${process.env.BACKEND_URL}/users/profile`, {
-        credentials: "include",
-        headers: {
-          Cookie: `accessToken=${token}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/profile`,
+        {
+          credentials: "include",
+          headers: {
+            Cookie: `accessToken=${token}`,
+          },
+        }
+      );
       if (res.ok) {
         const data = await res.json();
         user.id = data.id;

@@ -40,6 +40,7 @@ export default async function Page({
         buildings={data.buildings}
         accessPoints={data.accesspoints}
         entityId={entity}
+        entity={{ entityName: data.name, entityId: entity }}
       />
     </div>
   );

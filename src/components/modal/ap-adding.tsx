@@ -145,10 +145,8 @@ export default function ApAdding({
                 onChange={handleChange}
                 className="outline w-full"
               />
-              {errors.entity && (
-                <p className="text-red-500 text-sm">{errors.entity}</p>
-              )}
             </div>
+
             <div className="flex flex-row gap-3">
               <label className="w-fit">Building:</label>
               <input
@@ -158,11 +156,10 @@ export default function ApAdding({
                 autoComplete="false"
                 onChange={handleChange}
                 className="outline w-full"
+                readOnly
               />
-              {errors.building && (
-                <p className="text-red-500 text-sm">{errors.building}</p>
-              )}
             </div>
+
             <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit">Model:</label>
@@ -181,6 +178,7 @@ export default function ApAdding({
                 )}
               </div>
             </div>
+
             <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit text-nowrap">Serial Number:</label>
@@ -199,6 +197,7 @@ export default function ApAdding({
                 )}
               </div>
             </div>
+
             <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit text-nowrap"> Eth. Mac Address:</label>
@@ -217,6 +216,7 @@ export default function ApAdding({
                 )}
               </div>
             </div>
+
             <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit text-nowrap">IP Address:</label>
@@ -235,6 +235,7 @@ export default function ApAdding({
                 )}
               </div>
             </div>
+
             <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit"> Location:</label>
@@ -253,6 +254,7 @@ export default function ApAdding({
                 )}
               </div>
             </div>
+
             <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit"> Description:</label>
@@ -264,11 +266,6 @@ export default function ApAdding({
                   onChange={handleChange}
                   className="outline w-full"
                 />
-              </div>
-              <div>
-                {errors.description && (
-                  <p className="text-red-500 text-sm">{errors.description}</p>
-                )}
               </div>
             </div>
           </div>

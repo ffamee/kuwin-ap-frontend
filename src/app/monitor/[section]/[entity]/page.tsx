@@ -29,6 +29,12 @@ export default async function Page({
     totalAPDown: data.apDown,
     totalUser: data.totalUser,
   };
+  const sectionName =
+    section === "1"
+      ? "Faculty"
+      : section === "2"
+      ? "Organization"
+      : "Dormitory";
 
   return (
     <div className="flex flex-col p-4 gap-4">
@@ -39,8 +45,11 @@ export default async function Page({
       <EntityTab
         buildings={data.buildings}
         accessPoints={data.accesspoints}
-        entityId={entity}
-        entity={{ entityName: data.name, entityId: entity }}
+        entity={{
+          entityName: data.name,
+          entityId: entity,
+          sectionName: sectionName,
+        }}
       />
     </div>
   );

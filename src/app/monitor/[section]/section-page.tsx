@@ -7,6 +7,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { EntityOverview } from "@/types/entity-type";
 import { SectionOverview } from "@/types/section-type";
 
+import { SquarePen, Delete } from "lucide-react";
+
 import { DataTableColumnHeader } from "@/components/table/data-table-header";
 import Link from "next/link";
 
@@ -109,6 +111,29 @@ export default function SectionPage({
         return <div>{total}</div>;
       },
     },
+    {
+      id: "action",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Action" />
+      ),
+      cell: ({ row }) => {
+        const url = "./" + section + "/" + row.original.id;
+        return (
+          <div className="flex item-center-safe justify-evenly">
+            <Link href={url}>
+              <span>
+                <SquarePen size={16} />
+              </span>
+            </Link>
+            <Link href={url}>
+              <span>
+                <Delete size={16} />
+              </span>
+            </Link>
+          </div>
+        );
+      },
+    },
   ];
   return (
     <div className="flex flex-col p-4 gap-4 w-full min-h-0 h-screen overflow-y-auto no-scrollbar overscroll-y-contain">
@@ -118,7 +143,7 @@ export default function SectionPage({
       <SectionCard sumData={sumData} />
 
       <div>
-        <SectionTab header={columns} data={data.entities} />
+        <SectionTab header={columns} data={data.entities} name={data.name} />
       </div>
     </div>
   );

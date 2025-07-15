@@ -92,7 +92,6 @@ export default function UserManageTable({ data }: { data: User[] }) {
       },
     },
   ];
-  //console.log(optimisticUsers);
   return (
     <div>
       <UserAdding onUserAdded={handleAddUser} />

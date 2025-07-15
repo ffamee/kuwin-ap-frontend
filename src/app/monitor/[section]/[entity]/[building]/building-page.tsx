@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/tooltip";
 import ApAdding from "@/components/modal/ap-adding";
 import { useState } from "react";
+import ApEdit from "@/components/modal/ap-edit";
 
 const colorsMap: Record<string, string> = {
   up: "bg-green-500",
@@ -242,7 +243,8 @@ export default function BuildingPage({
       },
     },
   ];
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalAddingOpen, setModalAddingOpen] = useState(false);
+  const [modalEditOpen, setModalEditOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-4 w-full p-4 min-h-0 h-screen overflow-y-auto no-scrollbar overscroll-y-contain">
@@ -295,9 +297,7 @@ export default function BuildingPage({
               <TooltipTrigger asChild>
                 <Button
                   variant="outline"
-                  onClick={() => {
-                    setModalOpen(true);
-                  }}
+                  onClick={() => setModalAddingOpen(true)}
                 >
                   Add
                 </Button>
@@ -306,16 +306,34 @@ export default function BuildingPage({
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline">Edit</Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setModalEditOpen(true)}
+                >
+                  Edit
+                </Button>
               </TooltipTrigger>
               <TooltipContent>Edit this Building details</TooltipContent>
             </Tooltip>
           </div>
         </div>
         <ApAdding
-          modalOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
+          modalOpen={modalAddingOpen}
+          onClose={() => setModalAddingOpen(false)}
           basicDetails={{ entity: "", building: data.name }}
+        />
+        <ApEdit
+          modalOpen={modalEditOpen}
+          onClose={() => setModalEditOpen(false)}
+          basicDetails={{
+            entity: "",
+            building: data.name,
+            model: "",
+            serialNumber: "",
+            ethMac: "",
+            ip: "",
+            location: "",
+          }}
         />
         <div>
           {isLoading ? (

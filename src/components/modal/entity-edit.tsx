@@ -18,6 +18,8 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
+import { EditEntity } from "@/api/entity-api";
+
 export default function EntityEdit({
   modalOpen,
   onClose,
@@ -25,16 +27,16 @@ export default function EntityEdit({
 }: {
   modalOpen: boolean;
   onClose: () => void;
-  basicDetails: { section: string; entity: string };
+  basicDetails: { section: string; entityName: string; entityId: string };
 }) {
   // handler for form in Adding Modal
   const formTemplate = {
-    entity: basicDetails.entity,
-    section: basicDetails.section,
+    name: basicDetails.entityName,
+    sectionId: basicDetails.section,
     description: "",
   };
   const [formData, setFormData] = useState(formTemplate);
-  const [sectionMenu, selectSectionMenu] = useState(formData.section);
+  const [sectionMenu, selectSectionMenu] = useState(formData.sectionId);
 
   // handler for changing in form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,24 +54,25 @@ export default function EntityEdit({
       modalOpen = true;
       return;
     }
+    EditEntity(basicDetails.entityId, formData);
     onClose();
   };
 
   // check if form is validate
   const [errors, setErrors] = useState({
-    entity: "",
+    name: "",
     section: "",
     description: "",
   });
   const validate = () => {
     const newError = {
-      entity: "",
+      name: "",
       section: "",
       description: "",
     };
     let isValid = true;
-    if (!formData.entity.trim()) {
-      newError.entity = basicDetails.section + " name is required";
+    if (!formData.name.trim()) {
+      newError.name = basicDetails.section + " name is required";
       isValid = false;
     }
 
@@ -90,11 +93,42 @@ export default function EntityEdit({
               Edit {basicDetails.section}
             </DialogTitle>
             <DialogDescription>
-              editing {basicDetails.entity} informations
+              editing {basicDetails.entityName} informations
             </DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col gap-4">
+            <div>
+              <div className="flex flex-row gap-3">
+                <label className="w-fit">Section:</label>
+                <div className="w-full">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="capitalize w-full">
+                        {sectionMenu}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onSelect={() => selectSectionMenu("faculty")}
+                      >
+                        Faculty
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => selectSectionMenu("organization")}
+                      >
+                        Organization
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => selectSectionMenu("dormitory")}
+                      >
+                        Dormitory
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+            </div>
             <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit text-nowrap capitalize">
@@ -102,47 +136,17 @@ export default function EntityEdit({
                 </label>
                 <input
                   type="text"
-                  name="entity"
-                  value={formData.entity}
+                  name="name"
+                  value={formData.name}
                   autoComplete="false"
                   onChange={handleChange}
                   className="outline w-full"
                 />
               </div>
               <div>
-                {errors.entity && (
-                  <p className="text-red-500 text-sm">{errors.entity}</p>
+                {errors.name && (
+                  <p className="text-red-500 text-sm">{errors.name}</p>
                 )}
-              </div>
-            </div>
-
-            <div className="flex flex-row gap-3">
-              <label className="w-fit">Section:</label>
-              <div className="w-full">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="capitalize w-full">
-                      {sectionMenu}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onSelect={() => selectSectionMenu("faculty")}
-                    >
-                      Faculty
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={() => selectSectionMenu("organization")}
-                    >
-                      Organization
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={() => selectSectionMenu("dormitory")}
-                    >
-                      Dormitory
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
               </div>
             </div>
             <div>

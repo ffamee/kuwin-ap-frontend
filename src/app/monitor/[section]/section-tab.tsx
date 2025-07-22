@@ -18,18 +18,21 @@ import {
 import { EntityOverview } from "@/types/entity-type";
 import { ColumnDef } from "@tanstack/react-table";
 import EntityAdding from "@/components/modal/entity-adding";
+import { Section } from "@/types/section-type";
 
 export default function SectionTab({
   header,
   data,
-  name,
+  section,
 }: {
   header: ColumnDef<EntityOverview>[];
   data: EntityOverview[];
-  name: string;
+  section: Section;
 }) {
   const [tab, setTab] = React.useState<string>("list");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [entities, setEntities] = useState(data);
+  const [modalOpen, setModalOpen] = useState(false);
   const handleChange = (value: string) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -37,7 +40,10 @@ export default function SectionTab({
       setTab(value);
     }, 300);
   };
-  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleAddEntity = (entity: EntityOverview) => {
+    setEntities((prev) => [entity, ...prev]);
+  };
 
   return (
     <Tabs value={tab} onValueChange={handleChange} className="w-full space-y-1">
@@ -69,7 +75,8 @@ export default function SectionTab({
       <EntityAdding
         modalOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        basicDetails={{ section: name }}
+        basicDetails={section}
+        onEntityAdded={handleAddEntity}
       />
       <div>
         {isLoading ? (
@@ -81,7 +88,7 @@ export default function SectionTab({
             </TabsContent>
             <TabsContent value="list">
               <div className="w-full">
-                <SectionTable columns={header} data={data} />
+                <SectionTable columns={header} data={entities} />
               </div>
             </TabsContent>
           </div>

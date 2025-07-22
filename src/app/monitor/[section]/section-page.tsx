@@ -7,28 +7,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { EntityOverview } from "@/types/entity-type";
 import { SectionOverview } from "@/types/section-type";
 
-import { SquarePen, Delete } from "lucide-react";
-
 import { DataTableColumnHeader } from "@/components/table/data-table-header";
+import DeleteComfirm from "@/components/modal/confirmdelete";
 import Link from "next/link";
-
-// const chartData1 = [
-//   { month: "January", desktop: 186, mobile: 80 },
-//   { month: "February", desktop: 305, mobile: 200 },
-//   { month: "March", desktop: 237, mobile: 120 },
-//   { month: "April", desktop: 73, mobile: 190 },
-//   { month: "May", desktop: 209, mobile: 130 },
-//   { month: "June", desktop: 214, mobile: 140 },
-// ];
-
-// const chartData2 = [
-//   { month: "January", desktop: 186, mobile: 80 },
-//   { month: "February", desktop: 305, mobile: 200 },
-//   { month: "March", desktop: 237, mobile: 120 },
-//   { month: "April", desktop: 73, mobile: 190 },
-//   { month: "May", desktop: 209, mobile: 130 },
-//   { month: "June", desktop: 214, mobile: 140 },
-// ];
+import { DeleteEntity } from "@/api/entity-api";
 
 export default function SectionPage({
   section,
@@ -43,6 +25,12 @@ export default function SectionPage({
     totalAPDown: data.apDown,
     totalUser: data.totalUser,
   };
+
+  const handleDeleteEntity = (entityId: number) => {
+    DeleteEntity(entityId);
+  };
+
+  //const [modalOpen, setModalOpen] = useState(false);
   const columns: ColumnDef<EntityOverview>[] = [
     {
       accessorKey: "name",
@@ -117,19 +105,36 @@ export default function SectionPage({
         <DataTableColumnHeader column={column} title="Action" />
       ),
       cell: ({ row }) => {
-        const url = "./" + section + "/" + row.original.id;
         return (
           <div className="flex item-center-safe justify-evenly">
-            <Link href={url}>
+            {/* <div>
               <span>
-                <SquarePen size={16} />
+                <SquarePen
+                  size={16}
+                  onClick={() => (
+                    setModalOpen(true),
+                    (
+                      <EntityEdit
+                        modalOpen={modalOpen}
+                        onClose={() => setModalOpen(false)}
+                        basicDetails={{
+                          section: data.name,
+                          entityName: row.original.name,
+                          entityId: row.original.id,
+                        }}
+                      />
+                    )
+                  )}
+                />
               </span>
-            </Link>
-            <Link href={url}>
+            </div> */}
+            <div>
               <span>
-                <Delete size={16} />
+                <DeleteComfirm
+                  onConfirm={() => handleDeleteEntity(row.original.id)}
+                />
               </span>
-            </Link>
+            </div>
           </div>
         );
       },
@@ -143,7 +148,11 @@ export default function SectionPage({
       <SectionCard sumData={sumData} />
 
       <div>
-        <SectionTab header={columns} data={data.entities} name={data.name} />
+        <SectionTab
+          header={columns}
+          data={data.entities}
+          section={{ id: data.id, name: data.name }}
+        />
       </div>
     </div>
   );

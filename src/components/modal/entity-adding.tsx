@@ -17,24 +17,39 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { AddEntity } from "@/api/entity-api";
+import { Section } from "@/types/section-type";
+import { EntityOverview } from "@/types/entity-type";
+
+const DEFAULT_ENTITY: EntityOverview = {
+  id: 0,
+  name: "",
+  apAll: 0,
+  apDown: 0,
+  apMaintain: 0,
+  user1: 0,
+  user2: 0,
+};
 
 export default function EntityAdding({
   modalOpen,
   onClose,
   basicDetails,
+  onEntityAdded,
 }: {
   modalOpen: boolean;
   onClose: () => void;
-  basicDetails: { section: string };
+  basicDetails: Section;
+  onEntityAdded: (entity: EntityOverview) => void;
 }) {
   // handler for form in Adding Modal
   const formTemplate = {
-    entity: "",
-    section: basicDetails.section,
-    description: "",
+    name: "",
+    sectionId: basicDetails.id,
+    // description: "",
   };
   const [formData, setFormData] = useState(formTemplate);
-  const [sectionMenu, selectSectionMenu] = useState(formData.section);
+  const [sectionMenu, selectSectionMenu] = useState(formData.sectionId);
 
   // handler for changing in form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,27 +68,42 @@ export default function EntityAdding({
       modalOpen = true;
       return;
     }
+    AddEntity(formData);
+    const newEntity: EntityOverview = DEFAULT_ENTITY;
+    newEntity.name = formData.name;
+    onEntityAdded(newEntity);
     onClose();
+  };
+
+  const handleMenu = (menu: number) => {
+    if (menu === 1) formData.sectionId = 1;
+    else if (menu === 2) formData.sectionId = 2;
+    else if (menu === 3) formData.sectionId = 3;
+    else formData.sectionId = 0;
+
+    selectSectionMenu(menu);
   };
 
   // check if form is validate
   const [errors, setErrors] = useState({
-    entity: "",
+    name: "",
     section: "",
-    description: "",
+    // description: "",
   });
   const validate = () => {
     const newError = {
-      entity: "",
+      name: "",
       section: "",
-      description: "",
+      // description: "",
     };
     let isValid = true;
-    if (!formData.entity.trim()) {
-      newError.entity = basicDetails.section + " name is required";
+    if (!formData.name.trim()) {
+      newError.name = basicDetails.name + " name is required";
       isValid = false;
     }
-
+    if (formData.sectionId === 0) {
+      newError.section = "selected section required";
+    }
     setErrors(newError);
     return isValid;
   };
@@ -87,9 +117,9 @@ export default function EntityAdding({
           className="flex flex-col gap-3"
         >
           <DialogHeader>
-            <DialogTitle>Add New {basicDetails.section}</DialogTitle>
+            <DialogTitle>Add New {basicDetails.name}</DialogTitle>
             <DialogDescription>
-              adding new faculty/organization/dormitory
+              adding new {basicDetails.name}
             </DialogDescription>
           </DialogHeader>
 
@@ -97,20 +127,20 @@ export default function EntityAdding({
             <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit text-nowrap capitalize">
-                  {basicDetails.section}:
+                  {basicDetails.name}:
                 </label>
                 <input
                   type="text"
-                  name="entity"
-                  value={formData.entity}
+                  name="name"
+                  value={formData.name}
                   autoComplete="false"
                   onChange={handleChange}
                   className="outline w-full"
                 />
               </div>
               <div>
-                {errors.entity && (
-                  <p className="text-red-500 text-sm">{errors.entity}</p>
+                {errors.name && (
+                  <p className="text-red-500 text-sm">{errors.name}</p>
                 )}
               </div>
             </div>
@@ -121,42 +151,30 @@ export default function EntityAdding({
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild disabled>
                     <Button variant="outline" className="capitalize w-full">
-                      {sectionMenu}
+                      {sectionMenu === 1
+                        ? "Faculty"
+                        : sectionMenu === 2
+                        ? "Organization"
+                        : sectionMenu === 3
+                        ? "Dormitory"
+                        : "Selected"}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onSelect={() => selectSectionMenu("faculty")}
-                    >
+                    <DropdownMenuItem onSelect={() => handleMenu(1)}>
                       Faculty
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={() => selectSectionMenu("organization")}
-                    >
+                    <DropdownMenuItem onSelect={() => handleMenu(2)}>
                       Organization
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={() => selectSectionMenu("dormitory")}
-                    >
+                    <DropdownMenuItem onSelect={() => handleMenu(3)}>
                       Dormitory
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              {/* <input
-                type="text"
-                name="building"
-                value={formData.section}
-                autoComplete="false"
-                onChange={handleChange}
-                className="outline w-full"
-                readOnly
-              />
-              {errors.section && (
-                <p className="text-red-500 text-sm">{errors.section}</p>
-              )} */}
             </div>
-            <div>
+            {/* <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit"> Description:</label>
                 <input
@@ -173,7 +191,7 @@ export default function EntityAdding({
                   <p className="text-red-500 text-sm">{errors.description}</p>
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
 
           <DialogFooter>

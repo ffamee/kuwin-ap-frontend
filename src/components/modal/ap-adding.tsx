@@ -127,13 +127,6 @@ export default function ApAdding({
             <DialogDescription>adding new user</DialogDescription>
           </DialogHeader>
 
-          {/* {formField.map((field)=>(
-            <div key={field.name}>
-              <label>{field.label}</label>
-              <input type={field.type} name={field.name} onChange={handleChange} value={formData.[field.name]}/>
-            </div>
-            
-          ))} */}
           <div className="flex flex-col gap-4">
             <div className="flex flex-row gap-3">
               <label className="w-fit">Faculty:</label>
@@ -144,6 +137,7 @@ export default function ApAdding({
                 autoComplete="false"
                 onChange={handleChange}
                 className="outline w-full"
+                readOnly
               />
             </div>
 
@@ -158,63 +152,6 @@ export default function ApAdding({
                 className="outline w-full"
                 readOnly
               />
-            </div>
-
-            <div>
-              <div className="flex flex-row gap-3">
-                <label className="w-fit">Model:</label>
-                <input
-                  type="text"
-                  name="model"
-                  value={formData.model}
-                  autoComplete="false"
-                  onChange={handleChange}
-                  className="outline w-full"
-                />
-              </div>
-              <div>
-                {errors.model && (
-                  <p className="text-red-500 text-sm">{errors.model}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <div className="flex flex-row gap-3">
-                <label className="w-fit text-nowrap">Serial Number:</label>
-                <input
-                  type="text"
-                  name="serialNumber"
-                  value={formData.serialNumber}
-                  autoComplete="false"
-                  onChange={handleChange}
-                  className="outline w-full"
-                />
-              </div>
-              <div>
-                {errors.serialNumber && (
-                  <p className="text-red-500 text-sm">{errors.serialNumber}</p>
-                )}
-              </div>
-            </div>
-
-            <div>
-              <div className="flex flex-row gap-3">
-                <label className="w-fit text-nowrap"> Eth. Mac Address:</label>
-                <input
-                  type="text"
-                  name="ethMac"
-                  value={formData.ethMac}
-                  autoComplete="false"
-                  onChange={handleChange}
-                  className="outline w-full"
-                />
-              </div>
-              <div>
-                {errors.ethMac && (
-                  <p className="text-red-500 text-sm">{errors.ethMac}</p>
-                )}
-              </div>
             </div>
 
             <div>
@@ -266,6 +203,13 @@ export default function ApAdding({
                   onChange={handleChange}
                   className="outline w-full"
                 />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex flex-row gap-3">
+                <label className="w-fit text-nowrap">Upload Picture</label>
+                <input type="file" name="picture" className="p-1 w-full" />
               </div>
             </div>
           </div>

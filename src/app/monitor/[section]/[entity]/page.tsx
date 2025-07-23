@@ -43,11 +43,11 @@ export default async function Page({
       </h1>
       <EntityCard sumData={sumData} />
       <EntityTab
-        buildings={data.buildings}
+        data={data.buildings}
         accessPoints={data.accesspoints}
         entity={{
           entityName: data.name,
-          entityId: entity,
+          entityId: data.id,
           sectionName: sectionName,
         }}
       />

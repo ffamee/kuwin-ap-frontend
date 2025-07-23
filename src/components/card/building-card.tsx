@@ -19,6 +19,8 @@ import { AccessPointOverview } from "@/types/ap-type";
 import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import ApAdding from "../modal/ap-adding";
+import { DeleteBuilding } from "@/api/building-api";
+import DeleteComfirm from "../modal/confirmdelete";
 
 const colorsMap: Record<string, string> = {
   up: "bg-green-500",
@@ -40,7 +42,7 @@ export function BuildingCard({
   building,
   accessPoints = [],
 }: {
-  entity: { entityId: string; entityName: string };
+  entity: { entityId: number; entityName: string };
   building: BuildingOverview;
   accessPoints: AccessPointOverview[];
 }) {
@@ -78,6 +80,7 @@ export function BuildingCard({
                 Full Details
               </Button>
             </Link>
+            <DeleteComfirm onConfirm={() => DeleteBuilding(building.id)} />
             <ApAdding
               modalOpen={modalOpen}
               onClose={() => setModalOpen(false)}

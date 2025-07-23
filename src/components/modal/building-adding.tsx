@@ -9,33 +9,41 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { BuildingOverview } from "@/types/building-type";
+import { AddBuilding } from "@/api/building-api";
+
+const DEFAULT_BUILDING: BuildingOverview = {
+  id: 0,
+  name: "",
+  apAll: 0,
+  apMaintain: 0,
+  apDown: 0,
+  user1: 0,
+  user2: 0,
+};
 
 export default function BuildingAdding({
   modalOpen,
   onClose,
   basicDetails,
+  onBuildingAdded,
 }: {
   modalOpen: boolean;
   onClose: () => void;
-  basicDetails: { section: string; entity: string };
+  basicDetails: { section: string; entityName: string; entityId: number };
+  onBuildingAdded: (building: BuildingOverview) => void;
 }) {
   // handler for form in Adding Modal
   const formTemplate = {
     name: "",
-    section: basicDetails.section,
-    entity: basicDetails.entity,
+    entityId: basicDetails.entityId,
+    entityName: basicDetails.entityName,
     description: "",
   };
   const [formData, setFormData] = useState(formTemplate);
-  const [sectionMenu, selectSectionMenu] = useState(formData.section);
 
   // handler for changing in form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,21 +62,23 @@ export default function BuildingAdding({
       modalOpen = true;
       return;
     }
+    AddBuilding(formData);
+    const newBuilding = DEFAULT_BUILDING;
+    newBuilding.name = formData.name;
+    onBuildingAdded(newBuilding);
     onClose();
   };
 
   // check if form is validate
   const [errors, setErrors] = useState({
     name: "",
-    section: "",
-    entity: "",
+    entityName: "",
     description: "",
   });
   const validate = () => {
     const newError = {
       name: "",
-      section: "",
-      entity: "",
+      entityName: "",
       description: "",
     };
     let isValid = true;
@@ -95,68 +105,38 @@ export default function BuildingAdding({
           </DialogHeader>
 
           <div className="flex flex-col gap-4">
-            <div>
-              <div className="flex flex-row gap-3">
-                <label className="w-fit text-nowrap">Building name:</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  autoComplete="false"
-                  onChange={handleChange}
-                  className="outline w-full"
-                />
-              </div>
-              <div>
-                {errors.name && (
-                  <p className="text-red-500 text-sm">{errors.name}</p>
-                )}
-              </div>
-            </div>
-
             <div className="flex flex-row gap-3">
               <label className="w-fit text-nowrap">Faculty:</label>
               <input
                 type="text"
-                name="entity"
-                value={formData.entity}
+                name="entityName"
+                value={formData.entityName}
                 autoComplete="false"
                 onChange={handleChange}
-                className="outline w-full"
+                className="outline w-full placeholder-muted"
                 readOnly
               />
-              {errors.entity && (
-                <p className="text-red-500 text-sm">{errors.entity}</p>
+              {errors.entityName && (
+                <p className="text-red-500 text-sm">{errors.entityName}</p>
               )}
             </div>
           </div>
-          <div className="flex flex-row gap-3">
-            <label className="w-fit">Section:</label>
-            <div className="w-full">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild disabled>
-                  <Button variant="outline" className="capitalize w-full">
-                    {sectionMenu}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem
-                    onSelect={() => selectSectionMenu("faculty")}
-                  >
-                    Faculty
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => selectSectionMenu("organization")}
-                  >
-                    Organization
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => selectSectionMenu("dormitory")}
-                  >
-                    Dormitory
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+          <div>
+            <div className="flex flex-row gap-3">
+              <label className="w-fit text-nowrap">Building name:</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                autoComplete="false"
+                onChange={handleChange}
+                className="outline w-full"
+              />
+            </div>
+            <div>
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name}</p>
+              )}
             </div>
           </div>
           <div>
@@ -170,6 +150,13 @@ export default function BuildingAdding({
                 onChange={handleChange}
                 className="outline w-full"
               />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex flex-row gap-3">
+              <label className="w-fit text-nowrap">Upload Picture</label>
+              <input type="file" name="picture" className="p-1 w-full" />
             </div>
           </div>
 

@@ -3,7 +3,7 @@ import { toast } from "sonner";
 export async function AddEntity(entityData: {
   name: string;
   sectionId: number;
-  // description: string;
+  description?: string;
 }) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/entities`, {
     method: "POST",
@@ -48,7 +48,7 @@ export async function DeleteEntity(entityId: number) {
 }
 
 export async function EditEntity(
-  entityId: string,
+  entityId: number,
   entityData: { name: string; sectionId: string; description?: string }
 ) {
   //console.log(entityData);

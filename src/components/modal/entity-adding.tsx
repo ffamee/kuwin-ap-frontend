@@ -123,6 +123,36 @@ export default function EntityAdding({
             </DialogDescription>
           </DialogHeader>
 
+          <div className="flex flex-row gap-3">
+            <label className="w-fit">Section:</label>
+            <div className="w-full">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild disabled>
+                  <Button variant="outline" className="capitalize w-full">
+                    {sectionMenu === 1
+                      ? "Faculty"
+                      : sectionMenu === 2
+                      ? "Organization"
+                      : sectionMenu === 3
+                      ? "Dormitory"
+                      : "Selected"}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={() => handleMenu(1)}>
+                    Faculty
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => handleMenu(2)}>
+                    Organization
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => handleMenu(3)}>
+                    Dormitory
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+
           <div className="flex flex-col gap-4">
             <div>
               <div className="flex flex-row gap-3">
@@ -145,35 +175,6 @@ export default function EntityAdding({
               </div>
             </div>
 
-            <div className="flex flex-row gap-3">
-              <label className="w-fit">Section:</label>
-              <div className="w-full">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild disabled>
-                    <Button variant="outline" className="capitalize w-full">
-                      {sectionMenu === 1
-                        ? "Faculty"
-                        : sectionMenu === 2
-                        ? "Organization"
-                        : sectionMenu === 3
-                        ? "Dormitory"
-                        : "Selected"}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onSelect={() => handleMenu(1)}>
-                      Faculty
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleMenu(2)}>
-                      Organization
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => handleMenu(3)}>
-                      Dormitory
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
             {/* <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit"> Description:</label>
@@ -192,6 +193,13 @@ export default function EntityAdding({
                 )}
               </div>
             </div> */}
+
+            <div>
+              <div className="flex flex-row gap-3">
+                <label className="w-fit text-nowrap">Upload Picture</label>
+                <input type="file" name="picture" className="p-1 w-full" />
+              </div>
+            </div>
           </div>
 
           <DialogFooter>

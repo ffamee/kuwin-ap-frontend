@@ -22,16 +22,17 @@ import BuildingAdding from "@/components/modal/building-adding";
 import EntityEdit from "@/components/modal/entity-edit";
 
 export default function EntityTab({
-  buildings,
+  data,
   accessPoints,
   entity: { entityName, entityId, sectionName },
 }: {
-  buildings: BuildingOverview[];
+  data: BuildingOverview[];
   accessPoints: [];
-  entity: { entityName: string; entityId: string; sectionName: string };
+  entity: { entityName: string; entityId: number; sectionName: string };
 }) {
-  const [tab, setTab] = React.useState<string>("list");
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [tab, setTab] = useState("list");
+  const [isLoading, setIsLoading] = useState(false);
+  const [buildings, setBuildings] = useState(data);
   const handleChange = (value: string) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -41,6 +42,9 @@ export default function EntityTab({
   };
   const [modalAddingOpen, setModalAddingOpen] = useState(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
+  const handleAddBuilding = (building: BuildingOverview) => {
+    setBuildings((prev) => [building, ...prev]);
+  };
 
   return (
     <Tabs value={tab} onValueChange={handleChange} className="w-full space-y-1">
@@ -78,7 +82,12 @@ export default function EntityTab({
       <BuildingAdding
         modalOpen={modalAddingOpen}
         onClose={() => setModalAddingOpen(false)}
-        basicDetails={{ section: sectionName, entity: entityName }}
+        basicDetails={{
+          section: sectionName,
+          entityName: entityName,
+          entityId: entityId,
+        }}
+        onBuildingAdded={handleAddBuilding}
       />
       <EntityEdit
         modalOpen={modalEditOpen}
@@ -99,14 +108,20 @@ export default function EntityTab({
               <ExBarChart chartData={chartData2} /> */}
             </TabsContent>
             <TabsContent value="list" className="space-y-1">
-              {buildings.map((b: BuildingOverview) => (
-                <BuildingCard
-                  key={b.id}
-                  entity={{ entityId, entityName }}
-                  building={b}
-                  accessPoints={accessPoints[b.id]}
-                />
-              ))}
+              {buildings.length ? (
+                buildings.map((b: BuildingOverview) => (
+                  <BuildingCard
+                    key={b.id}
+                    entity={{ entityId, entityName }}
+                    building={b}
+                    accessPoints={accessPoints[b.id]}
+                  />
+                ))
+              ) : (
+                <div className="bg-secondary/50 flex items-center-safe justify-center-safe h-40 rounded-lg text-muted-foreground">
+                  No Building in this {sectionName}
+                </div>
+              )}
             </TabsContent>
           </div>
         )}

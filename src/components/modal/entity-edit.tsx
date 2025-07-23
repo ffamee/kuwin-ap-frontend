@@ -27,7 +27,7 @@ export default function EntityEdit({
 }: {
   modalOpen: boolean;
   onClose: () => void;
-  basicDetails: { section: string; entityName: string; entityId: string };
+  basicDetails: { section: string; entityName: string; entityId: number };
 }) {
   // handler for form in Adding Modal
   const formTemplate = {

@@ -80,7 +80,11 @@ export function BuildingCard({
                 Full Details
               </Button>
             </Link>
-            <DeleteComfirm onConfirm={() => DeleteBuilding(building.id)} />
+            <DeleteComfirm
+              onConfirm={() => DeleteBuilding(building.id)}
+              trigger={<Button>Delete</Button>}
+            />
+
             <ApAdding
               modalOpen={modalOpen}
               onClose={() => setModalOpen(false)}

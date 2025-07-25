@@ -27,16 +27,21 @@ export default function EntityEdit({
 }: {
   modalOpen: boolean;
   onClose: () => void;
-  basicDetails: { section: string; entityName: string; entityId: number };
+  basicDetails: {
+    section: string;
+    sectionId: number;
+    entityName: string;
+    entityId: number;
+  };
 }) {
   // handler for form in Adding Modal
   const formTemplate = {
     name: basicDetails.entityName,
-    sectionId: basicDetails.section,
-    description: "",
+    section: basicDetails.sectionId,
+    //description: "",
   };
   const [formData, setFormData] = useState(formTemplate);
-  const [sectionMenu, selectSectionMenu] = useState(formData.sectionId);
+  const [sectionMenu, selectSectionMenu] = useState(formData.section);
 
   // handler for changing in form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,6 +85,14 @@ export default function EntityEdit({
     return isValid;
   };
 
+  const handleMenu = (menu: number) => {
+    if (menu === 1) formData.section = 1;
+    else if (menu === 2) formData.section = 2;
+    else if (menu === 3) formData.section = 3;
+    else formData.section = 0;
+
+    selectSectionMenu(menu);
+  };
   return (
     <Dialog open={modalOpen} onOpenChange={onClose}>
       <DialogContent>
@@ -97,38 +110,37 @@ export default function EntityEdit({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="flex flex-col gap-4">
-            <div>
-              <div className="flex flex-row gap-3">
-                <label className="w-fit">Section:</label>
-                <div className="w-full">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="capitalize w-full">
-                        {sectionMenu}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        onSelect={() => selectSectionMenu("faculty")}
-                      >
-                        Faculty
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onSelect={() => selectSectionMenu("organization")}
-                      >
-                        Organization
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onSelect={() => selectSectionMenu("dormitory")}
-                      >
-                        Dormitory
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
+          <div className="flex flex-row gap-3">
+            <label className="w-fit">Section:</label>
+            <div className="w-full">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="capitalize w-full">
+                    {sectionMenu === 1
+                      ? "Faculty"
+                      : sectionMenu === 2
+                      ? "Organization"
+                      : sectionMenu === 3
+                      ? "Dormitory"
+                      : "Selected"}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={() => handleMenu(1)}>
+                    Faculty
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => handleMenu(2)}>
+                    Organization
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => handleMenu(3)}>
+                    Dormitory
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
             <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit text-nowrap capitalize">
@@ -149,7 +161,7 @@ export default function EntityEdit({
                 )}
               </div>
             </div>
-            <div>
+            {/* <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit"> Description:</label>
                 <input
@@ -165,6 +177,13 @@ export default function EntityEdit({
                 {errors.description && (
                   <p className="text-red-500 text-sm">{errors.description}</p>
                 )}
+              </div>
+            </div> */}
+
+            <div>
+              <div className="flex flex-row gap-3">
+                <label className="w-fit text-nowrap">Upload Picture</label>
+                <input type="file" name="picture" className="p-1 w-full" />
               </div>
             </div>
           </div>

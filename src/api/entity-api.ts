@@ -1,5 +1,8 @@
 import { toast } from "sonner";
 
+// const param = new URLSearch
+// const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities`;
+
 export async function AddEntity(entityData: {
   name: string;
   sectionId: number;
@@ -49,14 +52,17 @@ export async function DeleteEntity(entityId: number) {
 
 export async function EditEntity(
   entityId: number,
-  entityData: { name: string; sectionId: string; description?: string }
+  entityData: { name: string; section: number; description?: string }
 ) {
-  //console.log(entityData);
+  console.log(entityData);
+  console.log(entityId);
+
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/edit/${entityId}`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/edit/${entityId}?confirm=true`,
     {
       method: "POST",
       // credentials: "include",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(entityData),
     }
   );
@@ -68,7 +74,7 @@ export async function EditEntity(
     );
   } else {
     toast.success(`Entity with ID ${entityId} updated successfully`);
-    console.log(entityData);
+    console.log(res);
     //window.location.reload();
     return res.json();
   }

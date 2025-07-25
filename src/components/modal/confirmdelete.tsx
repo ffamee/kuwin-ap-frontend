@@ -12,16 +12,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
+import { ReactNode } from "react";
 
 export default function DeleteComfirm({
   onConfirm,
+  trigger,
 }: {
   onConfirm: () => void;
+  trigger?: ReactNode;
 }) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <Delete size={16} />
+      <AlertDialogTrigger asChild>
+        {trigger || <Delete size={16} className="cursor-pointer" />}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

@@ -49,6 +49,7 @@ export default async function Page({
           entityName: data.name,
           entityId: data.id,
           sectionName: sectionName,
+          sectionId: Number(section),
         }}
       />
     </div>

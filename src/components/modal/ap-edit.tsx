@@ -278,6 +278,13 @@ export default function ApEdit({
                 />
               </div>
             </div>
+
+            <div>
+              <div className="flex flex-row gap-3">
+                <label className="w-fit text-nowrap">Upload Picture</label>
+                <input type="file" name="picture" className="p-1 w-full" />
+              </div>
+            </div>
           </div>
 
           <DialogFooter>

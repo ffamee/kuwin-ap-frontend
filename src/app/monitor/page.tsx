@@ -111,7 +111,7 @@ export default function Page() {
     const interval = setInterval(() => {
       console.log("Fetching data...");
       fetchData();
-    }, 5000);
+    }, 5 * 60 * 1000);
 
     fetchData(); // Initial fetch
     return () => clearInterval(interval); // Cleanup on unmount

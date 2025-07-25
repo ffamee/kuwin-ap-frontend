@@ -24,11 +24,16 @@ import EntityEdit from "@/components/modal/entity-edit";
 export default function EntityTab({
   data,
   accessPoints,
-  entity: { entityName, entityId, sectionName },
+  entity: { entityName, entityId, sectionName, sectionId },
 }: {
   data: BuildingOverview[];
   accessPoints: [];
-  entity: { entityName: string; entityId: number; sectionName: string };
+  entity: {
+    entityName: string;
+    entityId: number;
+    sectionName: string;
+    sectionId: number;
+  };
 }) {
   const [tab, setTab] = useState("list");
   const [isLoading, setIsLoading] = useState(false);
@@ -94,6 +99,7 @@ export default function EntityTab({
         onClose={() => setModalEditOpen(false)}
         basicDetails={{
           section: sectionName,
+          sectionId: sectionId,
           entityName: entityName,
           entityId: entityId,
         }}

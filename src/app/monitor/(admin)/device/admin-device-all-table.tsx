@@ -26,14 +26,6 @@ export default function AdminAllDeviceTable() {
       cell: ({ row }) => {
         if (!row.original.name) return <div>NaN</div>;
         const url = "/monitor";
-        // "/monitor/" +
-        // row.original.building.entity.section.id +
-        // "/" +
-        // row.original.building.entity.id +
-        // "/" +
-        // row.original.building.id +
-        // "/" +
-        // row.original.id;
         return (
           <Link href={url} className="max-w-xs whitespace-normal break-words">
             {row.getValue("name")}

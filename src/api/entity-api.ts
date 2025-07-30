@@ -54,9 +54,6 @@ export async function EditEntity(
   entityId: number,
   entityData: { name: string; section: number; description?: string }
 ) {
-  console.log(entityData);
-  console.log(entityId);
-
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/edit/${entityId}?confirm=true`,
     {

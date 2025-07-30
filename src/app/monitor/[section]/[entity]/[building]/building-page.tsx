@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/tooltip";
 import ApAdding from "@/components/modal/ap-adding";
 import { useState } from "react";
-import ApEdit from "@/components/modal/ap-edit";
+import BuildingEdit from "@/components/modal/building-edit";
 
 const colorsMap: Record<string, string> = {
   up: "bg-green-500",
@@ -56,8 +56,10 @@ const chartData = [
 
 export default function BuildingPage({
   buildingId,
+  entityId,
   data,
 }: {
+  entityId: number;
   buildingId: string;
   data: BuildingOverview & { accesspoints: AccessPoint[] };
 }) {
@@ -184,16 +186,7 @@ export default function BuildingPage({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="AP Join" />
       ),
-      // filterFn: (row, columnId, filterValue: string[]) => {
-      // 	const value = row.getValue(columnId);
 
-      // 	const matchEqual = filterValue.includes("eq") && value === 0;
-      // 	const matchGtZero = filterValue.includes("gt") && value > 0;
-
-      // 	if (filterValue.length === 0) return true;
-
-      // 	return matchEqual || matchGtZero;
-      // },
       cell: ({ row }) => {
         const value = row.original.wlcActive ?? "";
         return <div>{value}</div>;
@@ -322,17 +315,13 @@ export default function BuildingPage({
           onClose={() => setModalAddingOpen(false)}
           basicDetails={{ entity: "", building: data.name }}
         />
-        <ApEdit
+        <BuildingEdit
           modalOpen={modalEditOpen}
           onClose={() => setModalEditOpen(false)}
           basicDetails={{
-            entity: "",
-            building: data.name,
-            model: "",
-            serialNumber: "",
-            ethMac: "",
-            ip: "",
-            location: "",
+            buildingName: data.name,
+            buildingId: data.id,
+            entityId: entityId,
           }}
         />
         <div>

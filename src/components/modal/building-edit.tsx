@@ -12,36 +12,22 @@ import {
 
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { BuildingOverview } from "@/types/building-type";
-import { AddBuilding } from "@/api/building-api";
+import { EditBuilding } from "@/api/building-api";
 
-const DEFAULT_BUILDING: BuildingOverview = {
-  id: 0,
-  name: "",
-  apAll: 0,
-  apMaintain: 0,
-  apDown: 0,
-  user1: 0,
-  user2: 0,
-};
-
-export default function BuildingAdding({
+export default function BuildingEdit({
   modalOpen,
   onClose,
   basicDetails,
-  onBuildingAdded,
 }: {
   modalOpen: boolean;
   onClose: () => void;
-  basicDetails: { section: string; entityName: string; entityId: number };
-  onBuildingAdded: (building: BuildingOverview) => void;
+  basicDetails: { buildingName: string; buildingId: number; entityId: number };
 }) {
-  // handler for form in Adding Modal
+  // handler for form in Edit Modal
   const formTemplate = {
-    name: "",
-    entityId: basicDetails.entityId,
-    entityName: basicDetails.entityName,
-    description: "",
+    name: basicDetails.buildingName,
+    entity: basicDetails.entityId,
+    //description: "",
   };
   const [formData, setFormData] = useState(formTemplate);
 
@@ -57,15 +43,11 @@ export default function BuildingAdding({
   // handler when form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    //console.log(errors);
     if (!validate()) {
       modalOpen = true;
       return;
     }
-    AddBuilding(formData);
-    const newBuilding = DEFAULT_BUILDING;
-    newBuilding.name = formData.name;
-    onBuildingAdded(newBuilding);
+    EditBuilding(basicDetails.buildingId, formData);
     onClose();
   };
 
@@ -100,8 +82,8 @@ export default function BuildingAdding({
           className="flex flex-col gap-3"
         >
           <DialogHeader>
-            <DialogTitle>Add New Building</DialogTitle>
-            <DialogDescription>adding new building</DialogDescription>
+            <DialogTitle>Edit Building</DialogTitle>
+            <DialogDescription>edit this building</DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col gap-4">
@@ -109,12 +91,12 @@ export default function BuildingAdding({
               <label className="w-fit text-nowrap">Faculty:</label>
               <input
                 type="text"
-                name="entityName"
-                value={formData.entityName}
+                name="entity"
+                value={formData.entity}
                 autoComplete="false"
                 onChange={handleChange}
                 className="outline w-full placeholder-muted"
-                readOnly
+                readOnly // only for now waiting for full api
               />
               {errors.entityName && (
                 <p className="text-red-500 text-sm">{errors.entityName}</p>
@@ -139,7 +121,8 @@ export default function BuildingAdding({
               )}
             </div>
           </div>
-          <div>
+
+          {/* <div>
             <div className="flex flex-row gap-3">
               <label className="w-fit"> Description:</label>
               <input
@@ -151,7 +134,7 @@ export default function BuildingAdding({
                 className="outline w-full"
               />
             </div>
-          </div>
+          </div> */}
 
           <div>
             <div className="flex flex-row gap-3">

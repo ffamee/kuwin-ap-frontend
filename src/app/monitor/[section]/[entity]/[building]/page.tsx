@@ -27,5 +27,7 @@ export default async function Page({
 
   const data = await getBuildingOverview(section, entity, building);
 
-  return <BuildingPage buildingId={building} data={data} />;
+  return (
+    <BuildingPage entityId={Number(entity)} buildingId={building} data={data} />
+  );
 }

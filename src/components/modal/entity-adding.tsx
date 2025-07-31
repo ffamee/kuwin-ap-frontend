@@ -21,15 +21,15 @@ import { AddEntity } from "@/api/entity-api";
 import { Section } from "@/types/section-type";
 import { EntityOverview } from "@/types/entity-type";
 
-const DEFAULT_ENTITY: EntityOverview = {
-  id: 0,
-  name: "",
-  apAll: 0,
-  apDown: 0,
-  apMaintain: 0,
-  user1: 0,
-  user2: 0,
-};
+// const DEFAULT_ENTITY: EntityOverview = {
+//   id: 0,
+//   name: "",
+//   apAll: 0,
+//   apDown: 0,
+//   apMaintain: 0,
+//   user1: 0,
+//   user2: 0,
+// };
 
 export default function EntityAdding({
   modalOpen,
@@ -68,9 +68,8 @@ export default function EntityAdding({
       modalOpen = true;
       return;
     }
-    AddEntity(formData);
-    const newEntity: EntityOverview = DEFAULT_ENTITY;
-    newEntity.name = formData.name;
+    const data = await AddEntity(formData);
+    const newEntity = data;
     onEntityAdded(newEntity);
     onClose();
   };

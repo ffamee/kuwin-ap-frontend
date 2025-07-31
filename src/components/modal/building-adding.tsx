@@ -15,15 +15,15 @@ import { useState } from "react";
 import { BuildingOverview } from "@/types/building-type";
 import { AddBuilding } from "@/api/building-api";
 
-const DEFAULT_BUILDING: BuildingOverview = {
-  id: 0,
-  name: "",
-  apAll: 0,
-  apMaintain: 0,
-  apDown: 0,
-  user1: 0,
-  user2: 0,
-};
+// const DEFAULT_BUILDING: BuildingOverview = {
+//   id: 0,
+//   name: "",
+//   apAll: 0,
+//   apMaintain: 0,
+//   apDown: 0,
+//   user1: 0,
+//   user2: 0,
+// };
 
 export default function BuildingAdding({
   modalOpen,
@@ -62,9 +62,10 @@ export default function BuildingAdding({
       modalOpen = true;
       return;
     }
-    AddBuilding(formData);
-    const newBuilding = DEFAULT_BUILDING;
-    newBuilding.name = formData.name;
+    const data = await AddBuilding(formData);
+    const newBuilding = data;
+    //newBuilding.name = formData.name;
+    console.log(newBuilding);
     onBuildingAdded(newBuilding);
     onClose();
   };

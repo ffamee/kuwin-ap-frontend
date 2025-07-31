@@ -123,13 +123,13 @@ export default function ApAdding({
           className="flex flex-col gap-3"
         >
           <DialogHeader>
-            <DialogTitle>Add New User</DialogTitle>
-            <DialogDescription>adding new user</DialogDescription>
+            <DialogTitle>Add New Access point</DialogTitle>
+            <DialogDescription>adding new accesspoint</DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col gap-4">
             <div className="flex flex-row gap-3">
-              <label className="w-fit">Faculty:</label>
+              <label className="w-fit">Entity:</label>
               <input
                 type="text"
                 name="entity"

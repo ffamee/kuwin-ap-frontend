@@ -24,6 +24,7 @@ export async function AddEntity(entityData: {
     toast.error("Entity saves fail");
   } else {
     toast.success(`Entity ${entityData.name} added successfully`);
+    console.log(res);
     return res.json();
   }
 }
@@ -72,7 +73,7 @@ export async function EditEntity(
   } else {
     toast.success(`Entity with ID ${entityId} updated successfully`);
     console.log(res);
-    //window.location.reload();
+    window.location.reload();
     return res.json();
   }
 }

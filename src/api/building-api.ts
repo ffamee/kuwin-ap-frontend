@@ -21,6 +21,7 @@ export async function AddBuilding(buildingData: {
     toast.error("Entity saves fail");
   } else {
     toast.success(`Entity ${buildingData.name} added successfully`);
+    console.log(res);
     return res.json();
   }
 }
@@ -70,7 +71,7 @@ export async function EditBuilding(
   } else {
     toast.success(`Building with ID ${buildingId} updated successfully`);
     console.log(res);
-    //window.location.reload();
+    window.location.reload();
     return res.json();
   }
 }

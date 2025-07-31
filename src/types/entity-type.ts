@@ -31,12 +31,13 @@ type Entity = {
 type EntityOverview = {
   id: number;
   name: string;
-  apAll: number;
-  apMaintain: number;
-  apDown: number;
+  configCount: number;
+  maCount: number;
+  downCount: number;
   // totalUser: number;
-  user1: number;
-  user2: number;
+  c24Count: number;
+  c5Count: number;
+  c6Count: number;
 };
 
 type EntityName = Pick<Entity, "id" | "name">;

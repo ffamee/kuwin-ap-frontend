@@ -22,6 +22,7 @@ export default async function Page({
   const { section } = await params;
 
   const data = await getSectionOverview(section);
+  console.log(data);
 
   return <SectionPage section={section} data={data} />; // Pass the entities to SectionPage
 }

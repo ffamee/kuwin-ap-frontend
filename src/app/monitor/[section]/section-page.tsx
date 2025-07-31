@@ -20,10 +20,11 @@ export default function SectionPage({
   data: SectionOverview & { entities: EntityOverview[] };
 }) {
   const sumData = {
-    totalAP: data.apAll,
-    totalAPMaintain: data.apMaintain,
-    totalAPDown: data.apDown,
-    totalUser: data.totalUser,
+    totalAP: data.configCount,
+    totalAPMaintain: data.maCount,
+    totalAPDown: data.downCount,
+    totalUser:
+      Number(data.c24Count) + Number(data.c5Count) + Number(data.c6Count),
   };
 
   const handleDeleteEntity = (entityId: number) => {
@@ -51,13 +52,13 @@ export default function SectionPage({
       },
     },
     {
-      accessorKey: "apAll",
+      accessorKey: "configCount",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="#AP (overall)" />
       ),
     },
     {
-      accessorKey: "apMaintain",
+      accessorKey: "maCount",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="#AP (maintain)" />
       ),
@@ -73,7 +74,7 @@ export default function SectionPage({
       },
     },
     {
-      accessorKey: "apDown",
+      accessorKey: "downCount",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="#AP (down)" />
       ),
@@ -90,12 +91,16 @@ export default function SectionPage({
     },
     {
       id: "totalUser",
-      accessorFn: (row) => Number(row.user1) + Number(row.user2),
+      accessorFn: (row) =>
+        Number(row.c24Count) + Number(row.c5Count) + Number(row.c6Count),
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="#User" />
       ),
       cell: ({ row }) => {
-        const total = Number(row.original.user1) + Number(row.original.user2);
+        const total =
+          Number(row.original.c24Count) +
+          Number(row.original.c5Count) +
+          Number(row.original.c6Count);
         return <div>{total}</div>;
       },
     },
@@ -107,27 +112,6 @@ export default function SectionPage({
       cell: ({ row }) => {
         return (
           <div className="flex item-center-safe justify-evenly">
-            {/* <div>
-              <span>
-                <SquarePen
-                  size={16}
-                  onClick={() => (
-                    setModalOpen(true),
-                    (
-                      <EntityEdit
-                        modalOpen={modalOpen}
-                        onClose={() => setModalOpen(false)}
-                        basicDetails={{
-                          section: data.name,
-                          entityName: row.original.name,
-                          entityId: row.original.id,
-                        }}
-                      />
-                    )
-                  )}
-                />
-              </span>
-            </div> */}
             <div>
               <span>
                 <DeleteComfirm

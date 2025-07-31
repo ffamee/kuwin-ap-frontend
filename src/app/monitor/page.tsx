@@ -49,31 +49,35 @@ const columns: ColumnDef<SectionOverview>[] = [
     },
   },
   {
-    accessorKey: "apAll",
+    accessorKey: "configCount",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="#AP (overall)" />
     ),
   },
   {
-    accessorKey: "apMaintain",
+    accessorKey: "maCount",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="#AP (maintain)" />
     ),
   },
   {
-    accessorKey: "apDown",
+    accessorKey: "downCount",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="#AP (down)" />
     ),
   },
   {
     id: "totalUser",
-    accessorFn: (row) => Number(row.user1) + Number(row.user2),
+    accessorFn: (row) =>
+      Number(row.c24Count) + Number(row.c5Count) + Number(row.c6Count),
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="#User" />
     ),
     cell: ({ row }) => {
-      const total = Number(row.original.user1) + Number(row.original.user2);
+      const total =
+        Number(row.original.c24Count) +
+        Number(row.original.c5Count) +
+        Number(row.original.c6Count);
       return <div>{total}</div>;
     },
   },
@@ -82,10 +86,12 @@ const columns: ColumnDef<SectionOverview>[] = [
 export default function Page() {
   const [data, setData] = React.useState<
     | ({
-        apAll: number;
-        apMaintain: number;
-        apDown: number;
-        totalUser: number;
+        configCount: number;
+        maCount: number;
+        downCount: number;
+        c24Count: number;
+        c5Count: number;
+        c6Count: number;
       } & {
         sections: SectionOverview[];
       })
@@ -107,6 +113,7 @@ export default function Page() {
         throw new Error("Failed to fetch data");
       }
     }
+
     // create set interval to fetch data every 5 seconds
     const interval = setInterval(() => {
       console.log("Fetching data...");
@@ -129,27 +136,31 @@ export default function Page() {
             <div className="grid grid-cols-4 gap-4">
               <SummaryCard
                 title="Total Access Points"
-                data={data.apAll}
+                data={data.configCount}
                 Icon={Wifi}
                 color="text-green-500"
                 description="some description"
               />
               <SummaryCard
                 title="Maintain Access Points"
-                data={data.apMaintain}
+                data={data.maCount}
                 Icon={CircleAlert}
                 color="text-yellow-400"
                 description="some description"
               />
               <SummaryCard
                 title="Down Access Points"
-                data={data.apDown}
+                data={data.downCount}
                 Icon={WifiOff}
                 color="text-red-500"
               />
               <SummaryCard
                 title="Total Users"
-                data={data.totalUser}
+                data={
+                  Number(data.c24Count) +
+                  Number(data.c5Count) +
+                  Number(data.c6Count)
+                }
                 Icon={Users}
                 description="some description"
               />

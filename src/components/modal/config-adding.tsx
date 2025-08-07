@@ -9,25 +9,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { EditBuilding } from "@/api/building-api";
 
-export default function BuildingEdit({
+export default function ApAdding({
   modalOpen,
   onClose,
   basicDetails,
 }: {
   modalOpen: boolean;
   onClose: () => void;
-  basicDetails: { buildingName: string; buildingId: number; entityId: number };
+  basicDetails: { entity: string; building: string };
 }) {
-  // handler for form in Edit Modal
+  // handler for form in Adding Modal
   const formTemplate = {
-    name: basicDetails.buildingName,
-    entityId: basicDetails.entityId,
-    //description: "",
+    buildingId: basicDetails.building,
+    ip: "",
+    name: "",
   };
   const [formData, setFormData] = useState(formTemplate);
 
@@ -47,25 +45,26 @@ export default function BuildingEdit({
       modalOpen = true;
       return;
     }
-    EditBuilding(basicDetails.buildingId, formData);
     onClose();
   };
 
   // check if form is validate
   const [errors, setErrors] = useState({
+    ip: "",
     name: "",
-    entityName: "",
-    description: "",
   });
   const validate = () => {
     const newError = {
+      ip: "",
       name: "",
-      entityName: "",
-      description: "",
     };
     let isValid = true;
+    if (!formData.ip.trim()) {
+      newError.ip = "ip address is required";
+      isValid = false;
+    }
     if (!formData.name.trim()) {
-      newError.name = "building name is required";
+      newError.name = "location is required";
       isValid = false;
     }
 
@@ -82,31 +81,42 @@ export default function BuildingEdit({
           className="flex flex-col gap-3"
         >
           <DialogHeader>
-            <DialogTitle>Edit Building</DialogTitle>
-            <DialogDescription>edit this building</DialogDescription>
+            <DialogTitle>Add New Configuration</DialogTitle>
+            <DialogDescription>adding new configurations</DialogDescription>
           </DialogHeader>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-row gap-3">
+            <label className="w-fit text-nowrap">Building:</label>
+            <input
+              type="text"
+              name="buildingId"
+              value={formData.buildingId}
+              autoComplete="false"
+              onChange={handleChange}
+              className="outline w-full"
+            />
+          </div>
+
+          <div>
             <div className="flex flex-row gap-3">
-              <label className="w-fit text-nowrap">Faculty:</label>
+              <label className="w-fit text-nowrap">IP Address:</label>
               <input
                 type="text"
-                name="entityId"
-                value={formData.entityId}
+                name="ip"
+                value={formData.ip}
                 autoComplete="false"
                 onChange={handleChange}
-                className="outline w-full placeholder-muted"
-                readOnly // only for now waiting for full api
+                className="outline w-full"
               />
-              {errors.entityName && (
-                <p className="text-red-500 text-sm">{errors.entityName}</p>
-              )}
+            </div>
+            <div>
+              {errors.ip && <p className="text-red-500 text-sm">{errors.ip}</p>}
             </div>
           </div>
 
           <div>
             <div className="flex flex-row gap-3">
-              <label className="w-fit text-nowrap">Building name:</label>
+              <label className="w-fit"> Name:</label>
               <input
                 type="text"
                 name="name"
@@ -122,20 +132,6 @@ export default function BuildingEdit({
               )}
             </div>
           </div>
-
-          {/* <div>
-            <div className="flex flex-row gap-3">
-              <label className="w-fit"> Description:</label>
-              <input
-                type="text"
-                name="description"
-                value={formData.description}
-                autoComplete="false"
-                onChange={handleChange}
-                className="outline w-full"
-              />
-            </div>
-          </div> */}
 
           <div>
             <div className="flex flex-row gap-3">

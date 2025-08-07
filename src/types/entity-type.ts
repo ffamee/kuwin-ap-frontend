@@ -34,10 +34,10 @@ type EntityOverview = {
   configCount: number;
   maCount: number;
   downCount: number;
-  // totalUser: number;
   c24Count: number;
   c5Count: number;
   c6Count: number;
+  //buildings: BuildingOverview[];
 };
 
 type EntityName = Pick<Entity, "id" | "name">;

@@ -1,34 +1,29 @@
-import { AccessPoint } from "@/types/ap-type";
+import { StatusState } from "@/types/config-type";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { CircleAlert, LucideIcon, Wifi, WifiOff } from "lucide-react";
+import { ConfigOverview } from "@/types/config-type";
 
-const colorsMap: Record<string, string> = {
-  up: "text-green-500",
-  down: "text-red-500",
-  ma: "text-yellow-500",
-  rOff: "text-cyan-500",
-  second: "text-gray-500",
+const colorsMap: Record<StatusState, string> = {
+  UP: "bg-green-500",
+  DOWN: "bg-red-500",
+  MAINTENANCE: "bg-yellow-500",
+  RADIO_OFF: "bg-cyan-500",
+  PENDING: "bg-gray-500",
+  MISMATCH: "bg-black-500",
+  DOWNLOAD: "bg-red-300",
 };
 
-const statusMap: Record<string, LucideIcon> = {
-  up: Wifi,
-  down: WifiOff,
-  ma: CircleAlert,
-  rOff: WifiOff,
-  second: CircleAlert,
+const statusMap: Record<StatusState, LucideIcon> = {
+  UP: Wifi,
+  DOWN: WifiOff,
+  MAINTENANCE: CircleAlert,
+  RADIO_OFF: WifiOff,
+  PENDING: CircleAlert,
+  MISMATCH: CircleAlert,
+  DOWNLOAD: WifiOff,
 };
 
-export default function ApDetail({
-  data,
-}: {
-  data: AccessPoint & {
-    building: {
-      name: string;
-      entity: { name: string; section: { name: string } };
-    };
-  };
-}) {
-  console.log(statusMap);
+export default function ConfigDetail({ data }: { data: ConfigOverview }) {
   const Icon = statusMap[data.status];
   return (
     <div className="grid grid-cols-5 gap-4">
@@ -37,17 +32,17 @@ export default function ApDetail({
         <CardContent className="grid grid-cols-2 gap-4">
           <div className="gap-2">
             <div className="capitalize text-muted-foreground">
-              <p className=""> {data.building.entity.section.name}</p>
+              <p className=""> {"Section"}</p>
             </div>
-            {data.building.entity.name}
+            {"Entity"}
           </div>
           <div>
             <p className="text-muted-foreground">Building</p>
-            {data.building.name}
+            {"Building"}
           </div>
           <div className="col-span-2">
             <p className="text-muted-foreground">Location</p>
-            {data.location}
+            {String(data.location.name)}
           </div>
         </CardContent>
         <CardTitle className="px-6 text-3xl flex gap-6">
@@ -58,15 +53,15 @@ export default function ApDetail({
         </CardTitle>
         <CardContent>
           <div className="grid grid-cols-3">
-            {data.status === "up" ? (
+            {data.status === "UP" ? (
               <div>
                 <p className="text-muted-foreground">Connected</p>
-                <p>{data.numberClient}</p>
+                <p>{data.client24 + data.client5 + data.client6}</p>
               </div>
             ) : (
               <div>
                 <p className="text-muted-foreground">Problem</p>
-                <p>{data.problem}</p>
+                <p>{""}</p>
               </div>
             )}
           </div>
@@ -76,21 +71,19 @@ export default function ApDetail({
         <CardTitle className="px-6 text-3xl">Technical Details</CardTitle>
         <CardContent className="grid grid-cols-2 gap-1">
           <p className="text-muted-foreground">IP Address:</p>
-          <p>{data.ip}</p>
-          <p className="text-muted-foreground">Wireless Controller:</p>
-          <p>{data.wlcActive}</p>
+          <p>{String(data.ip.ip)}</p>
           <p className="text-muted-foreground">Model:</p>
-          <p>{data.model}</p>
+          <p>{""}</p>
           <p className="text-muted-foreground">Firmware:</p>
-          <p>{data.ios}</p>
+          <p>{""}</p>
           <p className="text-muted-foreground">Serial Number:</p>
-          <p>{data.serial}</p>
+          <p>{""}</p>
           <p className="text-muted-foreground">Radio Mac:</p>
-          <p>{data.radMac}</p>
+          <p>{""}</p>
           <p className="text-muted-foreground">Eth Mac:</p>
-          <p>{data.ethMac}</p>
+          <p>{""}</p>
           <p className="text-muted-foreground">Equipment Number:</p>
-          <p>{data.eqNumber}</p>
+          <p>{""}</p>
         </CardContent>
       </Card>
       <Card className="col-span-5">
@@ -99,16 +92,12 @@ export default function ApDetail({
           <div className="grid grid-cols-2 gap-1">
             <p>Channel:</p>
             <p>
-              {data.channel}:{data.channel_2}
+              {""}:{""}
             </p>
             <p>RX Rate:</p>
-            <p>{data.rxbs}</p>
+            <p>{data.rx}</p>
             <p>TX Rate:</p>
-            <p>{data.txbs}</p>
-            <p>IQD:</p>
-            <p>{data.iqd}</p>
-            <p>OQD:</p>
-            <p>{data.oqd}</p>
+            <p>{data.tx}</p>
           </div>
         </CardContent>
       </Card>

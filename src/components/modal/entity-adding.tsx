@@ -46,7 +46,7 @@ export default function EntityAdding({
   const formTemplate = {
     name: "",
     sectionId: basicDetails.id,
-    // description: "",
+    description: "",
   };
   const [formData, setFormData] = useState(formTemplate);
   const [sectionMenu, selectSectionMenu] = useState(formData.sectionId);
@@ -68,9 +68,15 @@ export default function EntityAdding({
       modalOpen = true;
       return;
     }
-    const data = await AddEntity(formData);
-    const newEntity = data;
-    onEntityAdded(newEntity);
+    const newEntity = await AddEntity({
+      name: formData.name,
+      sectionId: formData.sectionId,
+      description:
+        formData.description === "" ? undefined : formData.description,
+    });
+    if (newEntity !== null) {
+      onEntityAdded(newEntity);
+    }
     onClose();
   };
 
@@ -93,7 +99,6 @@ export default function EntityAdding({
     const newError = {
       name: "",
       section: "",
-      // description: "",
     };
     let isValid = true;
     if (!formData.name.trim()) {
@@ -174,7 +179,7 @@ export default function EntityAdding({
               </div>
             </div>
 
-            {/* <div>
+            <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit"> Description:</label>
                 <input
@@ -186,12 +191,7 @@ export default function EntityAdding({
                   className="outline w-full"
                 />
               </div>
-              <div>
-                {errors.description && (
-                  <p className="text-red-500 text-sm">{errors.description}</p>
-                )}
-              </div>
-            </div> */}
+            </div>
 
             <div>
               <div className="flex flex-row gap-3">

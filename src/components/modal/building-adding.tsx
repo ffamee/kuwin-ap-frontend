@@ -57,12 +57,16 @@ export default function BuildingAdding({
   // handler when form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    //console.log(errors);
     if (!validate()) {
       modalOpen = true;
       return;
     }
-    const data = await AddBuilding(formData);
+    const data = await AddBuilding({
+      name: formData.name,
+      entityId: formData.entityId,
+      description:
+        formData.description === "" ? undefined : formData.description,
+    });
     const newBuilding = data;
     //newBuilding.name = formData.name;
     console.log(newBuilding);
@@ -76,6 +80,7 @@ export default function BuildingAdding({
     entityName: "",
     description: "",
   });
+
   const validate = () => {
     const newError = {
       name: "",
@@ -87,7 +92,6 @@ export default function BuildingAdding({
       newError.name = "building name is required";
       isValid = false;
     }
-
     setErrors(newError);
     return isValid;
   };

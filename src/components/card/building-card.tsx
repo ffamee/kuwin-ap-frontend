@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,12 +15,12 @@ import {
 import Link from "next/link";
 import { Collapsible, CollapsibleContent } from "../ui/collapsible";
 import { BuildingOverview } from "@/types/building-type";
-import { AccessPointOverview } from "@/types/ap-type";
 import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import ApAdding from "../modal/ap-adding";
+import ApAdding from "../modal/config-adding";
 import { DeleteBuilding } from "@/api/building-api";
 import DeleteComfirm from "../modal/confirmdelete";
+import { ConfigOverview } from "@/types/config-type";
 
 const colorsMap: Record<string, string> = {
   up: "bg-green-500",
@@ -40,19 +40,18 @@ const colorsMap: Record<string, string> = {
 export function BuildingCard({
   entity: { entityId, entityName },
   building,
-  accessPoints = [],
+  configurations = [],
 }: {
   entity: { entityId: number; entityName: string };
   building: BuildingOverview;
-  accessPoints: AccessPointOverview[];
+  configurations: ConfigOverview[];
 }) {
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const toggleBuildingExpand = () => {
     setExpanded(!expanded);
   };
-  const [modalOpen, setModalOpen] = React.useState(false);
-  //console.log(building);
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <Card key={building.id} className="w-full">
@@ -64,7 +63,7 @@ export function BuildingCard({
           </div>
           <div className="flex items-center gap-2 text-center">
             <div className="rounded-2xl bg-muted min-w-16 p-2">
-              {accessPoints.length} APs
+              {configurations.length} APs
             </div>
             <Button
               size="sm"
@@ -110,16 +109,17 @@ export function BuildingCard({
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-green-500"></div>
             <span className="text-sm">
-              Online: {building.apAll - building.apDown - building.apMaintain}
+              Online:{" "}
+              {building.configCount - building.downCount - building.maCount}
             </span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <span className="text-sm">Maintain: {building.apMaintain}</span>
+            <span className="text-sm">Maintain: {building.maCount}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <span className="text-sm">Offline: {building.apDown}</span>
+            <span className="text-sm">Offline: {building.downCount}</span>
           </div>
         </div>
         <Collapsible open={expanded} className="w-full rounded-md">
@@ -142,44 +142,49 @@ export function BuildingCard({
                 </div>
               </div>
               <Separator className="mb-2" />
-              {accessPoints.length ? (
+              {configurations.length ? (
                 <div className="bg-secondary/40 rounded-lg">
-                  {accessPoints.map((ap) => (
+                  {configurations.map((config) => (
                     <div
-                      key={ap.id}
+                      key={config.id}
                       className="grid grid-cols-10 mb-2 space-x-2 hover:bg-muted rounded-lg"
                     >
                       <div
                         className="col-span-3 flex items-center-safe whitespace-normal break-words indent-2"
-                        title={ap.name}
+                        title={config.id.toString()}
                       >
-                        {ap.name ?? "-"}
+                        {config.id ?? "-"}
                       </div>
+
                       <div
                         className={"flex items-center-safe justify-center-safe"}
                       >
                         <div
                           className={`rounded-full size-3 ${
-                            colorsMap[ap.status]
+                            config.status
+                              ? colorsMap[config.status]
+                              : "bg-red-950"
                           }`}
                         ></div>
                       </div>
+
                       <div className="col-span-3 flex items-center-safe">
-                        {ap.location}
+                        {config.location.name}
                       </div>
                       <div className="flex items-center-safe">
-                        {ap.ip ?? "-"}
+                        {config.ip.ip ?? "-"}
                       </div>
                       <div className="flex items-center-safe justify-center">
-                        {Number(ap.numberClient ?? 0) +
-                          Number(ap.numberClients_2 ?? 0)}
+                        {Number(config.client24 ?? 0) +
+                          Number(config.client5 ?? 0) +
+                          Number(config.client6)}
                         <Users size={16} className="mx-2" />
                       </div>
                       <div className="flex items-center-safe justify-evenly">
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Link
-                              href={`./${entityId}/${building.id}/${ap.id}`}
+                              href={`./${entityId}/${building.id}/${config.id}`}
                             >
                               <span className="cursor-pointer">
                                 <SquarePen size={16} />
@@ -193,7 +198,7 @@ export function BuildingCard({
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Link
-                              href={`./${entityId}/${building.id}/${ap.id}`}
+                              href={`./${entityId}/${building.id}/${config.id}`}
                             >
                               <span className="cursor-pointer">
                                 <ClipboardList size={16} />

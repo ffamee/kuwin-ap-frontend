@@ -2,9 +2,6 @@ import React from "react";
 import { useState } from "react";
 
 import { SectionTable } from "@/components/table/section-table";
-// import { ExAreaChart } from "@/components/chart/example-area-chart";
-// import { ExBarChart } from "@/components/chart/example-bar-chart";
-import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,6 +16,7 @@ import { EntityOverview } from "@/types/entity-type";
 import { ColumnDef } from "@tanstack/react-table";
 import EntityAdding from "@/components/modal/entity-adding";
 import { Section } from "@/types/section-type";
+import SectionChart from "./section-chart";
 
 export default function SectionTab({
   header,
@@ -46,8 +44,12 @@ export default function SectionTab({
   };
 
   return (
-    <Tabs value={tab} onValueChange={handleChange} className="w-full space-y-1">
-      <div className="flex justify-between">
+    <Tabs
+      value={tab}
+      onValueChange={handleChange}
+      className="w-full space-y-1 h-full"
+    >
+      <div className="flex justify-between h-auto w-full">
         <TabsList className="grid w-fit h-fit  grid-cols-2 border">
           <TabsTrigger value="list" className="text-center">
             List
@@ -78,13 +80,13 @@ export default function SectionTab({
         basicDetails={section}
         onEntityAdded={handleAddEntity}
       />
-      <div>
+      <div className="w-full">
         {isLoading ? (
           <Skeleton className="w-full h-52" />
         ) : (
-          <div>
-            <TabsContent value="overview">
-              <ExInteractiveChart />
+          <div className="w-full">
+            <TabsContent value="overview" className="h-[300px]">
+              <SectionChart />
             </TabsContent>
             <TabsContent value="list">
               <div className="w-full">

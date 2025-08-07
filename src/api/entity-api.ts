@@ -10,70 +10,57 @@ export async function AddEntity(entityData: {
 }) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/entities`, {
     method: "POST",
-    // credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(entityData),
   });
-  if (res.status === 400) {
-    toast.error("File type not matched with jpeg, png, or gif");
-  } else if (res.status === 404) {
-    toast.error("Section with the given ID not found");
-  } else if (res.status === 413) {
-    toast.error("File too large, maximum size is 10MB");
-  } else if (!res.ok) {
-    toast.error("Entity saves fail");
+  console.log(entityData);
+  const data = await res.json();
+  if ("statusCode" in data) {
+    toast.error(data.statusCode + ":" + data.error);
+    return null;
   } else {
+    // fetched successful
     toast.success(`Entity ${entityData.name} added successfully`);
-    console.log(res);
-    return res.json();
+    return data;
   }
 }
 
 export async function DeleteEntity(entityId: number) {
-  //console.log(entityData);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/${entityId}`,
     {
       method: "DELETE",
-      // credentials: "include",
     }
   );
-  if (res.status === 404) {
-    toast.error("Entity with the given ID not found");
-  } else if (res.status === 409) {
-    toast.error(
-      "Entity with the given ID has associated buildings and cannot be deleted"
-    );
+  const data = await res.json();
+  if ("statusCode" in data) {
+    toast.error(data.statusCode + ":" + data.error);
   } else {
     toast.success(`Entity with ID ${entityId} deleted successfully`);
     window.location.reload();
-    return res.json();
+    // return res.json();
   }
 }
 
 export async function EditEntity(
   entityId: number,
-  entityData: { name: string; section: number; description?: string }
+  entityData: { name: string; sectionId: number; description?: string }
 ) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/edit/${entityId}?confirm=true`,
     {
       method: "POST",
-      // credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(entityData),
     }
   );
-  if (res.status === 404) {
-    toast.error("Entity with the given ID not found");
-  } else if (res.status === 409) {
-    toast.error(
-      "Entity with the given ID has associated buildings and cannot be updated"
-    );
+  console.log(entityData); // need on sectionId
+  const data = await res.json();
+  if ("statusCode" in data) {
+    toast.error(data.statusCode + ":" + data.error);
   } else {
     toast.success(`Entity with ID ${entityId} updated successfully`);
-    console.log(res);
-    window.location.reload();
-    return res.json();
+    //window.location.reload();
+    // return res.json();
   }
 }

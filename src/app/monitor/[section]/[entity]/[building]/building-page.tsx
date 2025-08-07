@@ -2,17 +2,17 @@
 
 import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
 import { ExPieChart } from "@/components/chart/example-pie-chart";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+// import {
+//   Card,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { AccessPoint } from "@/types/ap-type";
+// import { AccessPoint } from "@/types/ap-type";
 import { BuildingOverview } from "@/types/building-type";
 import {
   CircleAlert,
@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import SummaryCard from "@/components/card/summary-card";
-import ApOverviewCard from "@/components/card/ap-overview-card";
+// import ApOverviewCard from "@/components/card/ap-overview-card";
 import { ColumnDef } from "@tanstack/react-table";
 import { BuildingTable } from "@/components/table/building-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-header";
@@ -34,16 +34,19 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import ApAdding from "@/components/modal/ap-adding";
+import ApAdding from "@/components/modal/config-adding";
 import { useState } from "react";
 import BuildingEdit from "@/components/modal/building-edit";
+import { ConfigOverview, StatusState } from "@/types/config-type";
 
-const colorsMap: Record<string, string> = {
-  up: "bg-green-500",
-  down: "bg-red-500",
-  ma: "bg-yellow-500",
-  rOff: "bg-cyan-500",
-  second: "bg-gray-500",
+const colorsMap: Record<StatusState, string> = {
+  UP: "bg-green-500",
+  DOWN: "bg-red-500",
+  MAINTENANCE: "bg-yellow-500",
+  RADIO_OFF: "bg-cyan-500",
+  PENDING: "bg-gray-500",
+  MISMATCH: "bg-black-500",
+  DOWNLOAD: "bg-red-300",
 };
 
 const chartData = [
@@ -60,8 +63,8 @@ export default function BuildingPage({
   data,
 }: {
   entityId: number;
-  buildingId: string;
-  data: BuildingOverview & { accesspoints: AccessPoint[] };
+  buildingId: number;
+  data: BuildingOverview;
 }) {
   const [tab, setTab] = React.useState<string>("list");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -72,8 +75,9 @@ export default function BuildingPage({
       setTab(value);
     }, 300);
   };
+
   //console.log(data);
-  const columns: ColumnDef<AccessPoint>[] = [
+  const columns: ColumnDef<ConfigOverview>[] = [
     {
       accessorKey: "status",
       header: ({ column }) => (
@@ -84,7 +88,7 @@ export default function BuildingPage({
           <div className="px-4">
             <div
               className={`rounded-full size-4 ${
-                colorsMap[row.getValue("status") as string]
+                colorsMap[row.getValue("status") as StatusState]
               }`}
             />
           </div>
@@ -92,13 +96,6 @@ export default function BuildingPage({
       },
       filterFn: (row, columnId, filterValue: string[]) => {
         const value = row.getValue(columnId) as string;
-
-        // const matchUp = filterValue.includes("up") && value === "up";
-        // const matchDown = filterValue.includes("down") && value === "down";
-        // const matchMA = filterValue.includes("ma") && value === "ma";
-        // const matchROff = filterValue.includes("rOff") && value === "rOff";
-        // const matchSecond =
-        // 	filterValue.includes("second") && value === "second";
 
         if (filterValue.length === 0) return true;
 
@@ -111,14 +108,14 @@ export default function BuildingPage({
         <DataTableColumnHeader column={column} title="Name" />
       ),
       filterFn: (row, columnId, value) => {
-        const rowData: string = row.getValue("name") ?? "-";
+        const rowData: string = row.original.location.name ?? "-";
         return rowData.toLowerCase().includes(value.toLowerCase());
       },
       cell: ({ row }) => {
         const url = "./" + buildingId + "/" + row.original.id;
         return (
           <Link href={url} className="max-w-xs whitespace-normal break-words">
-            {row.getValue("name") ?? "-"}
+            {row.original.location.name ?? "-"}
           </Link>
         );
       },
@@ -130,9 +127,10 @@ export default function BuildingPage({
       ),
       enableSorting: false,
     },
+
     {
-      id: "client",
-      accessorFn: (row) => Number(row.numberClient),
+      id: "client24",
+      accessorFn: (row) => Number(row.client24),
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -151,13 +149,14 @@ export default function BuildingPage({
         return matchEqual || matchGtZero;
       },
       cell: ({ row }) => {
-        const value = row.original.numberClient ?? 0;
+        const value = row.original.client24 ?? "-";
         return <div>{value}</div>;
       },
     },
+
     {
-      id: "client2",
-      accessorFn: (row) => Number(row.numberClient_2),
+      id: "client5",
+      accessorFn: (row) => Number(row.client5),
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
@@ -176,42 +175,68 @@ export default function BuildingPage({
         return matchEqual || matchGtZero;
       },
       cell: ({ row }) => {
-        const value = row.original.numberClient_2 ?? 0;
+        const value = row.original.client5 ?? "-";
         return <div>{value}</div>;
       },
     },
-    {
-      id: "join",
-      accessorFn: (row) => row.wlcActive,
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="AP Join" />
-      ),
 
-      cell: ({ row }) => {
-        const value = row.original.wlcActive ?? "";
-        return <div>{value}</div>;
-      },
-    },
     {
-      accessorKey: "wlc",
+      id: "client6",
+      accessorFn: (row) => Number(row.client6),
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="WLC" />
+        <DataTableColumnHeader
+          column={column}
+          title="#Client 6GHz"
+          // className="w-20 whitespace-normal break-words"
+        />
       ),
       filterFn: (row, columnId, filterValue: string[]) => {
-        const value = row.getValue(columnId);
+        const value = Number(row.getValue(columnId));
 
-        const matchYes = filterValue.includes("Yes") && value === "Yes";
-        const matchNo = filterValue.includes("No") && value === "No";
+        const matchEqual = filterValue.includes("eq") && value === 0;
+        const matchGtZero = filterValue.includes("gt") && value > 0;
 
         if (filterValue.length === 0) return true;
 
-        return matchYes || matchNo;
+        return matchEqual || matchGtZero;
       },
       cell: ({ row }) => {
-        const value = row.original.wlc ?? "-";
+        const value = row.original.client6 ?? "-";
         return <div>{value}</div>;
       },
     },
+    // {
+    //   id: "join",
+    //   accessorFn: (row) => row.wlcActive,
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title="AP Join" />
+    //   ),
+
+    //   cell: ({ row }) => {
+    //     const value = row.original.wlcActive ?? "";
+    //     return <div>{value}</div>;
+    //   },
+    // },
+    // {
+    //   accessorKey: "wlc",
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title="WLC" />
+    //   ),
+    //   filterFn: (row, columnId, filterValue: string[]) => {
+    //     const value = row.getValue(columnId);
+
+    //     const matchYes = filterValue.includes("Yes") && value === "Yes";
+    //     const matchNo = filterValue.includes("No") && value === "No";
+
+    //     if (filterValue.length === 0) return true;
+
+    //     return matchYes || matchNo;
+    //   },
+    //   cell: ({ row }) => {
+    //     const value = row.original.wlc ?? "-";
+    //     return <div>{value}</div>;
+    //   },
+    // },
     {
       id: "action",
       header: ({ column }) => (
@@ -247,27 +272,29 @@ export default function BuildingPage({
       <div className="grid grid-cols-4 gap-4">
         <SummaryCard
           title="Total Access Points"
-          data={data.apAll}
+          data={data.configCount}
           Icon={Wifi}
           color="text-green-500"
           description="some description"
         />
         <SummaryCard
           title="Maintain Access Points"
-          data={data.apMaintain}
+          data={data.maCount}
           Icon={CircleAlert}
           color="text-yellow-400"
           description="some description"
         />
         <SummaryCard
           title="Down Access Points"
-          data={data.apDown}
+          data={data.downCount}
           Icon={WifiOff}
           color="text-red-500"
         />
         <SummaryCard
           title="Total Users"
-          data={data.totalUser ?? 0}
+          data={
+            Number(data.c24Count) + Number(data.c5Count) + Number(data.c6Count)
+          }
           Icon={Users}
           description="some description"
         />
@@ -340,9 +367,15 @@ export default function BuildingPage({
                 </div>
               </TabsContent>
               <TabsContent value="list">
-                <BuildingTable columns={columns} data={data.accesspoints} />
+                {data.configurations.length ? (
+                  <BuildingTable columns={columns} data={data.configurations} />
+                ) : (
+                  <div className="bg-secondary/50 flex items-center-safe justify-center-safe h-40 rounded-lg text-muted-foreground">
+                    No AP in this Building
+                  </div>
+                )}
               </TabsContent>
-              <TabsContent value="card">
+              {/* <TabsContent value="card">
                 <Card>
                   <CardHeader>
                     <CardTitle>Access Points</CardTitle>
@@ -352,17 +385,17 @@ export default function BuildingPage({
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-4">
-                      {data.accesspoints?.map((ap) => (
+                      {data.configurations?.map((config) => (
                         <ApOverviewCard
-                          key={ap.id}
+                          key={config.id}
                           buildingId={buildingId}
-                          ap={ap}
+                          ap={config}
                         />
                       ))}
                     </div>
                   </CardContent>
                 </Card>
-              </TabsContent>
+              </TabsContent> */}
             </div>
           )}
         </div>

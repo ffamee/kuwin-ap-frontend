@@ -23,17 +23,12 @@ import EntityEdit from "@/components/modal/entity-edit";
 
 export default function EntityTab({
   data,
-  accessPoints,
-  entity: { entityName, entityId, sectionName, sectionId },
+  section,
+  entity,
 }: {
   data: BuildingOverview[];
-  accessPoints: [];
-  entity: {
-    entityName: string;
-    entityId: number;
-    sectionName: string;
-    sectionId: number;
-  };
+  section: { sectionId: number; sectionName: string };
+  entity: { entityId: number; entityName: string };
 }) {
   const [tab, setTab] = useState("list");
   const [isLoading, setIsLoading] = useState(false);
@@ -80,7 +75,9 @@ export default function EntityTab({
                 Edit
               </Button>
             </TooltipTrigger>
-            <TooltipContent>edit this {sectionName} details</TooltipContent>
+            <TooltipContent>
+              edit this {section.sectionName} details
+            </TooltipContent>
           </Tooltip>
         </div>
       </div>
@@ -88,9 +85,9 @@ export default function EntityTab({
         modalOpen={modalAddingOpen}
         onClose={() => setModalAddingOpen(false)}
         basicDetails={{
-          section: sectionName,
-          entityName: entityName,
-          entityId: entityId,
+          section: section.sectionName,
+          entityName: entity.entityName,
+          entityId: entity.entityId,
         }}
         onBuildingAdded={handleAddBuilding}
       />
@@ -98,10 +95,10 @@ export default function EntityTab({
         modalOpen={modalEditOpen}
         onClose={() => setModalEditOpen(false)}
         basicDetails={{
-          section: sectionName,
-          sectionId: sectionId,
-          entityName: entityName,
-          entityId: entityId,
+          section: section.sectionName,
+          sectionId: section.sectionId,
+          entityName: entity.entityName,
+          entityId: entity.entityId,
         }}
       />
       <div>
@@ -118,14 +115,14 @@ export default function EntityTab({
                 buildings.map((b: BuildingOverview) => (
                   <BuildingCard
                     key={b.id}
-                    entity={{ entityId, entityName }}
+                    entity={entity}
                     building={b}
-                    accessPoints={accessPoints[b.id]}
+                    configurations={b.configurations}
                   />
                 ))
               ) : (
                 <div className="bg-secondary/50 flex items-center-safe justify-center-safe h-40 rounded-lg text-muted-foreground">
-                  No Building in this {sectionName}
+                  No Building in this {section.sectionName}
                 </div>
               )}
             </TabsContent>

@@ -2,26 +2,19 @@
 
 import React, { useState } from "react";
 
-import { AccessPoint } from "@/types/ap-type";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
-import ApDetail from "./ap-detail";
+import ApDetail from "./config-detail";
 import ApEdit from "@/components/modal/ap-edit";
+import { ConfigOverview } from "@/types/config-type";
 
-export default function ApTab({
-  data,
-}: {
-  data: AccessPoint & {
-    building: {
-      name: string;
-      entity: { name: string; section: { name: string } };
-    };
-  };
-}) {
-  const [tab, setTab] = React.useState<string>("detail");
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+export default function ConfigTab({ data }: { data: ConfigOverview }) {
+  const [tab, setTab] = useState<string>("detail");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [modalEditOpen, setModalEditOpen] = useState(false);
+
   const handleChange = (value: string) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -29,7 +22,7 @@ export default function ApTab({
       setTab(value);
     }, 300);
   };
-  const [modalEditOpen, setModalEditOpen] = useState(false);
+
   return (
     <Tabs
       value={tab}
@@ -52,13 +45,13 @@ export default function ApTab({
         modalOpen={modalEditOpen}
         onClose={() => setModalEditOpen(false)}
         basicDetails={{
-          entity: data.building.entity.name,
-          building: data.building.name,
-          model: data.model,
-          serialNumber: data.serial,
-          ethMac: data.ethMac,
-          ip: data.ip,
-          location: data.location,
+          entity: "",
+          building: "",
+          model: "",
+          serialNumber: "",
+          ethMac: "",
+          ip: String(data.ip),
+          location: String(data.location),
         }}
       />
       <div>

@@ -38,7 +38,7 @@ export default function EntityEdit({
   const formTemplate = {
     name: basicDetails.entityName,
     section: basicDetails.sectionId,
-    //description: "",
+    description: "",
   };
   const [formData, setFormData] = useState(formTemplate);
   const [sectionMenu, selectSectionMenu] = useState(formData.section);
@@ -59,7 +59,12 @@ export default function EntityEdit({
       modalOpen = true;
       return;
     }
-    EditEntity(basicDetails.entityId, formData);
+    EditEntity(basicDetails.entityId, {
+      name: formData.name,
+      sectionId: formData.section,
+      description:
+        formData.description === "" ? undefined : formData.description,
+    });
     onClose();
   };
 

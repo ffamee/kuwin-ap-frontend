@@ -3,44 +3,36 @@ import { toast } from "sonner";
 export async function AddBuilding(buildingData: {
   name: string;
   entityId: number;
-  // description: string;
+  description?: string;
 }) {
+  console.log(buildingData);
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings`, {
     method: "POST",
-    // credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(buildingData),
   });
-  if (res.status === 400) {
-    toast.error("File type not matched with jpeg, png, or gif");
-  } else if (res.status === 404) {
-    toast.error("Entity with the given ID not found");
-  } else if (res.status === 413) {
-    toast.error("File too large, maximum size is 10MB");
-  } else if (!res.ok) {
-    toast.error("Entity saves fail");
+  const data = await res.json();
+  if ("statusCode" in data) {
+    toast.error(data.statusCode + ":" + data.error);
+    return null;
   } else {
-    toast.success(`Entity ${buildingData.name} added successfully`);
-    console.log(res);
-    return res.json();
+    // fetched successful
+    toast.success(`Building ${buildingData.name} added successfully`);
+    return data;
   }
 }
 
 export async function DeleteBuilding(buildingId: number) {
-  //console.log(entityData);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings/${buildingId}`,
     {
       method: "DELETE",
-      // credentials: "include",
     }
   );
-  if (res.status === 404) {
-    toast.error("Building with the given ID not found");
-  } else if (res.status === 409) {
-    toast.error(
-      "Building with the given ID has associated buildings and cannot be deleted"
-    );
+  console.log(res.status);
+  const data = await res.json();
+  if ("statusCode" in data) {
+    toast.error(data.statusCode + ":" + data.error);
   } else {
     toast.success(`Entity with ID ${buildingId} deleted successfully`);
     window.location.reload();
@@ -50,7 +42,7 @@ export async function DeleteBuilding(buildingId: number) {
 
 export async function EditBuilding(
   buildingId: number,
-  buildingData: { name: string; entity: number; description?: string }
+  buildingData: { name: string; entityId: number; description?: string }
 ) {
   console.log(buildingData);
   const res = await fetch(

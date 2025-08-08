@@ -11,19 +11,23 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { AddConfig } from "@/api/config-api";
+import { ConfigOverview } from "@/types/config-type";
 
-export default function ApAdding({
+export default function ConfigAdding({
   modalOpen,
   onClose,
   basicDetails,
+  onConfigAdded,
 }: {
   modalOpen: boolean;
   onClose: () => void;
-  basicDetails: { entity: string; building: string };
+  basicDetails: { entity: string; building: string; buildingId: number };
+  onConfigAdded: (config: ConfigOverview) => void;
 }) {
   // handler for form in Adding Modal
   const formTemplate = {
-    buildingId: basicDetails.building,
+    buildingId: basicDetails.buildingId,
     ip: "",
     name: "",
   };
@@ -44,6 +48,17 @@ export default function ApAdding({
     if (!validate()) {
       modalOpen = true;
       return;
+    }
+    const newConfig = await AddConfig({
+      name: formData.name,
+      ip: formData.ip,
+      buildingId: formData.buildingId,
+    });
+    console.log(newConfig);
+    if (newConfig !== null) {
+      newConfig.location.name = formData.name;
+      newConfig.ip.ip = formData.ip;
+      onConfigAdded(newConfig);
     }
     onClose();
   };

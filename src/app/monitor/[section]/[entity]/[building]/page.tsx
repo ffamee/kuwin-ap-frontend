@@ -2,9 +2,9 @@ import BuildingPage from "./building-page";
 import { notFound } from "next/navigation";
 
 async function getBuildingOverview(
-  section: string,
-  entity: string,
-  building: string
+  section: number,
+  entity: number,
+  building: number
 ) {
   const res = await fetch(
     `${process.env.BACKEND_URL}/buildings/overview?sec=${section}&entity=${entity}&build=${building}`
@@ -21,17 +21,11 @@ async function getBuildingOverview(
 export default async function Page({
   params,
 }: {
-  params: Promise<{ section: string; entity: string; building: string }>;
+  params: Promise<{ section: number; entity: number; building: number }>;
 }) {
   const { section, entity, building } = await params;
 
   const data = await getBuildingOverview(section, entity, building);
 
-  return (
-    <BuildingPage
-      entityId={Number(entity)}
-      buildingId={Number(building)}
-      data={data}
-    />
-  );
+  return <BuildingPage entityId={entity} buildingId={building} data={data} />;
 }

@@ -2,17 +2,11 @@
 
 import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
 import { ExPieChart } from "@/components/chart/example-pie-chart";
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-// import { AccessPoint } from "@/types/ap-type";
+
 import { BuildingOverview } from "@/types/building-type";
 import {
   CircleAlert,
@@ -34,7 +28,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import ApAdding from "@/components/modal/config-adding";
+import ConfigAdding from "@/components/modal/config-adding";
 import { useState } from "react";
 import BuildingEdit from "@/components/modal/building-edit";
 import { ConfigOverview, StatusState } from "@/types/config-type";
@@ -64,16 +58,24 @@ export default function BuildingPage({
 }: {
   entityId: number;
   buildingId: number;
-  data: BuildingOverview;
+  data: BuildingOverview & { configurations: ConfigOverview[] };
 }) {
-  const [tab, setTab] = React.useState<string>("list");
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [tab, setTab] = useState<string>("list");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [configs, setConfigs] = useState(data.configurations);
   const handleChange = (value: string) => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
       setTab(value);
     }, 300);
+  };
+
+  //Changing Table
+  const [modalAddingOpen, setModalAddingOpen] = useState(false);
+  const [modalEditOpen, setModalEditOpen] = useState(false);
+  const handleAddConfig = (config: ConfigOverview) => {
+    setConfigs((prev) => [config, ...prev]);
   };
 
   //console.log(data);
@@ -161,7 +163,7 @@ export default function BuildingPage({
         <DataTableColumnHeader
           column={column}
           title="#Client 5GHz"
-          // className="w-20 whitespace-normal break-words"
+          className="w-fit whitespace-normal break-words"
         />
       ),
       filterFn: (row, columnId, filterValue: string[]) => {
@@ -187,7 +189,7 @@ export default function BuildingPage({
         <DataTableColumnHeader
           column={column}
           title="#Client 6GHz"
-          // className="w-20 whitespace-normal break-words"
+          className="w-fit whitespace-normal break-words"
         />
       ),
       filterFn: (row, columnId, filterValue: string[]) => {
@@ -205,38 +207,7 @@ export default function BuildingPage({
         return <div>{value}</div>;
       },
     },
-    // {
-    //   id: "join",
-    //   accessorFn: (row) => row.wlcActive,
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title="AP Join" />
-    //   ),
 
-    //   cell: ({ row }) => {
-    //     const value = row.original.wlcActive ?? "";
-    //     return <div>{value}</div>;
-    //   },
-    // },
-    // {
-    //   accessorKey: "wlc",
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title="WLC" />
-    //   ),
-    //   filterFn: (row, columnId, filterValue: string[]) => {
-    //     const value = row.getValue(columnId);
-
-    //     const matchYes = filterValue.includes("Yes") && value === "Yes";
-    //     const matchNo = filterValue.includes("No") && value === "No";
-
-    //     if (filterValue.length === 0) return true;
-
-    //     return matchYes || matchNo;
-    //   },
-    //   cell: ({ row }) => {
-    //     const value = row.original.wlc ?? "-";
-    //     return <div>{value}</div>;
-    //   },
-    // },
     {
       id: "action",
       header: ({ column }) => (
@@ -261,8 +232,6 @@ export default function BuildingPage({
       },
     },
   ];
-  const [modalAddingOpen, setModalAddingOpen] = useState(false);
-  const [modalEditOpen, setModalEditOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-4 w-full p-4 min-h-0 h-screen overflow-y-auto no-scrollbar overscroll-y-contain">
@@ -337,10 +306,15 @@ export default function BuildingPage({
             </Tooltip>
           </div>
         </div>
-        <ApAdding
+        <ConfigAdding
           modalOpen={modalAddingOpen}
           onClose={() => setModalAddingOpen(false)}
-          basicDetails={{ entity: "", building: data.name }}
+          basicDetails={{
+            entity: "",
+            building: data.name,
+            buildingId: data.id,
+          }}
+          onConfigAdded={handleAddConfig}
         />
         <BuildingEdit
           modalOpen={modalEditOpen}
@@ -367,8 +341,8 @@ export default function BuildingPage({
                 </div>
               </TabsContent>
               <TabsContent value="list">
-                {data.configurations.length ? (
-                  <BuildingTable columns={columns} data={data.configurations} />
+                {configs.length ? (
+                  <BuildingTable columns={columns} data={configs} />
                 ) : (
                   <div className="bg-secondary/50 flex items-center-safe justify-center-safe h-40 rounded-lg text-muted-foreground">
                     No AP in this Building

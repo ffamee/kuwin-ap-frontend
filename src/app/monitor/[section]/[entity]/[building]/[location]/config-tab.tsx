@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
 import ApDetail from "./config-detail";
-import ApEdit from "@/components/modal/ap-edit";
+import ConfigEdit from "@/components/modal/config-edit";
 import { ConfigOverview } from "@/types/config-type";
 
 export default function ConfigTab({ data }: { data: ConfigOverview }) {
@@ -41,7 +41,7 @@ export default function ConfigTab({ data }: { data: ConfigOverview }) {
           <Button variant="outline">Delete</Button>
         </div>
       </div>
-      <ApEdit
+      <ConfigEdit
         modalOpen={modalEditOpen}
         onClose={() => setModalEditOpen(false)}
         basicDetails={{
@@ -50,8 +50,8 @@ export default function ConfigTab({ data }: { data: ConfigOverview }) {
           model: "",
           serialNumber: "",
           ethMac: "",
-          ip: String(data.ip),
-          location: String(data.location),
+          ip: String(data.ip.ip),
+          location: String(data.location.name),
         }}
       />
       <div>

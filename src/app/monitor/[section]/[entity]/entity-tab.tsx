@@ -40,6 +40,8 @@ export default function EntityTab({
       setTab(value);
     }, 300);
   };
+
+  // Changing table
   const [modalAddingOpen, setModalAddingOpen] = useState(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
   const handleAddBuilding = (building: BuildingOverview) => {

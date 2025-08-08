@@ -34,7 +34,7 @@ type basicDetails = {
 
 // param section - entity - building
 // then save state when adding access point
-export default function ApEdit({
+export default function ConfigEdit({
   modalOpen,
   onClose,
   basicDetails,
@@ -133,17 +133,10 @@ export default function ApEdit({
           className="flex flex-col gap-3"
         >
           <DialogHeader>
-            <DialogTitle>Add New User</DialogTitle>
-            <DialogDescription>adding new user</DialogDescription>
+            <DialogTitle>Edit This Configuration</DialogTitle>
+            <DialogDescription>edit this configuration</DialogDescription>
           </DialogHeader>
 
-          {/* {formField.map((field)=>(
-            <div key={field.name}>
-              <label>{field.label}</label>
-              <input type={field.type} name={field.name} onChange={handleChange} value={formData.[field.name]}/>
-            </div>
-            
-          ))} */}
           <div className="flex flex-col gap-4">
             <div className="flex flex-row gap-3">
               <label className="w-fit">Faculty:</label>

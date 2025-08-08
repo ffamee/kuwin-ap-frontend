@@ -53,6 +53,11 @@ export function BuildingCard({
   };
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [configs, setConfigs] = useState(configurations);
+  const handleAddConfig = (config: ConfigOverview) => {
+    setConfigs((prev) => [config, ...prev]);
+  };
+
   return (
     <Card key={building.id} className="w-full">
       <CardHeader className="pb-2">
@@ -87,7 +92,12 @@ export function BuildingCard({
             <ApAdding
               modalOpen={modalOpen}
               onClose={() => setModalOpen(false)}
-              basicDetails={{ entity: entityName, building: building.name }}
+              basicDetails={{
+                entity: entityName,
+                building: building.name,
+                buildingId: building.id,
+              }}
+              onConfigAdded={handleAddConfig}
             />
             <Button
               size="sm"
@@ -142,11 +152,11 @@ export function BuildingCard({
                 </div>
               </div>
               <Separator className="mb-2" />
-              {configurations.length ? (
+              {configs.length ? (
                 <div className="bg-secondary/40 rounded-lg">
-                  {configurations.map((config) => (
+                  {configs.map((config) => (
                     <div
-                      key={config.id}
+                      key={config.location.name}
                       className="grid grid-cols-10 mb-2 space-x-2 hover:bg-muted rounded-lg"
                     >
                       <div

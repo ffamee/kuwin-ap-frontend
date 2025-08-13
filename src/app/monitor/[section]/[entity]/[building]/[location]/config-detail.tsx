@@ -1,7 +1,7 @@
 import { StatusState } from "@/types/config-type";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 // import { CircleAlert, LucideIcon, Wifi, WifiOff } from "lucide-react";
-import { ConfigOverview, Accesspoint } from "@/types/config-type";
+import { ConfigOverview } from "@/types/config-type";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -27,11 +27,7 @@ const toMbs = (byte: number) => {
   return byte / (1024 * 1024);
 };
 
-export default function ConfigDetail({
-  data,
-}: {
-  data: ConfigOverview & { accesspoint: Accesspoint };
-}) {
+export default function ConfigDetail({ data }: { data: ConfigOverview }) {
   //const Icon = statusMap[data.status];
 
   console.log(data);
@@ -130,9 +126,7 @@ export default function ConfigDetail({
           <div className="grid grid-cols-2 gap-1">
             <p>Channel:</p>
             <p>
-              <p>
-                {data.channel1 ?? "-"} : {data.channel2 ?? "-"}
-              </p>
+              {data.channel1 ?? "-"} : {data.channel2 ?? "-"}
             </p>
             <p>RX Rate:</p>
             <p>{toMbs(data.rx).toPrecision(5)}</p>

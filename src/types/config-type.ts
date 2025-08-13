@@ -2,7 +2,7 @@ type ConfigOverview = {
   id: number;
   createdAt: Date;
   lastSeenAt: Date;
-  mismatchReason: string;
+  mismatchReason: string | null;
   problem: string;
   status: StatusState;
   tx: number;
@@ -15,7 +15,7 @@ type ConfigOverview = {
   wlc: string;
   location: Location;
   ip: IPName;
-  accesspoint: Accesspoint;
+  accesspoint: Accesspoint | null;
 };
 
 type Accesspoint = {

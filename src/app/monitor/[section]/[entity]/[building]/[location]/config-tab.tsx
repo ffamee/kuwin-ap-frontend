@@ -9,13 +9,8 @@ import { ExInteractiveChart } from "@/components/chart/example-interactive-chart
 import ConfigDetail from "./config-detail";
 import ConfigEdit from "@/components/modal/config-edit";
 import { ConfigOverview } from "@/types/config-type";
-import { AccessPoint } from "@/types/ap-type";
 
-export default function ConfigTab({
-  data,
-}: {
-  data: ConfigOverview & { accesspoint: AccessPoint };
-}) {
+export default function ConfigTab({ data }: { data: ConfigOverview }) {
   const [tab, setTab] = useState<string>("detail");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
@@ -51,12 +46,13 @@ export default function ConfigTab({
         onClose={() => setModalEditOpen(false)}
         basicDetails={{
           entity: "",
-          building: "",
-          model: "",
-          serialNumber: "",
-          ethMac: "",
-          ip: String(data.ip.ip),
-          location: String(data.location.name),
+          building: data.location.building.name,
+          buildingId: data.location.building.id,
+          model: data.accesspoint?.model ?? "-",
+          serialNumber: data.accesspoint?.serial ?? "-",
+          ethMac: data.accesspoint?.ethMac ?? "-",
+          ip: data.ip.ip,
+          location: data.location.name,
         }}
       />
       <div>

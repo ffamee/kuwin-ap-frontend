@@ -26,6 +26,7 @@ import BuildingEdit from "@/components/modal/building-edit";
 import { ConfigOverview, StatusState, Accesspoint } from "@/types/config-type";
 import { DeleteConfig } from "@/api/config-api";
 import DeleteComfirm from "@/components/modal/confirmdelete";
+import ConfigEdit from "@/components/modal/config-edit";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -52,7 +53,7 @@ export default function BuildingPage({
 }: {
   entityId: number;
   buildingId: number;
-  data: BuildingOverview & { configurations: ConfigOverview[] };
+  data: BuildingOverview;
 }) {
   const [tab, setTab] = useState<string>("list");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -67,13 +68,24 @@ export default function BuildingPage({
 
   //Changing Table
   const [modalAddingOpen, setModalAddingOpen] = useState(false);
-  const [modalEditOpen, setModalEditOpen] = useState(false);
+  const [modalBuildingEditOpen, setModalBuildingEditOpen] = useState(false);
+  const [modalConfigEditOpen, setModalConfigEditOpen] = useState(false);
   const handleAddConfig = (
     config: ConfigOverview & { accesspoint: Accesspoint }
   ) => {
     setConfigs((prev) => [config, ...prev]);
   };
 
+  const [editConfigData, setEditConfigData] = useState({
+    entity: "",
+    building: data.name,
+    buildingId: data.id,
+    model: "-",
+    serialNumber: "-",
+    ethMac: "-",
+    ip: "-",
+    location: "-",
+  });
   //console.log(data);
   const columns: ColumnDef<ConfigOverview>[] = [
     {
@@ -210,14 +222,27 @@ export default function BuildingPage({
         <DataTableColumnHeader column={column} title="Action" />
       ),
       cell: ({ row }) => {
-        const url = "./" + buildingId + "/" + row.original.id;
         return (
           <div className="flex item-center-safe justify-evenly">
-            <Link href={url}>
-              <span>
-                <SquarePen size={16} />
-              </span>
-            </Link>
+            <span>
+              <SquarePen
+                size={16}
+                onClick={() => {
+                  setEditConfigData({
+                    entity: "-",
+                    building: data.name,
+                    buildingId: data.id,
+                    model: row.original.accesspoint?.model ?? "-",
+                    serialNumber: row.original.accesspoint?.serial ?? "-",
+                    ethMac: row.original.accesspoint?.ethMac ?? "-",
+                    ip: row.original.ip.ip,
+                    location: row.original.location.name,
+                  });
+                  setModalConfigEditOpen(true);
+                }}
+              />
+            </span>
+
             <DeleteComfirm onConfirm={() => DeleteConfig(row.original.id)} />
           </div>
         );
@@ -289,7 +314,7 @@ export default function BuildingPage({
               <TooltipTrigger asChild>
                 <Button
                   variant="outline"
-                  onClick={() => setModalEditOpen(true)}
+                  onClick={() => setModalBuildingEditOpen(true)}
                 >
                   Edit
                 </Button>
@@ -308,9 +333,14 @@ export default function BuildingPage({
           }}
           onConfigAdded={handleAddConfig}
         />
+        <ConfigEdit
+          modalOpen={modalConfigEditOpen}
+          onClose={() => setModalConfigEditOpen(false)}
+          basicDetails={editConfigData}
+        />
         <BuildingEdit
-          modalOpen={modalEditOpen}
-          onClose={() => setModalEditOpen(false)}
+          modalOpen={modalBuildingEditOpen}
+          onClose={() => setModalBuildingEditOpen(false)}
           basicDetails={{
             buildingName: data.name,
             buildingId: data.id,

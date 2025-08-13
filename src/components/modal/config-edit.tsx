@@ -15,6 +15,7 @@ import { useState } from "react";
 type basicDetails = {
   entity: string;
   building: string;
+  buildingId: number;
   model: string;
   serialNumber: string;
   ethMac: string;
@@ -147,6 +148,7 @@ export default function ConfigEdit({
                 autoComplete="false"
                 onChange={handleChange}
                 className="outline w-full"
+                readOnly
               />
             </div>
 

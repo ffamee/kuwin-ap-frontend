@@ -12,7 +12,7 @@ import {
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { AddConfig } from "@/api/config-api";
-import { ConfigOverview } from "@/types/config-type";
+import { ConfigOverview, Accesspoint } from "@/types/config-type";
 
 export default function ConfigAdding({
   modalOpen,
@@ -23,7 +23,9 @@ export default function ConfigAdding({
   modalOpen: boolean;
   onClose: () => void;
   basicDetails: { entity: string; building: string; buildingId: number };
-  onConfigAdded: (config: ConfigOverview) => void;
+  onConfigAdded: (
+    config: ConfigOverview & { accesspoint: Accesspoint }
+  ) => void;
 }) {
   // handler for form in Adding Modal
   const formTemplate = {
@@ -54,10 +56,12 @@ export default function ConfigAdding({
       ip: formData.ip,
       buildingId: formData.buildingId,
     });
-    console.log(newConfig);
+
     if (newConfig !== null) {
       newConfig.location.name = formData.name;
       newConfig.ip.ip = formData.ip;
+
+      console.log(newConfig);
       onConfigAdded(newConfig);
     }
     onClose();

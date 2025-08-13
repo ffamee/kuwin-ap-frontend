@@ -1,7 +1,7 @@
 import { StatusState } from "@/types/config-type";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { CircleAlert, LucideIcon, Wifi, WifiOff } from "lucide-react";
-import { ConfigOverview } from "@/types/config-type";
+// import { CircleAlert, LucideIcon, Wifi, WifiOff } from "lucide-react";
+import { ConfigOverview, Accesspoint } from "@/types/config-type";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -13,18 +13,28 @@ const colorsMap: Record<StatusState, string> = {
   DOWNLOAD: "bg-red-300",
 };
 
-const statusMap: Record<StatusState, LucideIcon> = {
-  UP: Wifi,
-  DOWN: WifiOff,
-  MAINTENANCE: CircleAlert,
-  RADIO_OFF: WifiOff,
-  PENDING: CircleAlert,
-  MISMATCH: CircleAlert,
-  DOWNLOAD: WifiOff,
+// const statusMap: Record<StatusState, LucideIcon> = {
+//   UP: Wifi,
+//   DOWN: WifiOff,
+//   MAINTENANCE: CircleAlert,
+//   RADIO_OFF: WifiOff,
+//   PENDING: CircleAlert,
+//   MISMATCH: CircleAlert,
+//   DOWNLOAD: WifiOff,
+// };
+
+const toMbs = (byte: number) => {
+  return byte / (1024 * 1024);
 };
 
-export default function ConfigDetail({ data }: { data: ConfigOverview }) {
-  const Icon = statusMap[data.status];
+export default function ConfigDetail({
+  data,
+}: {
+  data: ConfigOverview & { accesspoint: Accesspoint };
+}) {
+  //const Icon = statusMap[data.status];
+
+  console.log(data);
   return (
     <div className="grid grid-cols-5 gap-4">
       <Card className="col-span-3">
@@ -38,17 +48,17 @@ export default function ConfigDetail({ data }: { data: ConfigOverview }) {
           </div>
           <div>
             <p className="text-muted-foreground">Building</p>
-            {"Building"}
+            {data.location.building.name ?? "-"}
           </div>
           <div className="col-span-2">
             <p className="text-muted-foreground">Location</p>
-            {String(data.location.name)}
+            {data.location.name ?? "-"}
           </div>
         </CardContent>
         <CardTitle className="px-6 text-3xl flex gap-6">
           <div>Status</div>
-          <div className={`${colorsMap[data.status]}`}>
-            <Icon />
+          <div className={`rounded-full ${colorsMap[data.status]} `}>
+            {data.status}
           </div>
         </CardTitle>
         <CardContent>
@@ -56,12 +66,16 @@ export default function ConfigDetail({ data }: { data: ConfigOverview }) {
             {data.status === "UP" ? (
               <div>
                 <p className="text-muted-foreground">Connected</p>
-                <p>{data.client24 + data.client5 + data.client6}</p>
+                <p>
+                  {(data.client24 ?? 0) +
+                    (data.client5 ?? 0) +
+                    (data.client6 ?? 0)}
+                </p>
               </div>
             ) : (
               <div>
                 <p className="text-muted-foreground">Problem</p>
-                <p>{""}</p>
+                <p>{data.problem ?? "-"}</p>
               </div>
             )}
           </div>
@@ -71,19 +85,43 @@ export default function ConfigDetail({ data }: { data: ConfigOverview }) {
         <CardTitle className="px-6 text-3xl">Technical Details</CardTitle>
         <CardContent className="grid grid-cols-2 gap-1">
           <p className="text-muted-foreground">IP Address:</p>
-          <p>{String(data.ip.ip)}</p>
+          <p>{data.ip.ip ?? "-"}</p>
           <p className="text-muted-foreground">Model:</p>
-          <p>{""}</p>
+          {data.accesspoint !== null ? (
+            <p>{data.accesspoint.model}</p>
+          ) : (
+            <p>{"-"}</p>
+          )}
           <p className="text-muted-foreground">Firmware:</p>
-          <p>{""}</p>
+          {data.accesspoint !== null ? (
+            <p>{data.accesspoint.ios}</p>
+          ) : (
+            <p>{"-"}</p>
+          )}
           <p className="text-muted-foreground">Serial Number:</p>
-          <p>{""}</p>
+          {data.accesspoint !== null ? (
+            <p>{data.accesspoint.serial}</p>
+          ) : (
+            <p>{"-"}</p>
+          )}
           <p className="text-muted-foreground">Radio Mac:</p>
-          <p>{""}</p>
+          {data.accesspoint !== null ? (
+            <p>{data.accesspoint.radMac}</p>
+          ) : (
+            <p>{"-"}</p>
+          )}
           <p className="text-muted-foreground">Eth Mac:</p>
-          <p>{""}</p>
+          {data.accesspoint !== null ? (
+            <p>{data.accesspoint.ethMac}</p>
+          ) : (
+            <p>{"-"}</p>
+          )}
           <p className="text-muted-foreground">Equipment Number:</p>
-          <p>{""}</p>
+          {data.accesspoint !== null ? (
+            <p>{data.accesspoint.owner}</p>
+          ) : (
+            <p>{"-"}</p>
+          )}
         </CardContent>
       </Card>
       <Card className="col-span-5">
@@ -92,12 +130,14 @@ export default function ConfigDetail({ data }: { data: ConfigOverview }) {
           <div className="grid grid-cols-2 gap-1">
             <p>Channel:</p>
             <p>
-              {""}:{""}
+              <p>
+                {data.channel1 ?? "-"} : {data.channel2 ?? "-"}
+              </p>
             </p>
             <p>RX Rate:</p>
-            <p>{data.rx}</p>
+            <p>{toMbs(data.rx).toPrecision(5)}</p>
             <p>TX Rate:</p>
-            <p>{data.tx}</p>
+            <p>{toMbs(data.tx).toPrecision(5)}</p>
           </div>
         </CardContent>
       </Card>

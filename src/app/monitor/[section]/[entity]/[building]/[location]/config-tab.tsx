@@ -6,11 +6,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
-import ApDetail from "./config-detail";
+import ConfigDetail from "./config-detail";
 import ConfigEdit from "@/components/modal/config-edit";
 import { ConfigOverview } from "@/types/config-type";
+import { AccessPoint } from "@/types/ap-type";
 
-export default function ConfigTab({ data }: { data: ConfigOverview }) {
+export default function ConfigTab({
+  data,
+}: {
+  data: ConfigOverview & { accesspoint: AccessPoint };
+}) {
   const [tab, setTab] = useState<string>("detail");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
@@ -63,7 +68,7 @@ export default function ConfigTab({ data }: { data: ConfigOverview }) {
               <ExInteractiveChart />
             </TabsContent>
             <TabsContent value="detail">
-              <ApDetail data={data} />
+              <ConfigDetail data={data} />
             </TabsContent>
           </div>
         )}

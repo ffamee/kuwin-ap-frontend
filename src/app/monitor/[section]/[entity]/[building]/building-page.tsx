@@ -8,17 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
 import { BuildingOverview } from "@/types/building-type";
-import {
-  CircleAlert,
-  Delete,
-  SquarePen,
-  Users,
-  Wifi,
-  WifiOff,
-} from "lucide-react";
+import { CircleAlert, SquarePen, Users, Wifi, WifiOff } from "lucide-react";
 import * as React from "react";
 import SummaryCard from "@/components/card/summary-card";
-// import ApOverviewCard from "@/components/card/ap-overview-card";
 import { ColumnDef } from "@tanstack/react-table";
 import { BuildingTable } from "@/components/table/building-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-header";
@@ -31,7 +23,9 @@ import {
 import ConfigAdding from "@/components/modal/config-adding";
 import { useState } from "react";
 import BuildingEdit from "@/components/modal/building-edit";
-import { ConfigOverview, StatusState } from "@/types/config-type";
+import { ConfigOverview, StatusState, Accesspoint } from "@/types/config-type";
+import { DeleteConfig } from "@/api/config-api";
+import DeleteComfirm from "@/components/modal/confirmdelete";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -74,7 +68,9 @@ export default function BuildingPage({
   //Changing Table
   const [modalAddingOpen, setModalAddingOpen] = useState(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
-  const handleAddConfig = (config: ConfigOverview) => {
+  const handleAddConfig = (
+    config: ConfigOverview & { accesspoint: Accesspoint }
+  ) => {
     setConfigs((prev) => [config, ...prev]);
   };
 
@@ -114,7 +110,7 @@ export default function BuildingPage({
         return rowData.toLowerCase().includes(value.toLowerCase());
       },
       cell: ({ row }) => {
-        const url = "./" + buildingId + "/" + row.original.id;
+        const url = "./" + buildingId + "/" + row.original.location.id;
         return (
           <Link href={url} className="max-w-xs whitespace-normal break-words">
             {row.original.location.name ?? "-"}
@@ -222,11 +218,7 @@ export default function BuildingPage({
                 <SquarePen size={16} />
               </span>
             </Link>
-            <Link href={url}>
-              <span>
-                <Delete size={16} />
-              </span>
-            </Link>
+            <DeleteComfirm onConfirm={() => DeleteConfig(row.original.id)} />
           </div>
         );
       },

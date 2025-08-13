@@ -8,7 +8,7 @@ async function getConfigurationDetail(
   location: number
 ) {
   const res = await fetch(
-    `${process.env.BACKEND_URL}/configurations/detail?sec=${section}&entity=${entity}&build=${building}&config=${location}`
+    `${process.env.BACKEND_URL}/configurations/detail?sec=${section}&entity=${entity}&build=${building}&loc=${location}`
   );
   if (res.status === 404) {
     return notFound();

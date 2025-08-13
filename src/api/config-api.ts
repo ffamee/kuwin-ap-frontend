@@ -13,7 +13,6 @@ export async function AddConfig(configData: {
       body: JSON.stringify(configData),
     }
   );
-  console.log(configData);
   const data = await res.json();
   if ("statusCode" in data) {
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
@@ -25,23 +24,23 @@ export async function AddConfig(configData: {
   }
 }
 
-// export async function DeleteConfig(configId: number) {
-//   const res = await fetch(
-//     `${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings/${configId}`,
-//     {
-//       method: "DELETE",
-//     }
-//   );
-//   console.log(res.status);
-//   const data = await res.json();
-//   if ("statusCode" in data) {
-//     toast.error(data.statusCode + ":" + data.error);
-//   } else {
-//     toast.success(`Configuration with ID ${configId} deleted successfully`);
-//     //window.location.reload();
-//     return res.json();
-//   }
-// }
+export async function DeleteConfig(configId: number) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/configurations/${configId}`,
+    {
+      method: "DELETE",
+    }
+  );
+  console.log(res.status);
+  const data = await res.json();
+  if ("statusCode" in data) {
+    toast.error(data.statusCode + ":" + data.error);
+  } else {
+    toast.success(`Configuration with ID ${configId} deleted successfully`);
+    window.location.reload();
+    return res.json();
+  }
+}
 
 export async function EditBuilding(
   configId: number,

@@ -48,9 +48,9 @@ export default function ConfigTab({ data }: { data: ConfigOverview }) {
           entity: "",
           building: data.location.building.name,
           buildingId: data.location.building.id,
-          model: data.accesspoint?.model ?? "-",
-          serialNumber: data.accesspoint?.serial ?? "-",
-          ethMac: data.accesspoint?.ethMac ?? "-",
+          model: data.accesspoint?.model ?? "",
+          serialNumber: data.accesspoint?.serial ?? "",
+          ethMac: data.accesspoint?.ethMac ?? "",
           ip: data.ip.ip,
           location: data.location.name,
         }}

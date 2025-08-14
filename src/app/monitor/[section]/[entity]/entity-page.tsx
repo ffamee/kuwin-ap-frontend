@@ -22,12 +22,7 @@ export default async function EntityPage({
     totalUser:
       Number(data.c24Count) + Number(data.c5Count) + Number(data.c6Count),
   };
-  //   const sectionName =
-  //     section === "1"
-  //       ? "Faculty"
-  //       : section === "2"
-  //       ? "Organization"
-  //       : "Dormitory";
+
   return (
     <div className="flex flex-col p-4 gap-4 w-full h-full">
       <h1 className="text-left font-bold text-[48px] capitalize">

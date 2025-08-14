@@ -13,7 +13,7 @@ export async function AddBuilding(buildingData: {
   });
   const data = await res.json();
   if ("statusCode" in data) {
-    toast.error(data.statusCode + ":" + data.error);
+    toast.error(data.statusCode + ":" + data.error + ":" + data.message);
     return null;
   } else {
     // fetched successful
@@ -32,7 +32,7 @@ export async function DeleteBuilding(buildingId: number) {
   console.log(res.status);
   const data = await res.json();
   if ("statusCode" in data) {
-    toast.error(data.statusCode + ":" + data.error);
+    toast.error(data.statusCode + ":" + data.error + ":" + data.message);
   } else {
     toast.success(`Entity with ID ${buildingId} deleted successfully`);
     window.location.reload();
@@ -46,7 +46,7 @@ export async function EditBuilding(
 ) {
   console.log(buildingData);
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings/edit/${buildingId}?confirm=true`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings/edit/${buildingId}`,
     {
       method: "POST",
       // credentials: "include",

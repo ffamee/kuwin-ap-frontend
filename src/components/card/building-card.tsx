@@ -20,14 +20,16 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import ApAdding from "../modal/config-adding";
 import { DeleteBuilding } from "@/api/building-api";
 import DeleteComfirm from "../modal/confirmdelete";
-import { ConfigOverview } from "@/types/config-type";
+import { ConfigOverview, StatusState } from "@/types/config-type";
 
-const colorsMap: Record<string, string> = {
-  up: "bg-green-500",
-  down: "bg-red-500",
-  ma: "bg-yellow-500",
-  rOff: "bg-cyan-500",
-  second: "bg-gray-500",
+const colorsMap: Record<StatusState, string> = {
+  UP: "bg-green-500",
+  DOWN: "bg-red-500",
+  MAINTENANCE: "bg-yellow-500",
+  RADIO_OFF: "bg-cyan-500",
+  MISMATCH: "bg-gray-500",
+  DOWNLOAD: "bg-red-500",
+  PENDING: "bg-gray-500",
 };
 
 // type entity = {
@@ -136,10 +138,8 @@ export function BuildingCard({
           <CollapsibleContent className="transition-[max-height] duration-300 ease-in-out">
             <Separator className="my-4" />
             <div className="w-full flex flex-col">
-              <div className="grid grid-cols-10 font-medium mb-2">
-                <div className="col-span-3 flex items-center-safe indent-2">
-                  Name
-                </div>
+              <div className="grid grid-cols-8 font-medium mb-2">
+                <div className="flex items-center-safe indent-2">Id</div>
                 <div className="flex items-center-safe justify-center-safe">
                   Status
                 </div>
@@ -150,6 +150,9 @@ export function BuildingCard({
                 <div className="flex items-center-safe justify-center-safe">
                   Client
                 </div>
+                <div className="flex items-center-safe justify-center-safe">
+                  Action
+                </div>
               </div>
               <Separator className="mb-2" />
               {configs.length ? (
@@ -157,13 +160,13 @@ export function BuildingCard({
                   {configs.map((config) => (
                     <div
                       key={config.location.name}
-                      className="grid grid-cols-10 mb-2 space-x-2 hover:bg-muted rounded-lg"
+                      className="grid grid-cols-8 mb-2 space-x-2 hover:bg-muted rounded-lg"
                     >
                       <div
-                        className="col-span-3 flex items-center-safe whitespace-normal break-words indent-2"
+                        className="flex items-center-safe whitespace-normal break-words indent-2"
                         title={config.id.toString()}
                       >
-                        {config.id ?? "-"}
+                        {config.location.id ?? "-"}
                       </div>
 
                       <div
@@ -194,7 +197,7 @@ export function BuildingCard({
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Link
-                              href={`./${entityId}/${building.id}/${config.id}`}
+                              href={`./${entityId}/${building.id}/${config.location.id}`}
                             >
                               <span className="cursor-pointer">
                                 <SquarePen size={16} />
@@ -208,7 +211,7 @@ export function BuildingCard({
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Link
-                              href={`./${entityId}/${building.id}/${config.id}`}
+                              href={`./${entityId}/${building.id}/${config.location.id}`}
                             >
                               <span className="cursor-pointer">
                                 <ClipboardList size={16} />

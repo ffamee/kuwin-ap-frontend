@@ -2,11 +2,6 @@
 
 import React from "react";
 import { useState } from "react";
-
-// import { SectionTable } from "@/components/table/section-table";
-// import { ExAreaChart } from "@/components/chart/example-area-chart";
-// import { ExBarChart } from "@/components/chart/example-bar-chart";
-//import { ExInteractiveChart } from "@/components/chart/example-interactive-chart";
 import { BuildingCard } from "@/components/card/building-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";

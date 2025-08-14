@@ -37,7 +37,6 @@ export default async function Page({
     building,
     location
   );
-  console.log(data);
 
   return (
     <div className="p-4 gap-4">

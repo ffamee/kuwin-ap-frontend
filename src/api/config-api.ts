@@ -20,19 +20,19 @@ export async function AddConfig(configData: {
   } else {
     // fetched successful
     toast.success(`Configuration ${configData.name} added successfully`);
-    if (data.accesspoint === null) {
-      data.accesspoint.id = null;
-      data.radMac = null;
-      data.ethMac = null;
-      data.name = null;
-      data.model = null;
-      data.ios = null;
-      data.serial = null;
-      data.pic = null;
-      data.owner = null;
-      data.createdAt = null;
-      data.updatedAt = null;
-    }
+    // if (data.accesspoint === null) {
+    //   data.accesspoint.id = null;
+    //   data.radMac = null;
+    //   data.ethMac = null;
+    //   data.name = null;
+    //   data.model = null;
+    //   data.ios = null;
+    //   data.serial = null;
+    //   data.pic = null;
+    //   data.owner = null;
+    //   data.createdAt = null;
+    //   data.updatedAt = null;
+    // }
     return data;
   }
 }
@@ -55,11 +55,18 @@ export async function DeleteConfig(configId: number) {
   }
 }
 
-export async function EditBuilding(
+export async function EditConfig(
   configId: number,
-  configData: { name: string; entityId: number; description?: string }
+  configData: {
+    building?: string;
+    model?: string;
+    ethMac?: string;
+    ip?: string;
+    location?: string;
+    description?: string;
+  }
 ) {
-  //console.log(buildingData);
+  console.log(configData);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/configurations/edit/${configId}`,
     {
@@ -74,7 +81,7 @@ export async function EditBuilding(
     return null;
   } else {
     // fetched successful
-    toast.success(`Configuration ${configData.name} edited successfully`);
+    toast.success(`Configuration ${configId} edited successfully`);
     return data;
   }
 }

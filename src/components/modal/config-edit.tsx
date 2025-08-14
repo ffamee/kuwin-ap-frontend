@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { EditConfig } from "@/api/config-api";
 
 type basicDetails = {
   entity: string;
@@ -46,14 +47,13 @@ export default function ConfigEdit({
 }) {
   // handler for form in Adding Modal
   const formTemplate = {
-    entity: basicDetails.entity,
     building: basicDetails.building,
     model: basicDetails.model,
     serialNumber: basicDetails.serialNumber,
     ethMac: basicDetails.ethMac,
     ip: basicDetails.ip,
     location: basicDetails.location,
-    description: "",
+    // description: "",
   };
   const [formData, setFormData] = useState(formTemplate);
 
@@ -70,60 +70,59 @@ export default function ConfigEdit({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     //console.log(errors);
-    if (!validate()) {
-      modalOpen = true;
-      return;
-    }
+    // if (!validate()) {
+    //   modalOpen = true;
+    //   return;
+    // }
+    EditConfig(basicDetails.buildingId, formData);
     onClose();
   };
 
   // check if form is validate
-  const [errors, setErrors] = useState({
-    entity: "",
-    building: "",
-    model: "",
-    serialNumber: "",
-    ethMac: "",
-    ip: "",
-    location: "",
-    description: "",
-  });
-  const validate = () => {
-    const newError = {
-      entity: "",
-      building: "",
-      model: "",
-      serialNumber: "",
-      ethMac: "",
-      ip: "",
-      location: "",
-      description: "",
-    };
-    let isValid = true;
-    if (!formData.model.trim()) {
-      newError.model = "model is required";
-      isValid = false;
-    }
-    if (!formData.serialNumber.trim()) {
-      newError.serialNumber = "serial number is required";
-      isValid = false;
-    }
-    if (!formData.ethMac.trim()) {
-      newError.ethMac = "ethernet mac address is required";
-      isValid = false;
-    }
-    if (!formData.ip.trim()) {
-      newError.ip = "ip address is required";
-      isValid = false;
-    }
-    if (!formData.location.trim()) {
-      newError.location = "location is required";
-      isValid = false;
-    }
+  // const [errors, setErrors] = useState({
+  //   building: "",
+  //   model: "",
+  //   serialNumber: "",
+  //   ethMac: "",
+  //   ip: "",
+  //   location: "",
+  //   description: "",
+  // });
+  // // const validate = () => {
+  // //   const newError = {
+  // //     building: "",
+  // //     model: "",
+  // //     serialNumber: "",
+  // //     ethMac: "",
+  // //     ip: "",
+  // //     location: "",
+  // //     description: "",
+  // //   };
+  //   let isValid = true;
+  //   if (!formData.model.trim()) {
+  //     newError.model = "model is required";
+  //     isValid = false;
+  //   }
+  //   if (!formData.serialNumber.trim()) {
+  //     newError.serialNumber = "serial number is required";
+  //     isValid = false;
+  //   }
+  //   if (!formData.ethMac.trim()) {
+  //     newError.ethMac = "ethernet mac address is required";
+  //     isValid = false;
+  //   }
+  //   if (!formData.ip.trim()) {
+  //     newError.ip = "ip address is required";
+  //     isValid = false;
+  //   }
+  //   if (!formData.location.trim()) {
+  //     newError.location = "location is required";
+  //     isValid = false;
+  //   }
 
-    setErrors(newError);
-    return isValid;
-  };
+  //   setErrors(newError);
+  //   return isValid;
+  // };
 
   return (
     <Dialog open={modalOpen} onOpenChange={onClose}>
@@ -139,7 +138,7 @@ export default function ConfigEdit({
           </DialogHeader>
 
           <div className="flex flex-col gap-4">
-            <div className="flex flex-row gap-3">
+            {/* <div className="flex flex-row gap-3">
               <label className="w-fit">Faculty:</label>
               <input
                 type="text"
@@ -150,7 +149,7 @@ export default function ConfigEdit({
                 className="outline w-full"
                 readOnly
               />
-            </div>
+            </div> */}
 
             <div className="flex flex-row gap-3">
               <label className="w-fit">Building:</label>
@@ -177,11 +176,11 @@ export default function ConfigEdit({
                   className="outline w-full"
                 />
               </div>
-              <div>
+              {/* <div>
                 {errors.model && (
                   <p className="text-red-500 text-sm">{errors.model}</p>
                 )}
-              </div>
+              </div> */}
             </div>
 
             <div>
@@ -196,11 +195,11 @@ export default function ConfigEdit({
                   className="outline w-full"
                 />
               </div>
-              <div>
+              {/* <div>
                 {errors.serialNumber && (
                   <p className="text-red-500 text-sm">{errors.serialNumber}</p>
                 )}
-              </div>
+              </div> */}
             </div>
 
             <div>
@@ -215,11 +214,11 @@ export default function ConfigEdit({
                   className="outline w-full"
                 />
               </div>
-              <div>
+              {/* <div>
                 {errors.ethMac && (
                   <p className="text-red-500 text-sm">{errors.ethMac}</p>
                 )}
-              </div>
+              </div> */}
             </div>
 
             <div>
@@ -234,11 +233,11 @@ export default function ConfigEdit({
                   className="outline w-full"
                 />
               </div>
-              <div>
+              {/* <div>
                 {errors.ip && (
                   <p className="text-red-500 text-sm">{errors.ip}</p>
                 )}
-              </div>
+              </div> */}
             </div>
 
             <div>
@@ -253,14 +252,14 @@ export default function ConfigEdit({
                   className="outline w-full"
                 />
               </div>
-              <div>
+              {/* <div>
                 {errors.location && (
                   <p className="text-red-500 text-sm">{errors.location}</p>
                 )}
-              </div>
+              </div> */}
             </div>
 
-            <div>
+            {/* <div>
               <div className="flex flex-row gap-3">
                 <label className="w-fit"> Description:</label>
                 <input
@@ -272,7 +271,7 @@ export default function ConfigEdit({
                   className="outline w-full"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div>
               <div className="flex flex-row gap-3">

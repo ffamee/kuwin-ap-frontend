@@ -40,6 +40,7 @@ export default function EntityTab({
   const [modalAddingOpen, setModalAddingOpen] = useState(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
   const handleAddBuilding = (building: BuildingOverview) => {
+    console.log(building);
     setBuildings((prev) => [building, ...prev]);
   };
 

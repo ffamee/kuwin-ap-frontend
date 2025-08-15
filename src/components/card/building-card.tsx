@@ -93,7 +93,9 @@ export function BuildingCard({
 
             <ApAdding
               modalOpen={modalOpen}
-              onClose={() => setModalOpen(false)}
+              onClose={() => {
+                setModalOpen(false);
+              }}
               basicDetails={{
                 entity: entityName,
                 building: building.name,
@@ -122,16 +124,18 @@ export function BuildingCard({
             <div className="w-3 h-3 rounded-full bg-green-500"></div>
             <span className="text-sm">
               Online:{" "}
-              {building.configCount - building.downCount - building.maCount}
+              {(building.configCount ?? 0) -
+                (building.downCount ?? 0) -
+                (building.maCount ?? 0)}
             </span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <span className="text-sm">Maintain: {building.maCount}</span>
+            <span className="text-sm">Maintain: {building.maCount ?? 0}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <span className="text-sm">Offline: {building.downCount}</span>
+            <span className="text-sm">Offline: {building.downCount ?? 0}</span>
           </div>
         </div>
         <Collapsible open={expanded} className="w-full rounded-md">

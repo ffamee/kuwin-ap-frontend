@@ -40,6 +40,7 @@ export default function SectionTab({
   };
 
   const handleAddEntity = (entity: EntityOverview) => {
+    console.log(entity);
     setEntities((prev) => [entity, ...prev]);
   };
 

@@ -56,6 +56,9 @@ export default function SectionPage({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="#AP (overall)" />
       ),
+      cell: ({ row }) => {
+        return row.original.configCount ?? "-";
+      },
     },
     {
       accessorKey: "maCount",
@@ -71,6 +74,9 @@ export default function SectionPage({
         if (filterValue.length === 0) return true;
 
         return matchEqual || matchGtZero;
+      },
+      cell: ({ row }) => {
+        return row.original.maCount ?? "-";
       },
     },
     {
@@ -88,6 +94,9 @@ export default function SectionPage({
 
         return matchEqual || matchGtZero;
       },
+      cell: ({ row }) => {
+        return row.original.downCount ?? "-";
+      },
     },
     {
       id: "totalUser",
@@ -98,9 +107,9 @@ export default function SectionPage({
       ),
       cell: ({ row }) => {
         const total =
-          Number(row.original.c24Count) +
-          Number(row.original.c5Count) +
-          Number(row.original.c6Count);
+          Number(row.original.c24Count ?? 0) +
+          Number(row.original.c5Count ?? 0) +
+          Number(row.original.c6Count ?? 0);
         return <div>{total}</div>;
       },
     },

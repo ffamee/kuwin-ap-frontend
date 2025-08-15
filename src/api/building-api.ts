@@ -54,6 +54,14 @@ export async function EditBuilding(
       body: JSON.stringify(buildingData),
     }
   );
+  const data = await res.json();
+  if ("statusCode" in data) {
+    toast.error(data.statusCode + ":" + data.error + ":" + data.message);
+  } else {
+    toast.success(`Entity with ID ${buildingId} deleted successfully`);
+    window.location.reload();
+    return res.json();
+  }
   if (res.status === 404) {
     toast.error("Building with the given ID not found");
   } else if (res.status === 409) {

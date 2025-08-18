@@ -7,14 +7,14 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 import { DownApTab } from "@/types/ap-type";
-import { GetDownAccessPoint } from "./device-handler";
+import { GetDownConfigurations } from "./device-handler";
 
 const DataTableDuration = dynamic(
   () => import("@/components/table/data-table-duration"),
   { ssr: false }
 );
 
-const data = await GetDownAccessPoint();
+const data = await GetDownConfigurations();
 
 export default function AdminDownDeviceTable() {
   const columns: ColumnDef<DownApTab>[] = [

@@ -15,6 +15,7 @@ import {
 import { BuildingOverview } from "@/types/building-type";
 import BuildingAdding from "@/components/modal/building-adding";
 import EntityEdit from "@/components/modal/entity-edit";
+import { EntityOverview } from "@/types/entity-type";
 
 export default function EntityTab({
   data,
@@ -28,6 +29,7 @@ export default function EntityTab({
   const [tab, setTab] = useState("list");
   const [isLoading, setIsLoading] = useState(false);
   const [buildings, setBuildings] = useState(data);
+  //  const [entityDetails, setEntityDetails] = useState({ section, entity });
   const handleChange = (value: string) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -42,6 +44,9 @@ export default function EntityTab({
   const handleAddBuilding = (building: BuildingOverview) => {
     console.log(building);
     setBuildings((prev) => [building, ...prev]);
+  };
+  const handleEditBuilding = (updatedEntity: EntityOverview) => {
+    console.log(updatedEntity);
   };
 
   return (
@@ -98,6 +103,7 @@ export default function EntityTab({
           entityName: entity.entityName,
           entityId: entity.entityId,
         }}
+        onEntityEdited={handleEditBuilding}
       />
       <div>
         {isLoading ? (

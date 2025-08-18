@@ -13,19 +13,28 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { ReactNode } from "react";
+import { TooltipContent, TooltipTrigger, Tooltip } from "../ui/tooltip";
 
 export default function DeleteComfirm({
   onConfirm,
   trigger,
+  tooltip,
 }: {
   onConfirm: () => void;
   trigger?: ReactNode;
+  tooltip?: string;
 }) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        {trigger || <Delete size={16} className="cursor-pointer" />}
-      </AlertDialogTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <AlertDialogTrigger asChild>
+            {trigger || <Delete size={16} className="cursor-pointer" />}
+          </AlertDialogTrigger>
+        </TooltipTrigger>
+        {tooltip && <TooltipContent>{tooltip}</TooltipContent>}
+      </Tooltip>
+
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm Delete?</AlertDialogTitle>
@@ -35,7 +44,12 @@ export default function DeleteComfirm({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => onConfirm()}>
+          <AlertDialogAction
+            onClick={(e) => {
+              e.preventDefault();
+              onConfirm();
+            }}
+          >
             Confirm
           </AlertDialogAction>
         </AlertDialogFooter>

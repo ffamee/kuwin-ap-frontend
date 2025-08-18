@@ -19,11 +19,13 @@ import {
 } from "../ui/dropdown-menu";
 
 import { EditEntity } from "@/api/entity-api";
+import { EntityOverview } from "@/types/entity-type";
 
 export default function EntityEdit({
   modalOpen,
   onClose,
   basicDetails,
+  onEntityEdited,
 }: {
   modalOpen: boolean;
   onClose: () => void;
@@ -33,6 +35,7 @@ export default function EntityEdit({
     entityName: string;
     entityId: number;
   };
+  onEntityEdited: (entity: EntityOverview) => void;
 }) {
   // handler for form in Adding Modal
   const formTemplate = {
@@ -59,12 +62,16 @@ export default function EntityEdit({
       modalOpen = true;
       return;
     }
-    EditEntity(basicDetails.entityId, {
+    const updatedEntity = await EditEntity(basicDetails.entityId, {
       name: formData.name,
       sectionId: formData.section,
       description:
         formData.description === "" ? undefined : formData.description,
     });
+    if (updatedEntity !== null) {
+      console.log(updatedEntity);
+      onEntityEdited(updatedEntity);
+    }
     onClose();
   };
 

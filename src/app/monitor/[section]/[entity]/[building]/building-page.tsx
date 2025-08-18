@@ -227,6 +227,7 @@ export default function BuildingPage({
             <span>
               <SquarePen
                 size={16}
+                className="cursor-pointer"
                 onClick={() => {
                   setEditConfigData({
                     entity: "-",

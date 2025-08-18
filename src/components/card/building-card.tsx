@@ -21,6 +21,7 @@ import ApAdding from "../modal/config-adding";
 import { DeleteBuilding } from "@/api/building-api";
 import DeleteComfirm from "../modal/confirmdelete";
 import { ConfigOverview, StatusState } from "@/types/config-type";
+import { DeleteConfig } from "@/api/config-api";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -78,6 +79,7 @@ export function BuildingCard({
               onClick={() => {
                 setModalOpen(true);
               }}
+              className="cursor-pointer"
             >
               Add AP
             </Button>
@@ -88,7 +90,7 @@ export function BuildingCard({
             </Link>
             <DeleteComfirm
               onConfirm={() => DeleteBuilding(building.id)}
-              trigger={<Button>Delete</Button>}
+              trigger={<Button className="cursor-pointer">Delete</Button>}
             />
 
             <ApAdding
@@ -226,6 +228,11 @@ export function BuildingCard({
                             Access Point Detail
                           </TooltipContent>
                         </Tooltip>
+
+                        <DeleteComfirm
+                          onConfirm={() => DeleteConfig(config.id)}
+                          tooltip="Delete This Config"
+                        />
                       </div>
                     </div>
                   ))}

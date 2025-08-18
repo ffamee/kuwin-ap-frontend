@@ -16,7 +16,7 @@ export async function AddEntity(entityData: {
   console.log(entityData);
   const data = await res.json();
   if ("statusCode" in data) {
-    toast.error(data.statusCode + ":" + data.error);
+    toast.error(data.statusCode + ":" + data.error + ":" + data.message);
     return null;
   } else {
     // fetched successful
@@ -34,7 +34,7 @@ export async function DeleteEntity(entityId: number) {
   );
   const data = await res.json();
   if ("statusCode" in data) {
-    toast.error(data.statusCode + ":" + data.error);
+    toast.error(data.statusCode + ":" + data.error + ":" + data.message);
   } else {
     toast.success(`Entity with ID ${entityId} deleted successfully`);
     window.location.reload();
@@ -47,20 +47,19 @@ export async function EditEntity(
   entityData: { name: string; sectionId: number; description?: string }
 ) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/edit/${entityId}?confirm=true`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/edit/${entityId}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(entityData),
     }
   );
-  console.log(entityData); // need on sectionId
   const data = await res.json();
   if ("statusCode" in data) {
-    toast.error(data.statusCode + ":" + data.error);
+    toast.error(data.statusCode + ":" + data.error + ":" + data.message);
   } else {
     toast.success(`Entity with ID ${entityId} updated successfully`);
     //window.location.reload();
-    // return res.json();
+    return data;
   }
 }

@@ -15,6 +15,8 @@ export default function ConfigTab({ data }: { data: ConfigOverview }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
 
+  const isConfigInactive = false;
+
   const handleChange = (value: string) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -30,9 +32,12 @@ export default function ConfigTab({ data }: { data: ConfigOverview }) {
       className="w-full space-y-1 h-full"
     >
       <div className="flex justify-between">
-        <TabsList className="grid w-fit h-fit grid-cols-2 border">
-          <TabsTrigger value="detail">Details</TabsTrigger>
+        <TabsList className="grid w-fit h-fit grid-cols-3 border">
+          <TabsTrigger value="detail" disabled={isConfigInactive}>
+            Details
+          </TabsTrigger>
           <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
         <div className="flex gap-1">
           <Button variant="outline" onClick={() => setModalEditOpen(true)}>

@@ -1,3 +1,4 @@
+// import ConfirmationDelete from "@/components/modal/confirmation-delete";
 import { toast } from "sonner";
 
 export async function AddBuilding(buildingData: {
@@ -6,11 +7,14 @@ export async function AddBuilding(buildingData: {
   description?: string;
 }) {
   console.log(buildingData);
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(buildingData),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings/create`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(buildingData),
+    }
+  );
   const data = await res.json();
   if ("statusCode" in data) {
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
@@ -22,31 +26,34 @@ export async function AddBuilding(buildingData: {
   }
 }
 
-export async function DeleteBuilding(buildingId: number) {
+export async function DeleteBuilding(
+  buildingId: number,
+  confirmMessage?: string
+) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings/${buildingId}`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings/${buildingId}${confirmMessage}`,
     {
       method: "DELETE",
     }
   );
-  console.log(res.status);
   const data = await res.json();
   if ("statusCode" in data) {
+    if (data.statusCode === 409) return data;
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
+    return data;
   } else {
     toast.success(`Entity with ID ${buildingId} deleted successfully`);
-    window.location.reload();
-    return res.json();
+    return data;
   }
 }
 
 export async function EditBuilding(
   buildingId: number,
-  buildingData: { name: string; entityId: number; description?: string }
+  buildingData: { name: string; entityId: number; description?: string },
+  confirmMessage?: string
 ) {
-  console.log(buildingData);
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings/edit/${buildingId}`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/buildings/edit/${buildingId}${confirmMessage}`,
     {
       method: "POST",
       // credentials: "include",
@@ -54,15 +61,13 @@ export async function EditBuilding(
       body: JSON.stringify(buildingData),
     }
   );
-  if (res.status === 409) {
-    console.log(res.statusText);
-  }
   const data = await res.json();
   if ("statusCode" in data) {
+    if (data.statusCode === 409) return data;
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
+    return data;
   } else {
     toast.success(`Entity with ID ${buildingId} edited successfully`);
-    window.location.reload();
-    return res.json();
+    return data;
   }
 }

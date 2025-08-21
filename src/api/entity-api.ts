@@ -8,11 +8,14 @@ export async function AddEntity(entityData: {
   sectionId: number;
   description?: string;
 }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/entities`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(entityData),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/create`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(entityData),
+    }
+  );
   console.log(entityData);
   const data = await res.json();
   if ("statusCode" in data) {
@@ -25,29 +28,31 @@ export async function AddEntity(entityData: {
   }
 }
 
-export async function DeleteEntity(entityId: number) {
+export async function DeleteEntity(entityId: number, message?: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/${entityId}`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/${entityId}/${message}`,
     {
       method: "DELETE",
     }
   );
   const data = await res.json();
   if ("statusCode" in data) {
+    if (data.statusCode === 409) return data;
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
+    return data;
   } else {
     toast.success(`Entity with ID ${entityId} deleted successfully`);
-    window.location.reload();
-    // return res.json();
+    return data;
   }
 }
 
 export async function EditEntity(
   entityId: number,
-  entityData: { name: string; sectionId: number; description?: string }
+  entityData: { name: string; sectionId: number; description?: string },
+  confirmMessage?: string
 ) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/edit/${entityId}`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/edit/${entityId}${confirmMessage}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -56,10 +61,12 @@ export async function EditEntity(
   );
   const data = await res.json();
   if ("statusCode" in data) {
+    if (data.statusCode === 409) return data;
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
+    return data;
   } else {
     toast.success(`Entity with ID ${entityId} updated successfully`);
-    //window.location.reload();
+    //redirect(`/monitor/${data.section.id}/${data.id}`);
     return data;
   }
 }

@@ -45,7 +45,7 @@ export default function EntityTab({
     console.log(building);
     setBuildings((prev) => [building, ...prev]);
   };
-  const handleEditBuilding = (updatedEntity: EntityOverview) => {
+  const handleEditEntity = (updatedEntity: EntityOverview) => {
     console.log(updatedEntity);
   };
 
@@ -103,7 +103,7 @@ export default function EntityTab({
           entityName: entity.entityName,
           entityId: entity.entityId,
         }}
-        onEntityEdited={handleEditBuilding}
+        onEntityEdited={handleEditEntity}
       />
       <div>
         {isLoading ? (

@@ -1,5 +1,6 @@
 //for confirm pop up when delete entity
 
+import { useState } from "react";
 import { Delete } from "lucide-react";
 import {
   AlertDialog,
@@ -24,8 +25,21 @@ export default function DeleteComfirm({
   trigger?: ReactNode;
   tooltip?: string;
 }) {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirm = async () => {
+    try {
+      setLoading(true);
+      await onConfirm();
+      setOpen(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <Tooltip>
         <TooltipTrigger asChild>
           <AlertDialogTrigger asChild>
@@ -47,10 +61,10 @@ export default function DeleteComfirm({
           <AlertDialogAction
             onClick={(e) => {
               e.preventDefault();
-              onConfirm();
+              handleConfirm();
             }}
           >
-            Confirm
+            {loading ? "deleting..." : "Confirm"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

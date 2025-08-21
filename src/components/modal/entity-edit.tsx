@@ -20,6 +20,8 @@ import {
 
 import { EditEntity } from "@/api/entity-api";
 import { EntityOverview } from "@/types/entity-type";
+import { useRouter } from "next/navigation";
+import Confirmation from "./confirmation";
 
 export default function EntityEdit({
   modalOpen,
@@ -38,6 +40,7 @@ export default function EntityEdit({
   onEntityEdited: (entity: EntityOverview) => void;
 }) {
   // handler for form in Adding Modal
+  const router = useRouter();
   const formTemplate = {
     name: basicDetails.entityName,
     section: basicDetails.sectionId,
@@ -45,6 +48,7 @@ export default function EntityEdit({
   };
   const [formData, setFormData] = useState(formTemplate);
   const [sectionMenu, selectSectionMenu] = useState(formData.section);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   // handler for changing in form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,17 +66,41 @@ export default function EntityEdit({
       modalOpen = true;
       return;
     }
-    const updatedEntity = await EditEntity(basicDetails.entityId, {
-      name: formData.name,
-      sectionId: formData.section,
-      description:
-        formData.description === "" ? undefined : formData.description,
-    });
-    if (updatedEntity !== null) {
-      console.log(updatedEntity);
-      onEntityEdited(updatedEntity);
-    }
+    const editedEntity = await EditEntity(
+      basicDetails.entityId,
+      {
+        name: formData.name,
+        sectionId: formData.section,
+        description:
+          formData.description === "" ? undefined : formData.description,
+      },
+      ""
+    );
+    if ("statusCode" in editedEntity) {
+      if (editedEntity.statusCode === 409) {
+        setOpenConfirmation(true);
+      }
+      console.log(editedEntity);
+      onEntityEdited(editedEntity);
+    } else
+      router.push(`/monitor/${editedEntity.section.id}/${editedEntity.id}`);
     onClose();
+  };
+
+  const handleConfirm = async () => {
+    const editedEntity = await EditEntity(
+      basicDetails.entityId,
+      {
+        name: formData.name,
+        sectionId: formData.section,
+        description:
+          formData.description === "" ? undefined : formData.description,
+      },
+      "?confirm=true"
+    );
+    if (!("statusCode" in editedEntity))
+      router.push(`/monitor/${editedEntity.section.id}/${editedEntity.id}`);
+    console.log(editedEntity);
   };
 
   // check if form is validate
@@ -211,6 +239,13 @@ export default function EntityEdit({
           </DialogFooter>
         </form>
       </DialogContent>
+      <Confirmation
+        open={openConfirmation}
+        onOpenChange={setOpenConfirmation}
+        onConfirm={handleConfirm}
+        title="Are you sure to move"
+        message="This Entity already has Building"
+      />
     </Dialog>
   );
 }

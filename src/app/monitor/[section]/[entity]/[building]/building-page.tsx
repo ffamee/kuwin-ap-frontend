@@ -47,10 +47,12 @@ const chartData = [
 ];
 
 export default function BuildingPage({
-  buildingId,
+  sectionId,
   entityId,
+  buildingId,
   data,
 }: {
+  sectionId: number;
   entityId: number;
   buildingId: number;
   data: BuildingOverview;
@@ -295,8 +297,12 @@ export default function BuildingPage({
             <TabsTrigger value="overview" className="text-center">
               Overview
             </TabsTrigger>
-            <TabsTrigger value="card" className="text-center">
-              Card
+            <TabsTrigger
+              value="location"
+              className="text-center"
+              disabled={data.inactive === 0}
+            >
+              Location {data.inactive !== 0 && <div>({data.inactive})</div>}
             </TabsTrigger>
           </TabsList>
           <div className="flex gap-1">
@@ -346,6 +352,7 @@ export default function BuildingPage({
             buildingName: data.name,
             buildingId: data.id,
             entityId: entityId,
+            sectionId: sectionId,
           }}
         />
         <div>
@@ -372,7 +379,7 @@ export default function BuildingPage({
                   </div>
                 )}
               </TabsContent>
-              {/* <TabsContent value="card">
+              {/* <TabsContent value="location">
                 <Card>
                   <CardHeader>
                     <CardTitle>Access Points</CardTitle>

@@ -22,6 +22,7 @@ import { DeleteBuilding } from "@/api/building-api";
 import DeleteComfirm from "../modal/confirmdelete";
 import { ConfigOverview, StatusState } from "@/types/config-type";
 import { DeleteConfig } from "@/api/config-api";
+import Confirmation from "../modal/confirmation";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -32,13 +33,6 @@ const colorsMap: Record<StatusState, string> = {
   DOWNLOAD: "bg-red-500",
   PENDING: "bg-gray-500",
 };
-
-// type entity = {
-//   entity: {
-//     entityId:string;
-//     entityName:string;
-//   }
-// }
 
 export function BuildingCard({
   entity: { entityId, entityName },
@@ -55,10 +49,30 @@ export function BuildingCard({
     setExpanded(!expanded);
   };
   const [modalOpen, setModalOpen] = useState(false);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   const [configs, setConfigs] = useState(configurations);
   const handleAddConfig = (config: ConfigOverview) => {
     setConfigs((prev) => [config, ...prev]);
+  };
+
+  // Delete Building Part
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+
+  const handleDeleteBuilding = async (buildingId: number) => {
+    const res = await DeleteBuilding(buildingId, "");
+    console.log(res);
+    if (res.statusCode === 409) {
+      setDeleteId(buildingId);
+      setOpenConfirmation(true);
+    }
+    return;
+  };
+
+  const handleConfirm = async () => {
+    if (!deleteId) return;
+    const res = await DeleteBuilding(deleteId, "?confirm=true");
+    console.log(res);
   };
 
   return (
@@ -89,7 +103,10 @@ export function BuildingCard({
               </Button>
             </Link>
             <DeleteComfirm
-              onConfirm={() => DeleteBuilding(building.id)}
+              onConfirm={() => {
+                setDeleteId(building.id);
+                handleDeleteBuilding(building.id);
+              }}
               trigger={<Button className="cursor-pointer">Delete</Button>}
             />
 
@@ -245,6 +262,13 @@ export function BuildingCard({
             </div>
           </CollapsibleContent>
         </Collapsible>
+        <Confirmation
+          open={openConfirmation}
+          onOpenChange={setOpenConfirmation}
+          onConfirm={handleConfirm}
+          title="Are you sure to delete?"
+          message="This Building already has access point"
+        />
       </CardContent>
     </Card>
   );

@@ -22,6 +22,7 @@ type BuildingOverview = {
   c24Count: number;
   c5Count: number;
   c6Count: number;
+  inactive: number;
   configurations: ConfigOverview[];
 };
 

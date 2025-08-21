@@ -11,6 +11,8 @@ import { DataTableColumnHeader } from "@/components/table/data-table-header";
 import DeleteComfirm from "@/components/modal/confirmdelete";
 import Link from "next/link";
 import { DeleteEntity } from "@/api/entity-api";
+import { useState } from "react";
+import Confirmation from "@/components/modal/confirmation";
 
 export default function SectionPage({
   section,
@@ -27,8 +29,22 @@ export default function SectionPage({
       Number(data.c24Count) + Number(data.c5Count) + Number(data.c6Count),
   };
 
-  const handleDeleteEntity = (entityId: number) => {
-    DeleteEntity(entityId);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const handleDeleteEntity = async (entityId: number) => {
+    const res = await DeleteEntity(entityId, "");
+    if ("statusCode" in res) {
+      if (res.statusCode === 409) {
+        setDeleteId(entityId);
+        setOpenConfirmation(true);
+      }
+    }
+    return;
+  };
+  const handleConfirm = async () => {
+    if (!deleteId) return;
+    const res = await DeleteEntity(deleteId, "?confirm=true");
+    console.log(res);
   };
 
   //const [modalOpen, setModalOpen] = useState(false);
@@ -147,6 +163,13 @@ export default function SectionPage({
           section={{ id: data.id, name: data.name }}
         />
       </div>
+      <Confirmation
+        open={openConfirmation}
+        onOpenChange={setOpenConfirmation}
+        onConfirm={handleConfirm}
+        title="Are you sure to delete?"
+        message="This Building already has access point"
+      />
     </div>
   );
 }

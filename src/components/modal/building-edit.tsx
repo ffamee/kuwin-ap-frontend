@@ -13,6 +13,8 @@ import {
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { EditBuilding } from "@/api/building-api";
+import Confirmation from "./confirmation";
+import { useRouter } from "next/navigation";
 
 export default function BuildingEdit({
   modalOpen,
@@ -21,7 +23,12 @@ export default function BuildingEdit({
 }: {
   modalOpen: boolean;
   onClose: () => void;
-  basicDetails: { buildingName: string; buildingId: number; entityId: number };
+  basicDetails: {
+    buildingName: string;
+    buildingId: number;
+    entityId: number;
+    sectionId: number;
+  };
 }) {
   // handler for form in Edit Modal
   const formTemplate = {
@@ -29,7 +36,9 @@ export default function BuildingEdit({
     entityId: basicDetails.entityId,
     //description: "",
   };
+  const router = useRouter();
   const [formData, setFormData] = useState(formTemplate);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   // handler for changing in form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,8 +56,36 @@ export default function BuildingEdit({
       modalOpen = true;
       return;
     }
-    EditBuilding(basicDetails.buildingId, formData);
+    const editedBuilding = await EditBuilding(
+      basicDetails.buildingId,
+      formData,
+      ""
+    );
+    if ("statusCode" in editedBuilding) {
+      if (editedBuilding.statusCode === 409) {
+        setOpenConfirmation(true);
+      }
+      console.log(editedBuilding);
+    } else {
+      router.push(
+        `/monitor/${basicDetails.sectionId}/${formData.entityId}/${editedBuilding.id}`
+      );
+    }
     onClose();
+  };
+
+  const handleConfirm = async () => {
+    const editedBuilding = await EditBuilding(
+      basicDetails.buildingId,
+      formData,
+      "?confirm=true"
+    );
+    if (!("statusCode" in editedBuilding)) {
+      router.push(
+        `/monitor/${basicDetails.sectionId}/${editedBuilding.entityId}/${editedBuilding.id}`
+      );
+    }
+    console.log(editedBuilding);
   };
 
   // check if form is validate
@@ -88,7 +125,7 @@ export default function BuildingEdit({
 
           <div className="flex flex-col gap-4">
             <div className="flex flex-row gap-3">
-              <label className="w-fit text-nowrap">Faculty:</label>
+              <label className="w-fit text-nowrap">Entity:</label>
               <input
                 type="text"
                 name="entityId"
@@ -96,7 +133,6 @@ export default function BuildingEdit({
                 autoComplete="false"
                 onChange={handleChange}
                 className="outline w-full placeholder-muted"
-                readOnly // only for now waiting for full api
               />
               {errors.entityName && (
                 <p className="text-red-500 text-sm">{errors.entityName}</p>
@@ -155,6 +191,13 @@ export default function BuildingEdit({
           </DialogFooter>
         </form>
       </DialogContent>
+      <Confirmation
+        open={openConfirmation}
+        onOpenChange={setOpenConfirmation}
+        onConfirm={handleConfirm}
+        title="Are you sure to move?"
+        message="This Building already have configuration or location"
+      />
     </Dialog>
   );
 }

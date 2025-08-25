@@ -4,7 +4,17 @@ import { CircleX } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ZoomImgModal from "../zoom-image/zoom-modal";
 
-const DragAndDrop = () => {
+const DragAndDrop = ({
+	name,
+	ref,
+}: // file,
+// setFile,
+{
+	name: string;
+	ref: React.RefObject<{
+		getFile: () => File | null;
+	} | null>;
+}) => {
 	const [isDragging, setIsDragging] = React.useState(false);
 	const [file, setFile] = React.useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
@@ -14,13 +24,23 @@ const DragAndDrop = () => {
 
 	const isMobile = useIsMobile();
 
+	React.useImperativeHandle(
+		ref,
+		() => ({
+			getFile: () => file,
+		}),
+		[file]
+	);
+
 	React.useEffect(() => {
+		// if (previewUrl) URL.revokeObjectURL(previewUrl);
 		if (file) {
 			const url = URL.createObjectURL(file);
 			setPreviewUrl(url);
 		} else {
 			setPreviewUrl(null);
 		}
+		// Clean up the object URL when the component unmounts
 	}, [file]);
 
 	// สร้างฟังก์ชันสำหรับจัดการ Event
@@ -61,37 +81,6 @@ const DragAndDrop = () => {
 		}
 	};
 
-	// ฟังก์ชันอัปโหลด (ตัวอย่าง)
-	const handleUpload = () => {
-		if (!file) return;
-		console.log(file);
-		const formData = new FormData();
-		formData.append("file", file);
-		console.log(formData.get("file"));
-
-		// // ตัวอย่างการใช้ XMLHttpRequest เพื่อแสดง progress
-		// const xhr = new XMLHttpRequest();
-		// xhr.open("POST", "/api/upload");
-
-		// xhr.upload.addEventListener("progress", (event) => {
-		// 	if (event.lengthComputable) {
-		// 		const percent = Math.round((event.loaded * 100) / event.total);
-		// 		setUploadProgress(percent);
-		// 	}
-		// });
-
-		// xhr.onload = () => {
-		// 	if (xhr.status === 200) {
-		// 		console.log("Upload successful");
-		// 		setUploadProgress(100);
-		// 	} else {
-		// 		console.error("Upload failed");
-		// 	}
-		// };
-
-		// xhr.send(formData);
-	};
-
 	return (
 		<div
 			className={`border-dashed border-2 rounded-md p-8 text-center transition-all ${
@@ -123,6 +112,7 @@ const DragAndDrop = () => {
 					</div>
 				)}
 				<input
+					name={name}
 					type="file"
 					hidden
 					ref={fileInputRef}
@@ -148,7 +138,7 @@ const DragAndDrop = () => {
 								${
 									isMobile
 										? "object-contain max-w-full max-h-full "
-										: "object-cover max-w-14 max-h-14"
+										: "object-cover w-auto h-auto min-h-12 max-h-12"
 								}
 									group-hover:border-2 border-accent-foreground`}
 								width={200}

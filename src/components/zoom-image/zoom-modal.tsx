@@ -19,11 +19,11 @@ export default function ZoomImgModal({ src, onClose }: ZoomImgProps) {
 
 	return (
 		<div
-			className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+			className="fixed inset-0 bg-black/50 z-50 w-screen h-screen flex items-center-safe justify-center-safe "
 			onClick={handleClickOutside}
 		>
 			<div
-				className="relative max-w-[90dvw] max-h-[90dvh]"
+				// className="relative flex items-center-safe justify-center-safe w-auto h-auto max-w-full max-h-full"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<TransformWrapper
@@ -47,7 +47,7 @@ export default function ZoomImgModal({ src, onClose }: ZoomImgProps) {
 						<Image
 							src={src}
 							alt="Zoomable"
-							className="max-w-full max-h-full cursor-grab active:cursor-grabbing"
+							className="w-auto h-auto max-h-[80vh] max-w-[80vw] object-contain cursor-grab active:cursor-grabbing"
 							width={800}
 							height={800}
 						/>

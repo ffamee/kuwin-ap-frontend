@@ -16,6 +16,7 @@ export default function Page() {
 					>
 						<Link
 							href="#title"
+							scroll={true}
 							className="size-full flex items-center-safe justify-center-safe text-center"
 						>
 							up
@@ -77,7 +78,7 @@ export default function Page() {
 						</Button>
 					</div>
 				</div>
-				<div id="edit">
+				<div id="edit" className="pb-8">
 					<EditReplacement />
 				</div>
 				<div id="display" className="bg-blue-200 min-h-screen"></div>

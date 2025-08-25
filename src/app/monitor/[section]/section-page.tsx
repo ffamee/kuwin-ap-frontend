@@ -28,7 +28,14 @@ export default function SectionPage({
     totalUser:
       Number(data.c24Count) + Number(data.c5Count) + Number(data.c6Count),
   };
+  const [entities, setEntities] = useState(data.entities);
 
+  // function about adding entity part
+  const handleAddEntity = (entity: EntityOverview) => {
+    setEntities((prev) => [entity, ...prev]);
+  };
+
+  // function about deleting part
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const handleDeleteEntity = async (entityId: number) => {
@@ -38,16 +45,23 @@ export default function SectionPage({
         setDeleteId(entityId);
         setOpenConfirmation(true);
       }
+    } else {
+      setEntities((prev) => prev.filter((entity) => entity.id !== entityId));
+      setDeleteId(null);
     }
+    console.log(res);
     return;
   };
   const handleConfirm = async () => {
     if (!deleteId) return;
     const res = await DeleteEntity(deleteId, "?confirm=true");
+    if (!("statusCode" in res)) {
+      setEntities((prev) => prev.filter((entity) => entity.id !== deleteId));
+      setDeleteId(null);
+    }
     console.log(res);
   };
 
-  //const [modalOpen, setModalOpen] = useState(false);
   const columns: ColumnDef<EntityOverview>[] = [
     {
       accessorKey: "name",
@@ -140,7 +154,10 @@ export default function SectionPage({
             <div>
               <span>
                 <DeleteComfirm
-                  onConfirm={() => handleDeleteEntity(row.original.id)}
+                  onConfirm={() => {
+                    setDeleteId(row.original.id);
+                    handleDeleteEntity(row.original.id);
+                  }}
                 />
               </span>
             </div>
@@ -151,25 +168,33 @@ export default function SectionPage({
   ];
   return (
     <div className="flex flex-col p-4 gap-4 w-full min-h-0 h-screen overflow-y-auto no-scrollbar overscroll-y-contain">
-      <h1 className="text-left font-bold text-[48px] capitalize">
-        {data.name}
-      </h1>
-      <SectionCard sumData={sumData} />
-
       <div>
-        <SectionTab
-          header={columns}
-          data={data.entities}
-          section={{ id: data.id, name: data.name }}
+        {
+          <div>
+            <h1 className="text-left font-bold text-[48px] capitalize">
+              {data.name}
+            </h1>
+            <SectionCard sumData={sumData} />
+
+            <div>
+              <SectionTab
+                header={columns}
+                data={entities}
+                section={{ id: data.id, name: data.name }}
+                onAddEntity={handleAddEntity}
+              />
+            </div>
+          </div>
+        }
+
+        <Confirmation
+          open={openConfirmation}
+          onOpenChange={setOpenConfirmation}
+          onConfirm={handleConfirm}
+          title="Are you sure to delete?"
+          message="This Entity already has Building"
         />
       </div>
-      <Confirmation
-        open={openConfirmation}
-        onOpenChange={setOpenConfirmation}
-        onConfirm={handleConfirm}
-        title="Are you sure to delete?"
-        message="This Building already has access point"
-      />
     </div>
   );
 }

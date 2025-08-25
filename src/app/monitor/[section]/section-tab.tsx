@@ -22,15 +22,17 @@ export default function SectionTab({
   header,
   data,
   section,
+  onAddEntity,
 }: {
   header: ColumnDef<EntityOverview>[];
   data: EntityOverview[];
   section: Section;
+  onAddEntity: (entity: EntityOverview) => void;
 }) {
-  const [tab, setTab] = React.useState<string>("list");
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [entities, setEntities] = useState(data);
+  const [tab, setTab] = useState<string>("list");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState(false);
+
   const handleChange = (value: string) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -41,7 +43,7 @@ export default function SectionTab({
 
   const handleAddEntity = (entity: EntityOverview) => {
     console.log(entity);
-    setEntities((prev) => [entity, ...prev]);
+    onAddEntity(entity);
   };
 
   return (
@@ -91,7 +93,7 @@ export default function SectionTab({
             </TabsContent>
             <TabsContent value="list">
               <div className="w-full">
-                <SectionTable columns={header} data={entities} />
+                <SectionTable columns={header} data={data} />
               </div>
             </TabsContent>
           </div>

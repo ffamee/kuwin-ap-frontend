@@ -16,7 +16,6 @@ export async function AddEntity(entityData: {
       body: JSON.stringify(entityData),
     }
   );
-  console.log(entityData);
   const data = await res.json();
   if ("statusCode" in data) {
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
@@ -28,9 +27,9 @@ export async function AddEntity(entityData: {
   }
 }
 
-export async function DeleteEntity(entityId: number, message?: string) {
+export async function DeleteEntity(entityId: number, confirmMessage?: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/${entityId}/${message}`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/${entityId}/${confirmMessage}`,
     {
       method: "DELETE",
     }
@@ -66,7 +65,6 @@ export async function EditEntity(
     return data;
   } else {
     toast.success(`Entity with ID ${entityId} updated successfully`);
-    //redirect(`/monitor/${data.section.id}/${data.id}`);
     return data;
   }
 }

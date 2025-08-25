@@ -75,7 +75,6 @@ export default function EntityAdding({
         formData.description === "" ? undefined : formData.description,
     });
     if (newEntity !== null) {
-      console.log(newEntity);
       onEntityAdded(newEntity);
     }
     onClose();

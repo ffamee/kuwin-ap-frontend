@@ -1,19 +1,19 @@
 // "use server";
-import { ActionState } from "@/app/monitor/(admin)/replace/replace-edit";
+import { ReplaceActionState } from "@/types/replace-type";
 import fetcher from "../fetcher";
 // import { revalidatePath } from "next/cache";
 
 export default async function ReplaceEditAction(
 	// file: File | null,
 	// id: number | null,
-	_prev: ActionState,
+	_prev: ReplaceActionState,
 	formData: FormData
 ) {
 	const id = formData.get("id");
 	const eol = formData.get("eol");
 	const eos = formData.get("eos");
 	// const pic = formData.get("pic");
-	const currState: ActionState = { errors: {}, message: "" };
+	const currState: ReplaceActionState = { errors: {}, message: "" };
 	// Process the form data as needed, e.g., save to a database
 	if (!!!id) currState.errors.id = true;
 	// console.log("Group:", group);

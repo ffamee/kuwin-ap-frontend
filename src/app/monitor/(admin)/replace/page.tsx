@@ -1,13 +1,27 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import EditReplacement from "./replace-edit";
+import DisplayReplacement from "./replace-display";
 
 export default function Page() {
 	return (
 		<div className="min-h-0 h-screen overflow-y-auto !scroll-smooth no-scrollbar relative">
-			<div className="fixed top-0 w-full">
-				<div className="bg-yellow-200 opacity-30 h-14" />
-				<div className="group absolute top-1/2 left-1/2 -translate-x-1/2 w-12 h-24">
+			<div className="fixed top-0 w-full z-10">
+				<div className="bg-accent-foreground h-16 flex justify-between items-center px-4">
+					<div className="text-white">Access Point Replacement</div>
+					<div className="text-white flex gap-4">
+						<div>
+							<Link href="#title">Home</Link>
+						</div>
+						<div>
+							<Link href="#edit">Edit</Link>
+						</div>
+						<div>
+							<Link href="#display">Report</Link>
+						</div>
+						<div className="border-2">User</div>
+					</div>
+					{/* <div className="group absolute top-1/2 left-1/2 -translate-x-1/2 w-12 h-24">
 					<div
 						className="absolute top-0 left-1/2 -translate-x-1/2 translate-y-1/2
           bg-accent-foreground text-white rounded-full size-12
@@ -22,26 +36,9 @@ export default function Page() {
 							up
 						</Link>
 					</div>
+				</div> */}
 				</div>
 			</div>
-			{/* <div className="fixed bottom-0 w-full">
-				<div className="bg-yellow-200 opacity-0 h-14" />
-				<div className="group absolute bottom-1/2 left-1/2 -translate-x-1/2 w-12 h-24">
-					<div
-						className="absolute bottom-0 left-1/2 -translate-x-1/2 -translate-y-1/2
-          bg-accent-foreground text-white rounded-full size-12
-          transition-all duration-300
-          opacity-0 group-hover:opacity-100 group-hover:-translate-y-full hover:animate-bounce"
-					>
-						<Link
-							href="#display"
-							className="size-full flex items-center-safe justify-center-safe text-center"
-						>
-							down
-						</Link>
-					</div>
-				</div>
-			</div> */}
 			<div className="p-8 space-y-24">
 				<div
 					id="title"
@@ -81,7 +78,9 @@ export default function Page() {
 				<div id="edit" className="pb-8">
 					<EditReplacement />
 				</div>
-				<div id="display" className="bg-blue-200 min-h-screen"></div>
+				<div id="display">
+					<DisplayReplacement />
+				</div>
 			</div>
 		</div>
 	);

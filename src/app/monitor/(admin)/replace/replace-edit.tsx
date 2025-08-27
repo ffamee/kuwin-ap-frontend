@@ -21,27 +21,10 @@ import ReplaceEditAction from "@/lib/actions/replace-edit-action";
 import fetcher from "@/lib/fetcher";
 import { toast } from "sonner";
 import { formatDate } from "@/components/date-picker/format-date";
+import { Lifecycle, ReplaceActionState } from "@/types/replace-type";
+import { useSearchParams } from "next/navigation";
 
-type Lifecycle = {
-	id: number;
-	group: string;
-	eol?: Date;
-	eos?: Date;
-	pic?: string;
-	models: string[];
-};
-
-// key of Lifecycle exclude id and group
-export type ActionState = {
-	success?: boolean;
-	errors: {
-		[k in Exclude<keyof Lifecycle, "group" | "pic" | "models">]?: boolean;
-	};
-	message: string;
-	payload?: unknown;
-};
-
-const initialState: ActionState = {
+const initialState: ReplaceActionState = {
 	errors: {
 		id: false,
 		eol: false,
@@ -51,11 +34,23 @@ const initialState: ActionState = {
 };
 
 export default function EditReplacement() {
+	const searchParams = useSearchParams();
 	const [groups, setGroups] = React.useState<Lifecycle[]>([]);
 	const [selected, setSelected] = React.useState<number | null>(null);
 	const fileRef = React.useRef<{
 		getFile: () => File | null;
 	} | null>(null);
+
+	React.useEffect(() => {
+		if (
+			searchParams.get("edit") &&
+			!isNaN(parseInt(searchParams.get("edit")!)) &&
+			groups.length &&
+			groups.some((group) => group.id === parseInt(searchParams.get("edit")!))
+		) {
+			setSelected(parseInt(searchParams.get("edit")!));
+		}
+	}, [searchParams, groups]);
 
 	React.useEffect(() => {
 		// Fetch lifecycle data from an API or other source
@@ -85,7 +80,10 @@ export default function EditReplacement() {
 	// 	null,
 	// 	fileRef?.current?.getFile() || null
 	// );
-	const wrapperAction = async (prev: ActionState, formData: FormData) => {
+	const wrapperAction = async (
+		prev: ReplaceActionState,
+		formData: FormData
+	) => {
 		const file = fileRef?.current?.getFile() || null;
 		if (file) formData.set("pic", file);
 		formData.set("id", selected ? selected.toString() : "");
@@ -153,16 +151,17 @@ export default function EditReplacement() {
 			<Separator className="bg-accent-foreground mb-4 !w-3/4" />
 			<div
 				key={selected}
-				className="h-auto min-h-full flex flex-col md:flex-row justify-between gap-8 w-full"
+				className="h-auto min-h-full grid grid-cols-1 justify-between gap-8 w-full md:grid-cols-2"
 			>
 				<Form
 					action={formAction}
-					className="min-h-full h-auto w-full bg-accent flex flex-col gap-4 p-4 rounded-lg md:rounded-2xl"
+					className="min-h-full h-auto w-full mx-auto bg-accent flex flex-col gap-4 p-4 rounded-lg md:rounded-2xl max-w-xl"
 				>
-					<div className="text-2xl font-semibold text-left mb-4">
+					<div className="text-2xl font-semibold text-left mb-1">
 						Model Details
 					</div>
 					<div>
+						<div className="mb-1">Model</div>
 						<Select
 							defaultValue={selected?.toString() ?? undefined}
 							onValueChange={(val) => setSelected(parseInt(val))}
@@ -229,7 +228,11 @@ export default function EditReplacement() {
 					</div>
 				</Form>
 				{selectedGroup ? (
-					<div className="p-4 bg-white rounded-lg shadow space-y-4 min-h-full h-auto max-h-full w-full md:rounded-2xl">
+					<div
+						className={`p-4 bg-white rounded-lg shadow space-y-4 min-h-full h-auto max-h-full w-full md:rounded-2xl
+							${isPending ? "animate-pulse-bg" : ""}`}
+					>
+						{/* Group Name */}
 						<div className="text-lg font-bold">{selectedGroup.group}</div>
 
 						{/* Image with loading state and fallback */}
@@ -240,7 +243,7 @@ export default function EditReplacement() {
 										? `http://localhost:3001/${selectedGroup.pic}`
 										: "/image.png"
 								}
-								className="object-contain"
+								className="object-contain p-4 md:p-0 lg:p-2 xl:p-4 2xl:p-6"
 								alt={selectedGroup.group}
 								fill
 								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

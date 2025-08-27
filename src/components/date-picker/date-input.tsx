@@ -47,7 +47,7 @@ export function DateInput({
 	}, [debounce]);
 
 	return (
-		<div className="flex flex-col gap-3">
+		<div className="flex flex-col gap-1">
 			{label}
 			<div className="relative flex gap-2">
 				<Input

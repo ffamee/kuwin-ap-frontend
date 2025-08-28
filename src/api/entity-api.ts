@@ -68,3 +68,10 @@ export async function EditEntity(
     return data;
   }
 }
+
+// export async function CountInEntity(sectionId: number, entityId: number) {
+//   const res = awatch fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/count/?sec=${sectionId}&entity=${entityId}`,{
+//     method: "GET",
+
+//   })
+// }

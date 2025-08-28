@@ -78,15 +78,15 @@ export default function BuildingPage({
     setConfigs((prev) => [config, ...prev]);
   };
 
+  //const [deleteId, setDeleteId] = useState<number | null>(null);
+  const handleDeleteConfig = (configId: number) => {
+    setConfigs((prev) => prev.filter((config) => config.id !== configId));
+  };
+
   const [editConfigData, setEditConfigData] = useState({
-    entity: "",
     building: data.name,
     buildingId: data.id,
-    model: "-",
-    serialNumber: "-",
-    ethMac: "-",
     ip: "-",
-    location: "-",
   });
   //console.log(data);
   const columns: ColumnDef<ConfigOverview>[] = [
@@ -232,21 +232,21 @@ export default function BuildingPage({
                 className="cursor-pointer"
                 onClick={() => {
                   setEditConfigData({
-                    entity: "-",
                     building: data.name,
                     buildingId: data.id,
-                    model: row.original.accesspoint?.model ?? "-",
-                    serialNumber: row.original.accesspoint?.serial ?? "-",
-                    ethMac: row.original.accesspoint?.ethMac ?? "-",
                     ip: row.original.ip.ip,
-                    location: row.original.location.name,
                   });
                   setModalConfigEditOpen(true);
                 }}
               />
             </span>
 
-            <DeleteComfirm onConfirm={() => DeleteConfig(row.original.id)} />
+            <DeleteComfirm
+              onConfirm={() => {
+                handleDeleteConfig(row.original.id);
+                DeleteConfig(row.original.id);
+              }}
+            />
           </div>
         );
       },

@@ -14,14 +14,9 @@ import { useState } from "react";
 import { EditConfig } from "@/api/config-api";
 
 type basicDetails = {
-  entity: string;
   building: string;
   buildingId: number;
-  model: string;
-  serialNumber: string;
-  ethMac: string;
   ip: string;
-  location: string;
 };
 
 // const formField = [
@@ -47,13 +42,8 @@ export default function ConfigEdit({
 }) {
   // handler for form in Adding Modal
   const formTemplate = {
-    building: basicDetails.building,
-    model: basicDetails.model,
-    serialNumber: basicDetails.serialNumber,
-    ethMac: basicDetails.ethMac,
+    buildingId: basicDetails.buildingId,
     ip: basicDetails.ip,
-    location: basicDetails.location,
-    // description: "",
   };
   const [formData, setFormData] = useState(formTemplate);
 
@@ -74,7 +64,8 @@ export default function ConfigEdit({
     //   modalOpen = true;
     //   return;
     // }
-    EditConfig(basicDetails.buildingId, formData);
+    const res = await EditConfig(basicDetails.buildingId, formData);
+    console.log(res);
     onClose();
   };
 
@@ -138,87 +129,16 @@ export default function ConfigEdit({
           </DialogHeader>
 
           <div className="flex flex-col gap-4">
-            {/* <div className="flex flex-row gap-3">
-              <label className="w-fit">Faculty:</label>
-              <input
-                type="text"
-                name="entity"
-                value={formData.entity}
-                autoComplete="false"
-                onChange={handleChange}
-                className="outline w-full"
-                readOnly
-              />
-            </div> */}
-
             <div className="flex flex-row gap-3">
               <label className="w-fit">Building:</label>
               <input
                 type="text"
-                name="building"
-                value={formData.building}
+                name="buildingId"
+                value={formData.buildingId}
                 autoComplete="false"
                 onChange={handleChange}
                 className="outline w-full"
-                readOnly
               />
-            </div>
-
-            <div>
-              <div className="flex flex-row gap-3">
-                <label className="w-fit">Model:</label>
-                <input
-                  type="text"
-                  name="model"
-                  value={formData.model}
-                  autoComplete="false"
-                  onChange={handleChange}
-                  className="outline w-full"
-                />
-              </div>
-              {/* <div>
-                {errors.model && (
-                  <p className="text-red-500 text-sm">{errors.model}</p>
-                )}
-              </div> */}
-            </div>
-
-            <div>
-              <div className="flex flex-row gap-3">
-                <label className="w-fit text-nowrap">Serial Number:</label>
-                <input
-                  type="text"
-                  name="serialNumber"
-                  value={formData.serialNumber}
-                  autoComplete="false"
-                  onChange={handleChange}
-                  className="outline w-full"
-                />
-              </div>
-              {/* <div>
-                {errors.serialNumber && (
-                  <p className="text-red-500 text-sm">{errors.serialNumber}</p>
-                )}
-              </div> */}
-            </div>
-
-            <div>
-              <div className="flex flex-row gap-3">
-                <label className="w-fit text-nowrap"> Eth. Mac Address:</label>
-                <input
-                  type="text"
-                  name="ethMac"
-                  value={formData.ethMac}
-                  autoComplete="false"
-                  onChange={handleChange}
-                  className="outline w-full"
-                />
-              </div>
-              {/* <div>
-                {errors.ethMac && (
-                  <p className="text-red-500 text-sm">{errors.ethMac}</p>
-                )}
-              </div> */}
             </div>
 
             <div>
@@ -239,39 +159,6 @@ export default function ConfigEdit({
                 )}
               </div> */}
             </div>
-
-            <div>
-              <div className="flex flex-row gap-3">
-                <label className="w-fit"> Location:</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  autoComplete="false"
-                  onChange={handleChange}
-                  className="outline w-full"
-                />
-              </div>
-              {/* <div>
-                {errors.location && (
-                  <p className="text-red-500 text-sm">{errors.location}</p>
-                )}
-              </div> */}
-            </div>
-
-            {/* <div>
-              <div className="flex flex-row gap-3">
-                <label className="w-fit"> Description:</label>
-                <input
-                  type="text"
-                  name="description"
-                  value={formData.description}
-                  autoComplete="false"
-                  onChange={handleChange}
-                  className="outline w-full"
-                />
-              </div>
-            </div> */}
 
             <div>
               <div className="flex flex-row gap-3">

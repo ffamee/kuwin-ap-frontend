@@ -23,6 +23,7 @@ import DeleteComfirm from "../modal/confirmdelete";
 import { ConfigOverview, StatusState } from "@/types/config-type";
 import { DeleteConfig } from "@/api/config-api";
 import Confirmation from "../modal/confirmation";
+import ConfigEdit from "../modal/config-edit";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -35,45 +36,63 @@ const colorsMap: Record<StatusState, string> = {
 };
 
 export function BuildingCard({
+  //  sectionId,
   entity: { entityId, entityName },
   building,
   configurations = [],
+  onBuildingDeleted,
+  onConfigDeleted,
+  onConfigAdded,
 }: {
+  //sectionId: number;
   entity: { entityId: number; entityName: string };
   building: BuildingOverview;
   configurations: ConfigOverview[];
+  onBuildingDeleted: (buildingId: number) => void;
+  onConfigDeleted: (configId: number) => void;
+  onConfigAdded: (config: ConfigOverview, buildingId: number) => void;
 }) {
+  // Expand control
   const [expanded, setExpanded] = useState(false);
-
   const toggleBuildingExpand = () => {
     setExpanded(!expanded);
   };
-  const [modalOpen, setModalOpen] = useState(false);
-  const [openConfirmation, setOpenConfirmation] = useState(false);
 
-  const [configs, setConfigs] = useState(configurations);
-  const handleAddConfig = (config: ConfigOverview) => {
-    setConfigs((prev) => [config, ...prev]);
-  };
+  // Modal Control
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalConfigEditOpen, setModalConfigEditOpen] = useState(false);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   // Delete Building Part
   const [deleteId, setDeleteId] = useState<number | null>(null);
-
   const handleDeleteBuilding = async (buildingId: number) => {
     const res = await DeleteBuilding(buildingId, "");
     console.log(res);
     if (res.statusCode === 409) {
       setDeleteId(buildingId);
       setOpenConfirmation(true);
+    } else {
+      onBuildingDeleted(buildingId);
+      setDeleteId(null);
     }
     return;
   };
-
   const handleConfirm = async () => {
     if (!deleteId) return;
     const res = await DeleteBuilding(deleteId, "?confirm=true");
     console.log(res);
+    onBuildingDeleted(deleteId);
+    setDeleteId(null);
   };
+
+  // Edit Config Part
+  const [editConfigData, setEditConfigData] = useState({
+    building: "",
+    buildingId: building.id,
+    ip: "",
+  });
+
+  console.log(building);
 
   return (
     <Card key={building.id} className="w-full">
@@ -120,7 +139,7 @@ export function BuildingCard({
                 building: building.name,
                 buildingId: building.id,
               }}
-              onConfigAdded={handleAddConfig}
+              onConfigAdded={onConfigAdded}
             />
             <Button
               size="sm"
@@ -178,9 +197,9 @@ export function BuildingCard({
                 </div>
               </div>
               <Separator className="mb-2" />
-              {configs.length ? (
+              {configurations.length ? (
                 <div className="bg-secondary/40 rounded-lg">
-                  {configs.map((config) => (
+                  {configurations.map((config) => (
                     <div
                       key={config.location.name}
                       className="grid grid-cols-8 mb-2 space-x-2 hover:bg-muted rounded-lg"
@@ -213,19 +232,25 @@ export function BuildingCard({
                       <div className="flex items-center-safe justify-center">
                         {Number(config.client24 ?? 0) +
                           Number(config.client5 ?? 0) +
-                          Number(config.client6)}
+                          Number(config.client6 ?? 0)}
                         <Users size={16} className="mx-2" />
                       </div>
                       <div className="flex items-center-safe justify-evenly">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <Link
-                              href={`./${entityId}/${building.id}/${config.location.id}`}
-                            >
-                              <span className="cursor-pointer">
-                                <SquarePen size={16} />
-                              </span>
-                            </Link>
+                            <span className="cursor-pointer">
+                              <SquarePen
+                                size={16}
+                                onClick={() => {
+                                  setEditConfigData({
+                                    building: building.name,
+                                    buildingId: building.id,
+                                    ip: config.ip.ip,
+                                  });
+                                  setModalConfigEditOpen(true);
+                                }}
+                              />
+                            </span>
                           </TooltipTrigger>
                           <TooltipContent side="top">
                             Edit Access Point
@@ -245,9 +270,17 @@ export function BuildingCard({
                             Access Point Detail
                           </TooltipContent>
                         </Tooltip>
-
+                        <ConfigEdit
+                          modalOpen={modalConfigEditOpen}
+                          onClose={() => setModalConfigEditOpen(false)}
+                          basicDetails={editConfigData}
+                        />
                         <DeleteComfirm
-                          onConfirm={() => DeleteConfig(config.id)}
+                          onConfirm={() => {
+                            //handleDeleteConfig(config.id);
+                            DeleteConfig(config.id);
+                            onConfigDeleted(config.id);
+                          }}
                           tooltip="Delete This Config"
                         />
                       </div>

@@ -16,6 +16,7 @@ import { BuildingOverview } from "@/types/building-type";
 import BuildingAdding from "@/components/modal/building-adding";
 import EntityEdit from "@/components/modal/entity-edit";
 import { EntityOverview } from "@/types/entity-type";
+import { ConfigOverview } from "@/types/config-type";
 
 export default function EntityTab({
   data,
@@ -28,7 +29,9 @@ export default function EntityTab({
 }) {
   const [tab, setTab] = useState("list");
   const [isLoading, setIsLoading] = useState(false);
+
   const [buildings, setBuildings] = useState(data);
+
   //  const [entityDetails, setEntityDetails] = useState({ section, entity });
   const handleChange = (value: string) => {
     setIsLoading(true);
@@ -41,13 +44,63 @@ export default function EntityTab({
   // Changing table
   const [modalAddingOpen, setModalAddingOpen] = useState(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
+
   const handleAddBuilding = (building: BuildingOverview) => {
     console.log(building);
     setBuildings((prev) => [building, ...prev]);
   };
+  const handleDeleteBuilding = (buildingId: number) => {
+    setBuildings((prev) =>
+      prev.filter((building) => building.id !== buildingId)
+    );
+  };
   const handleEditEntity = (updatedEntity: EntityOverview) => {
     console.log(updatedEntity);
   };
+
+  const handleAddConfig = (config: ConfigOverview, buildingId: number) => {
+    setBuildings((prev) =>
+      prev.map((building) =>
+        buildingId === building.id
+          ? {
+              ...building,
+              configurations: [config, ...building.configurations],
+            }
+          : building
+      )
+    );
+  };
+
+  const handleDeleteConfig = (configId: number) => {
+    setBuildings((prev) =>
+      prev.map((building) => ({
+        ...building,
+        configurations: building.configurations.filter(
+          (config) => config.id != configId
+        ),
+      }))
+    );
+    //setConfigs((prev) => prev.filter((config) => config.id !== configId));
+  };
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const data = await fetch(
+  //         `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/count/?sec=${section.sectionId}&entity=${entity.entityId}`
+  //       );
+  //       if (!data.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+  //       setBuildings(await data.json());
+  //       console.log(buildings);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //       throw new Error("Failed to fetch data");
+  //     }
+  //   }
+  //   fetchData();
+  // }, []);
 
   return (
     <Tabs value={tab} onValueChange={handleChange} className="w-full space-y-1">
@@ -119,9 +172,13 @@ export default function EntityTab({
                 buildings.map((b: BuildingOverview) => (
                   <BuildingCard
                     key={b.id}
+                    //sectionId={section.sectionId}
                     entity={entity}
                     building={b}
                     configurations={b.configurations}
+                    onBuildingDeleted={handleDeleteBuilding}
+                    onConfigDeleted={handleDeleteConfig}
+                    onConfigAdded={handleAddConfig}
                   />
                 ))
               ) : (

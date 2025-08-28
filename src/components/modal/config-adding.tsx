@@ -24,7 +24,8 @@ export default function ConfigAdding({
   onClose: () => void;
   basicDetails: { entity: string; building: string; buildingId: number };
   onConfigAdded: (
-    config: ConfigOverview & { accesspoint: Accesspoint }
+    config: ConfigOverview & { accesspoint: Accesspoint },
+    buildingId: number
   ) => void;
 }) {
   // handler for form in Adding Modal
@@ -62,7 +63,8 @@ export default function ConfigAdding({
       newConfig.ip.ip = formData.ip;
 
       console.log(newConfig);
-      onConfigAdded(newConfig);
+      onConfigAdded(newConfig, formData.buildingId);
+      //
     }
     onClose();
   };

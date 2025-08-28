@@ -29,7 +29,7 @@ const toMbs = (byte: number) => {
 
 export default function ConfigDetail({ data }: { data: ConfigOverview }) {
   //const Icon = statusMap[data.status];
-  console.log(data);
+  //console.log(data);
   return (
     <div className="grid grid-cols-5 gap-4">
       <Card className="col-span-3">

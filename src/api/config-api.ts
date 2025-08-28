@@ -37,7 +37,6 @@ export async function DeleteConfig(configId: number) {
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
   } else {
     toast.success(`Configuration with ID ${configId} deleted successfully`);
-    window.location.reload();
     return data;
   }
 }
@@ -45,12 +44,8 @@ export async function DeleteConfig(configId: number) {
 export async function EditConfig(
   configId: number,
   configData: {
-    building?: string;
-    model?: string;
-    ethMac?: string;
+    buildingId?: number;
     ip?: string;
-    location?: string;
-    description?: string;
   }
 ) {
   console.log(configData);
@@ -65,7 +60,7 @@ export async function EditConfig(
   const data = await res.json();
   if ("statusCode" in data) {
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
-    return null;
+    return data;
   } else {
     // fetched successful
     toast.success(`Configuration ${configId} edited successfully`);

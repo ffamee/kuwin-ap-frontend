@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import EditReplacement from "./replace-edit";
 import DisplayReplacement from "./replace-display";
+import Username from "./username";
 
 export default function Page() {
 	return (
@@ -19,7 +20,9 @@ export default function Page() {
 						<div>
 							<Link href="#display">Report</Link>
 						</div>
-						<div className="border-2">User</div>
+						<div className="border-2">
+							<Username />
+						</div>
 					</div>
 					{/* <div className="group absolute top-1/2 left-1/2 -translate-x-1/2 w-12 h-24">
 					<div

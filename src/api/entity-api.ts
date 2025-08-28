@@ -1,3 +1,4 @@
+import fetcher from "@/lib/fetcher";
 import { toast } from "sonner";
 
 // const param = new URLSearch
@@ -8,7 +9,7 @@ export async function AddEntity(entityData: {
   sectionId: number;
   description?: string;
 }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/entities`, {
+  const res = await fetcher(`/entities/create`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(entityData),
@@ -26,12 +27,9 @@ export async function AddEntity(entityData: {
 }
 
 export async function DeleteEntity(entityId: number) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/${entityId}`,
-    {
-      method: "DELETE",
-    }
-  );
+  const res = await fetcher(`/entities/${entityId}`, {
+    method: "DELETE",
+  });
   const data = await res.json();
   if ("statusCode" in data) {
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
@@ -46,14 +44,11 @@ export async function EditEntity(
   entityId: number,
   entityData: { name: string; sectionId: number; description?: string }
 ) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/edit/${entityId}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(entityData),
-    }
-  );
+  const res = await fetcher(`/entities/edit/${entityId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entityData),
+  });
   const data = await res.json();
   if ("statusCode" in data) {
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);

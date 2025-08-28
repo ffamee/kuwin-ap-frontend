@@ -1,3 +1,4 @@
+import fetcher from "@/lib/fetcher";
 import ConfigTab from "./config-tab";
 import { notFound } from "next/navigation";
 
@@ -7,8 +8,8 @@ async function getConfigurationDetail(
   building: number,
   location: number
 ) {
-  const res = await fetch(
-    `${process.env.BACKEND_URL}/configurations/detail?sec=${section}&entity=${entity}&build=${building}&loc=${location}`
+  const res = await fetcher(
+    `/configurations/detail?sec=${section}&entity=${entity}&build=${building}&loc=${location}`
   );
   if (res.status === 404) {
     return notFound();

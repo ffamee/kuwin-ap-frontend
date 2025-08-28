@@ -1,3 +1,4 @@
+import fetcher from "@/lib/fetcher";
 import { toast } from "sonner";
 
 export async function AddConfig(configData: {
@@ -5,14 +6,11 @@ export async function AddConfig(configData: {
   ip: string;
   buildingId: number;
 }) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/configurations/create`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(configData),
-    }
-  );
+  const res = await fetcher(`/configurations/create`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(configData),
+  });
   const data = await res.json();
   if ("statusCode" in data) {
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
@@ -25,12 +23,9 @@ export async function AddConfig(configData: {
 }
 
 export async function DeleteConfig(configId: number) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/configurations/${configId}`,
-    {
-      method: "DELETE",
-    }
-  );
+  const res = await fetcher(`/configurations/${configId}`, {
+    method: "DELETE",
+  });
   console.log(res.status);
   const data = await res.json();
   if ("statusCode" in data) {
@@ -54,14 +49,11 @@ export async function EditConfig(
   }
 ) {
   console.log(configData);
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/configurations/edit/${configId}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(configData),
-    }
-  );
+  const res = await fetcher(`/configurations/edit/${configId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(configData),
+  });
   const data = await res.json();
   if ("statusCode" in data) {
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);

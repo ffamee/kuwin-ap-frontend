@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import fetcher from "@/lib/fetcher";
 import { SectionOverview } from "@/types/section-type";
 import { ColumnDef } from "@tanstack/react-table";
 import { CircleAlert, Users, Wifi, WifiOff } from "lucide-react";
@@ -32,7 +33,7 @@ const columns: ColumnDef<SectionOverview>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
-    filterFn: (row, columnId, value) => {
+    filterFn: (row, _columnId, value) => {
       const rowData: string = row.getValue("name");
       return rowData.toLowerCase().includes(value.toLowerCase());
     },
@@ -101,9 +102,7 @@ export default function Page() {
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const data = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/section/monitor`
-        );
+        const data = await fetcher("/section/monitor");
         if (!data.ok) {
           throw new Error("Network response was not ok");
         }

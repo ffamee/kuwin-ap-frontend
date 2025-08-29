@@ -20,21 +20,30 @@ import { DataTablePagination } from "./data-table-pagination";
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
 	table: ReactTable<TData>;
+	"data-row"?: (row: TData) => string;
+	rowClassName?: string;
+	headerRowClassName?: string;
+	headerCellClassName?: string;
 }
 
 export default function DataTable<TData, TValue>({
 	columns,
 	table,
+	...props
 }: DataTableProps<TData, TValue>) {
 	return (
 		<div className="rounded-md border">
 			<Table className="border-b">
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (
-						<TableRow key={headerGroup.id}>
+						<TableRow key={headerGroup.id} className={props.headerRowClassName}>
 							{headerGroup.headers.map((header) => {
 								return (
-									<TableHead key={header.id} colSpan={header.colSpan}>
+									<TableHead
+										key={header.id}
+										colSpan={header.colSpan}
+										className={props.headerCellClassName}
+									>
 										{header.isPlaceholder
 											? null
 											: flexRender(
@@ -53,6 +62,12 @@ export default function DataTable<TData, TValue>({
 							<TableRow
 								key={row.id}
 								data-state={row.getIsSelected() && "selected"}
+								data-row={
+									props["data-row"]
+										? props["data-row"](row.original)
+										: undefined
+								}
+								className={props.rowClassName}
 							>
 								{row.getVisibleCells().map((cell) => (
 									<TableCell key={cell.id}>

@@ -1,9 +1,9 @@
 export function useLogout() {
-  return async () => {
-    await fetch(`${process.env.BACKEND_URL}/auth/logout`, {
-      credentials: "include",
-    });
+	return async () => {
+		await fetch(`http://localhost:3001/auth/logout`, {
+			credentials: "include",
+		});
 
-    window.location.href = "/monitor";
-  };
+		window.location.href = "/monitor";
+	};
 }

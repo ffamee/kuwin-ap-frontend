@@ -52,10 +52,10 @@ const sections = [
 	},
 ];
 
-const report = {
-	title: "Report",
+const monitor = {
+	title: "Monitor",
 	icon: ClipboardList,
-	url: "/report",
+	url: "/monitor",
 };
 
 const Setting = {
@@ -112,6 +112,14 @@ export function AppSidebar({
 								</Link>
 							</SidebarMenuButton>
 						</SidebarMenuItem>
+						<SidebarMenuItem key={monitor.title}>
+							<SidebarMenuButton tooltip={monitor.title} asChild>
+								<Link href={monitor.url} className="flex items-center gap-2">
+									{monitor.icon && <monitor.icon />}
+									<span>{monitor.title}</span>
+								</Link>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
 						{sections.map((section) => (
 							<SidebarMenuItem key={section.title}>
 								<SidebarMenuButton tooltip={section.title} asChild>
@@ -122,14 +130,6 @@ export function AppSidebar({
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						))}
-						<SidebarMenuItem key={report.title}>
-							<SidebarMenuButton tooltip={report.title} asChild>
-								<Link href={report.url} className="flex items-center gap-2">
-									{report.icon && <report.icon />}
-									<span>{report.title}</span>
-								</Link>
-							</SidebarMenuButton>
-						</SidebarMenuItem>
 					</SidebarMenu>
 				</SidebarGroup>
 				<SidebarGroup>

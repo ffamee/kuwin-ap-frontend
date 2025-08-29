@@ -2,10 +2,11 @@ import React from "react";
 
 import { notFound } from "next/navigation";
 import EntityPage from "./entity-page";
+import fetcher from "@/lib/fetcher";
 
 async function getEntityOverview(section: string, entity: string) {
-  const res = await fetch(
-    `${process.env.BACKEND_URL}/entities/overview?sec=${section}&entity=${entity}`
+  const res = await fetcher(
+    `/entities/overview?sec=${section}&entity=${entity}`
   );
   if (res.status === 404) {
     return notFound();

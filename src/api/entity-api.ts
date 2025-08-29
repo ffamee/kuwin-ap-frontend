@@ -1,3 +1,4 @@
+import fetcher from "@/lib/fetcher";
 import { toast } from "sonner";
 
 // const param = new URLSearch
@@ -8,14 +9,12 @@ export async function AddEntity(entityData: {
   sectionId: number;
   description?: string;
 }) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/create`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(entityData),
-    }
-  );
+  const res = await fetcher(`/entities/create`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entityData),
+  });
+  console.log(entityData);
   const data = await res.json();
   if ("statusCode" in data) {
     toast.error(data.statusCode + ":" + data.error + ":" + data.message);
@@ -28,12 +27,9 @@ export async function AddEntity(entityData: {
 }
 
 export async function DeleteEntity(entityId: number, confirmMessage?: string) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/${entityId}/${confirmMessage}`,
-    {
-      method: "DELETE",
-    }
-  );
+  const res = await fetcher(`/entities/${entityId}/${confirmMessage}`, {
+    method: "DELETE",
+  });
   const data = await res.json();
   if ("statusCode" in data) {
     if (data.statusCode === 409) return data;
@@ -50,14 +46,11 @@ export async function EditEntity(
   entityData: { name: string; sectionId: number; description?: string },
   confirmMessage?: string
 ) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/entities/edit/${entityId}${confirmMessage}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(entityData),
-    }
-  );
+  const res = await fetcher(`/entities/edit/${entityId}${confirmMessage}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entityData),
+  });
   const data = await res.json();
   if ("statusCode" in data) {
     if (data.statusCode === 409) return data;

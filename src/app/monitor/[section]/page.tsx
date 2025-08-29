@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import SectionPage from "./section-page";
+import fetcher from "@/lib/fetcher";
 
 async function getSectionOverview(section: string) {
-  const res = await fetch(
-    `${process.env.BACKEND_URL}/section/overview?sec=${section}`
-  );
+  const res = await fetcher(`/section/overview?sec=${section}`);
+
   if (res.status === 404) {
     return notFound();
   }

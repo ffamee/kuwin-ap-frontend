@@ -1,3 +1,4 @@
+import fetcher from "@/lib/fetcher";
 import BuildingPage from "./building-page";
 import { notFound } from "next/navigation";
 
@@ -6,8 +7,8 @@ async function getBuildingOverview(
   entity: number,
   building: number
 ) {
-  const res = await fetch(
-    `${process.env.BACKEND_URL}/buildings/overview?sec=${section}&entity=${entity}&build=${building}`
+  const res = await fetcher(
+    `/buildings/overview?sec=${section}&entity=${entity}&build=${building}`
   );
   if (res.status === 404) {
     return notFound();

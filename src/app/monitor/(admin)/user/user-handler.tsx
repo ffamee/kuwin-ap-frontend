@@ -1,9 +1,10 @@
+import fetcher from "@/lib/fetcher";
 import { User } from "@/types/user-type";
 
 export async function AddUser(
   userData: Omit<User, "id"> & { password: string }
 ) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/add`, {
+  const res = await fetcher(`/users/add`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -23,14 +24,10 @@ export async function AddUser(
 export async function DeleteUser(id: string) {
   const confirmed = confirm("Are you sure to delete this user");
   if (!confirmed) return;
-  //console.log(`${process.env.BACKEND_URL}/users/delete/${id}`);
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/delete/${id}`,
-    {
-      method: "DELETE",
-      credentials: "include",
-    }
-  );
+  const res = await fetcher(`/users/delete/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
   if (res.status === 404) {
     alert("User not found");
     throw new Error("User not found");
@@ -42,17 +39,13 @@ export async function DeleteUser(id: string) {
   }
 }
 
-export async function EditUser(id: string, data: User) {
-  //console.log(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/edit/${id}`);
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/edit/${data.id}`,
-    {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    }
-  );
+export async function EditUser(data: User) {
+  const res = await fetcher(`/users/edit/${data.id}`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
   if (!res.ok) throw new Error("Fetched Error");
   if (res.status === 409) {
     alert("Username already exists");
@@ -65,7 +58,6 @@ export async function EditUser(id: string, data: User) {
     throw new Error("Failed to submit");
   } else {
     alert("Edit Success");
-    //console.log(res.status);
     return res.json();
   }
 }

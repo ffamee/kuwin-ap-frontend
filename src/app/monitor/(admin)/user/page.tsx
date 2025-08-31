@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import UserManageTable from "./admin-user-table";
+import fetcher from "@/lib/fetcher";
 
 async function GetUserData() {
-  const res = await fetch(`${process.env.BACKEND_URL}/users`);
+  const res = await fetcher("/users");
   if (res.status === 404) {
     return notFound();
   }

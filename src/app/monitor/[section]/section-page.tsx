@@ -18,7 +18,7 @@ export default function SectionPage({
   section,
   data,
 }: {
-  section: string;
+  section: number;
   data: SectionOverview & { entities: EntityOverview[] };
 }) {
   const sumData = {
@@ -68,7 +68,7 @@ export default function SectionPage({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Name" />
       ),
-      filterFn: (row, columnId, value) => {
+      filterFn: (row, _columnId, value) => {
         const rowData: string = row.getValue("name");
         return rowData.toLowerCase().includes(value.toLowerCase());
       },

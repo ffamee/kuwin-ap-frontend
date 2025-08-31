@@ -12,6 +12,7 @@ import Link from "next/link";
 import getToken from "@/lib/token";
 import { User as UserData } from "@/types/user-type";
 import SearchButton from "@/components/sidebar/search-button";
+import fetcher from "@/lib/fetcher";
 
 export default async function SectionLayout({
   children,
@@ -24,15 +25,12 @@ export default async function SectionLayout({
     const token = await getToken();
     const user: UserData = { id: "", username: "Guest" };
     if (token) {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/profile`,
-        {
-          credentials: "include",
-          headers: {
-            Cookie: `accessToken=${token}`,
-          },
-        }
-      );
+      const res = await fetcher(`/users/profile`, {
+        credentials: "include",
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+      });
       if (res.ok) {
         const data = await res.json();
         user.id = data.id;
@@ -43,7 +41,7 @@ export default async function SectionLayout({
     } else {
       console.log("No token found.");
     }
-    const entities = await fetch(`${process.env.BACKEND_URL}/entities`, {
+    const entities = await fetcher(`/entities`, {
       credentials: "include",
       next: { revalidate: 900 },
     }).then((res) => {

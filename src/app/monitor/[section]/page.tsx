@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import SectionPage from "./section-page";
 import fetcher from "@/lib/fetcher";
+import NotFound from "@/app/not-found";
 
-async function getSectionOverview(section: string) {
+async function getSectionOverview(section: number) {
   const res = await fetcher(`/section/overview?sec=${section}`);
 
   if (res.status === 404) {
@@ -20,8 +21,10 @@ export default async function Page({
   params: Promise<{ section: string }>;
 }) {
   const { section } = await params;
+  const sectionId = Number(section);
+  if (isNaN(sectionId) || sectionId <= 0) return NotFound();
 
-  const data = await getSectionOverview(section);
+  const data = await getSectionOverview(sectionId);
 
-  return <SectionPage section={section} data={data} />; // Pass the entities to SectionPage
+  return <SectionPage section={sectionId} data={data} />; // Pass the entities to SectionPage
 }

@@ -1,0 +1,23 @@
+services:
+
+  frontend:
+    container_name: kuwin-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app/src
+    networks:
+      - kuwin-network
+    restart: always
+
+networks:
+  kuwin-network:
+    external: true

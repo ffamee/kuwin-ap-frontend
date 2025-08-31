@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { useLogout } from "@/hooks/use-logout";
+import { useAuth } from "@/context/auth-context";
 
 // This is sample data.
 const home = {
@@ -71,14 +72,15 @@ const Logout = {
 };
 
 export function AppSidebar({
-	token,
+	// token,
 	...props
 }: {
-	token: string | undefined;
+	// token: string | undefined;
 	prop: React.ComponentProps<typeof Sidebar>;
 }) {
 	const { open } = useSidebar();
 	const logout = useLogout();
+	const { isLogin } = useAuth();
 
 	return (
 		<Sidebar collapsible="icon" {...props}>
@@ -151,7 +153,7 @@ export function AppSidebar({
 									<button
 										className="flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-100 cursor-pointer"
 										onClick={logout}
-										disabled={!token}
+										disabled={!isLogin}
 									>
 										{Logout.icon && <Logout.icon />}
 										<span>{Logout.title}</span>

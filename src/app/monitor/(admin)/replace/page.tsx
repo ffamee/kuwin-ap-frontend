@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import EditReplacement from "./replace-edit";
 import DisplayReplacement from "./replace-display";
-import Username from "./username";
+import Username from "@/components/user/username";
 
 export default function Page() {
 	return (

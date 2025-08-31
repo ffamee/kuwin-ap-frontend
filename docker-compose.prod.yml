@@ -1,0 +1,13 @@
+services:
+
+  frontend:
+    container_name: kuwin-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: always

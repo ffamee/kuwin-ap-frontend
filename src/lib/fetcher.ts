@@ -1,8 +1,12 @@
 import { redirect } from "next/navigation";
 
-const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+const baseUrl =
+	typeof window === "undefined"
+		? process.env.BACKEND_URL
+		: process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export default async function fetcher(url: string, options: RequestInit = {}) {
+	// console.log("fetch to ", `${baseUrl}${url}`);
 	const response = await fetch(`${baseUrl}${url}`, options);
 	if (response.status === 401) {
 		const refresh = await fetch(`${baseUrl}/auth/refresh`, {

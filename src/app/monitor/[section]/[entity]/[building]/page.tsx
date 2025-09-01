@@ -25,6 +25,19 @@ export default async function Page({
   params: Promise<{ section: number; entity: number; building: number }>;
 }) {
   const { section, entity, building } = await params;
+  const sectionId = Number(section),
+    entityId = Number(entity),
+    buildingId = Number(building);
+
+  if (
+    isNaN(sectionId) ||
+    isNaN(entityId) ||
+    isNaN(buildingId) ||
+    sectionId <= 0 ||
+    entityId <= 0 ||
+    buildingId <= 0
+  )
+    throw new Error("sectionId, entityId ,or buildingId is not a valid number");
 
   const data = await getBuildingOverview(section, entity, building);
 

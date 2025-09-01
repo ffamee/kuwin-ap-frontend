@@ -31,7 +31,26 @@ export default async function Page({
   }>;
 }) {
   const { section, entity, building, location } = await params;
-  //console.log(sectionId, entityId, buildingId, locationId);
+
+  const sectionId = Number(section),
+    entityId = Number(entity),
+    buildingId = Number(building),
+    locationId = Number(location);
+
+  if (
+    isNaN(sectionId) ||
+    isNaN(entityId) ||
+    isNaN(buildingId) ||
+    isNaN(locationId) ||
+    sectionId <= 0 ||
+    entityId <= 0 ||
+    buildingId <= 0 ||
+    locationId <= 0
+  )
+    throw new Error(
+      "sectionId, entityId , buildingId, or locationId is not a valid number"
+    );
+
   const data = await getConfigurationDetail(
     section,
     entity,

@@ -23,6 +23,12 @@ export default async function Page({
   params: Promise<{ section: string; entity: string }>;
 }) {
   const { section, entity } = await params;
+  const sectionId = Number(section),
+    entityId = Number(entity);
+
+  if (isNaN(sectionId) || isNaN(entityId) || sectionId <= 0 || entityId <= 0)
+    throw new Error("sectionId ,or entityId is not a valid number");
+
   const data = await getEntityOverview(section, entity);
 
   return <EntityPage data={data} section={section} entity={entity} />;

@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import SectionPage from "./section-page";
 import fetcher from "@/lib/fetcher";
-import NotFound from "@/app/not-found";
 
 async function getSectionOverview(section: number) {
   const res = await fetcher(`/section/overview?sec=${section}`);
@@ -22,7 +21,8 @@ export default async function Page({
 }) {
   const { section } = await params;
   const sectionId = Number(section);
-  if (isNaN(sectionId) || sectionId <= 0) return NotFound();
+  if (isNaN(sectionId) || sectionId <= 0)
+    throw new Error("sectionId is not a valid number");
 
   const data = await getSectionOverview(sectionId);
 

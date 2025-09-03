@@ -28,6 +28,7 @@ import { DeleteConfig } from "@/api/config-api";
 import DeleteComfirm from "@/components/modal/confirmdelete";
 import ConfigEdit from "@/components/modal/config-edit";
 import { useAuth } from "@/context/auth-context";
+import fetcher from "@/lib/fetcher";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -74,15 +75,55 @@ export default function BuildingPage({
   const [modalAddingOpen, setModalAddingOpen] = useState(false);
   const [modalBuildingEditOpen, setModalBuildingEditOpen] = useState(false);
   const [modalConfigEditOpen, setModalConfigEditOpen] = useState(false);
+  const [sumData, setSumData] = useState({
+    totalAP: data.configCount,
+    totalAPMaintain: data.maCount,
+    totalAPDown: data.downCount,
+    totalUser:
+      Number(data.c24Count) + Number(data.c5Count) + Number(data.c6Count),
+  });
+
+  const fetchSumData = async () => {
+    try {
+      const res = await fetcher(
+        `/buildings/count/?sec=${sectionId}&entity=${entityId}&build=${buildingId}`,
+        {
+          credentials: "include",
+        }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setSumData({
+          totalAP: data.configCount,
+          totalAPMaintain: data.maCount,
+          totalAPDown: data.downCount,
+          totalUser:
+            Number(data.c24Count) + Number(data.c5Count) + Number(data.c6Count),
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching Buildings' count", error);
+    } finally {
+      console.log("get SumData Done");
+    }
+  };
+
+  const handleSumData = () => {
+    fetchSumData();
+    console.log(sumData);
+  };
+
   const handleAddConfig = (
     config: ConfigOverview & { accesspoint: Accesspoint }
   ) => {
     setConfigs((prev) => [config, ...prev]);
+    handleSumData();
   };
 
   //const [deleteId, setDeleteId] = useState<number | null>(null);
   const handleDeleteConfig = (configId: number) => {
     setConfigs((prev) => prev.filter((config) => config.id !== configId));
+    handleSumData();
   };
 
   const [editConfigData, setEditConfigData] = useState({
@@ -248,7 +289,7 @@ export default function BuildingPage({
             <DeleteComfirm
               onConfirm={() => {
                 handleDeleteConfig(row.original.id);
-                DeleteConfig(row.original.id);
+                DeleteConfig(row.original.id, "");
               }}
             />
           </div>
@@ -265,29 +306,27 @@ export default function BuildingPage({
       <div className="grid grid-cols-4 gap-4">
         <SummaryCard
           title="Total Access Points"
-          data={data.configCount}
+          data={sumData.totalAP}
           Icon={Wifi}
           color="text-green-500"
           description="some description"
         />
         <SummaryCard
           title="Maintain Access Points"
-          data={data.maCount}
+          data={sumData.totalAPMaintain}
           Icon={CircleAlert}
           color="text-yellow-400"
           description="some description"
         />
         <SummaryCard
           title="Down Access Points"
-          data={data.downCount}
+          data={sumData.totalAPDown}
           Icon={WifiOff}
           color="text-red-500"
         />
         <SummaryCard
           title="Total Users"
-          data={
-            Number(data.c24Count) + Number(data.c5Count) + Number(data.c6Count)
-          }
+          data={sumData.totalUser}
           Icon={Users}
           description="some description"
         />

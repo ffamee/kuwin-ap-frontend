@@ -30,6 +30,7 @@ import ConfigEdit from "@/components/modal/config-edit";
 import { useAuth } from "@/context/auth-context";
 import fetcher from "@/lib/fetcher";
 import BuildingCard from "./building-card";
+import Inactive from "./locationInactive";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -398,27 +399,13 @@ export default function BuildingPage({
                   </div>
                 )}
               </TabsContent>
-              {/* <TabsContent value="location">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Access Points</CardTitle>
-                    <CardDescription>
-                      Overview of all access points in this building.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-4">
-                      {data.configurations?.map((config) => (
-                        <ApOverviewCard
-                          key={config.id}
-                          buildingId={buildingId}
-                          ap={config}
-                        />
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent> */}
+              <TabsContent value="location">
+                <Inactive
+                  sectionId={sectionId}
+                  entityId={entityId}
+                  buildingId={buildingId}
+                />
+              </TabsContent>
             </div>
           )}
         </div>

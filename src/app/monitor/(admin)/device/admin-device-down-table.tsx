@@ -23,7 +23,7 @@ export default function AdminDownDeviceTable() {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Name" />
       ),
-      filterFn: (row, columnId, value) => {
+      filterFn: (row, _columnId, value) => {
         const rowData: string = row.getValue("name");
         if (!row.original.name) return false;
         return rowData.toLowerCase().includes(value.toLowerCase());

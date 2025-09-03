@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
+import { useAuth } from "@/context/auth-context";
 
 import { SectionTable } from "@/components/table/section-table";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -11,11 +11,12 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
+import EntityAdding from "@/components/modal/entity-adding";
 
 import { EntityOverview } from "@/types/entity-type";
-import { ColumnDef } from "@tanstack/react-table";
-import EntityAdding from "@/components/modal/entity-adding";
 import { Section } from "@/types/section-type";
+
+import { ColumnDef } from "@tanstack/react-table";
 import SectionChart from "./section-chart";
 
 export default function SectionTab({
@@ -32,6 +33,7 @@ export default function SectionTab({
   const [tab, setTab] = useState<string>("list");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const { isLogin } = useAuth();
 
   const handleChange = (value: string) => {
     setIsLoading(true);
@@ -62,19 +64,21 @@ export default function SectionTab({
           </TabsTrigger>
         </TabsList>
         <div className="flex gap-1">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setModalOpen(true);
-                }}
-              >
-                Add
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>add new entity</TooltipContent>
-          </Tooltip>
+          {isLogin && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setModalOpen(true);
+                  }}
+                >
+                  Add
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>add new entity</TooltipContent>
+            </Tooltip>
+          )}
         </div>
       </div>
       <EntityAdding

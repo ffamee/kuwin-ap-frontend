@@ -13,6 +13,7 @@ import Link from "next/link";
 import { DeleteEntity } from "@/api/entity-api";
 import { useState } from "react";
 import Confirmation from "@/components/modal/confirmation";
+import { useAuth } from "@/context/auth-context";
 
 export default function SectionPage({
   section,
@@ -29,6 +30,7 @@ export default function SectionPage({
       Number(data.c24Count) + Number(data.c5Count) + Number(data.c6Count),
   };
   const [entities, setEntities] = useState(data.entities);
+  const { isLogin } = useAuth();
 
   // function about adding entity part
   const handleAddEntity = (entity: EntityOverview) => {
@@ -145,10 +147,12 @@ export default function SectionPage({
     },
     {
       id: "action",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Action" />
-      ),
+      header: ({ column }) =>
+        isLogin ? (
+          <DataTableColumnHeader column={column} title="Action" />
+        ) : null,
       cell: ({ row }) => {
+        if (!isLogin) return;
         return (
           <div className="flex item-center-safe justify-evenly">
             <div>

@@ -27,6 +27,7 @@ import { ConfigOverview, StatusState, Accesspoint } from "@/types/config-type";
 import { DeleteConfig } from "@/api/config-api";
 import DeleteComfirm from "@/components/modal/confirmdelete";
 import ConfigEdit from "@/components/modal/config-edit";
+import { useAuth } from "@/context/auth-context";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -60,6 +61,7 @@ export default function BuildingPage({
   const [tab, setTab] = useState<string>("list");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [configs, setConfigs] = useState(data.configurations);
+  const { isLogin } = useAuth();
   const handleChange = (value: string) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -119,7 +121,7 @@ export default function BuildingPage({
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Name" />
       ),
-      filterFn: (row, columnId, value) => {
+      filterFn: (row, _columnId, value) => {
         const rowData: string = row.original.location.name ?? "-";
         return rowData.toLowerCase().includes(value.toLowerCase());
       },
@@ -220,10 +222,12 @@ export default function BuildingPage({
 
     {
       id: "action",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Action" />
-      ),
+      header: ({ column }) =>
+        isLogin ? (
+          <DataTableColumnHeader column={column} title="Action" />
+        ) : null,
       cell: ({ row }) => {
+        if (!isLogin) return;
         return (
           <div className="flex item-center-safe justify-evenly">
             <span>
@@ -305,30 +309,32 @@ export default function BuildingPage({
               Location {data.inactive !== 0 && <div>({data.inactive})</div>}
             </TabsTrigger>
           </TabsList>
-          <div className="flex gap-1">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  onClick={() => setModalAddingOpen(true)}
-                >
-                  Add
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Add new access point</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  onClick={() => setModalBuildingEditOpen(true)}
-                >
-                  Edit
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Edit this Building details</TooltipContent>
-            </Tooltip>
-          </div>
+          {isLogin && (
+            <div className="flex gap-1">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    onClick={() => setModalAddingOpen(true)}
+                  >
+                    Add
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Add new access point</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    onClick={() => setModalBuildingEditOpen(true)}
+                  >
+                    Edit
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Edit this Building details</TooltipContent>
+              </Tooltip>
+            </div>
+          )}
         </div>
         <ConfigAdding
           modalOpen={modalAddingOpen}

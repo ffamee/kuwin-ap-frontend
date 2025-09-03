@@ -17,18 +17,22 @@ import BuildingAdding from "@/components/modal/building-adding";
 import EntityEdit from "@/components/modal/entity-edit";
 import { EntityOverview } from "@/types/entity-type";
 import { ConfigOverview } from "@/types/config-type";
+import { useAuth } from "@/context/auth-context";
 
 export default function EntityTab({
   data,
   section,
   entity,
+  onSumDataUpdated,
 }: {
   data: BuildingOverview[];
   section: { sectionId: number; sectionName: string };
   entity: { entityId: number; entityName: string };
+  onSumDataUpdated: () => void;
 }) {
   const [tab, setTab] = useState("list");
   const [isLoading, setIsLoading] = useState(false);
+  const { isLogin } = useAuth();
 
   const [buildings, setBuildings] = useState(data);
 
@@ -46,13 +50,13 @@ export default function EntityTab({
   const [modalEditOpen, setModalEditOpen] = useState(false);
 
   const handleAddBuilding = (building: BuildingOverview) => {
-    console.log(building);
     setBuildings((prev) => [building, ...prev]);
   };
   const handleDeleteBuilding = (buildingId: number) => {
     setBuildings((prev) =>
       prev.filter((building) => building.id !== buildingId)
     );
+    onSumDataUpdated();
   };
   const handleEditEntity = (updatedEntity: EntityOverview) => {
     console.log(updatedEntity);
@@ -60,15 +64,16 @@ export default function EntityTab({
 
   const handleAddConfig = (config: ConfigOverview, buildingId: number) => {
     setBuildings((prev) =>
-      prev.map((building) =>
+      prev?.map((building) =>
         buildingId === building.id
           ? {
               ...building,
-              configurations: [config, ...building.configurations],
+              configurations: [config, ...building?.configurations],
             }
           : building
       )
     );
+    onSumDataUpdated();
   };
 
   const handleDeleteConfig = (configId: number) => {
@@ -80,6 +85,7 @@ export default function EntityTab({
         ),
       }))
     );
+    onSumDataUpdated();
     //setConfigs((prev) => prev.filter((config) => config.id !== configId));
   };
 
@@ -113,29 +119,34 @@ export default function EntityTab({
             Overview
           </TabsTrigger>
         </TabsList>
-        <div className="flex gap-1">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                onClick={() => setModalAddingOpen(true)}
-              >
-                Add
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>add new building</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" onClick={() => setModalEditOpen(true)}>
-                Edit
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              edit this {section.sectionName} details
-            </TooltipContent>
-          </Tooltip>
-        </div>
+        {isLogin && (
+          <div className="flex gap-1">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  onClick={() => setModalAddingOpen(true)}
+                >
+                  Add
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>add new building</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  onClick={() => setModalEditOpen(true)}
+                >
+                  Edit
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                edit this {section.sectionName} details
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        )}
       </div>
       <BuildingAdding
         modalOpen={modalAddingOpen}

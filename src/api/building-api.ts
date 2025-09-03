@@ -23,8 +23,11 @@ export async function AddBuilding(buildingData: {
   }
 }
 
-export async function DeleteBuilding(buildingId: number) {
-  const res = await fetcher(`/buildings/${buildingId}`, {
+export async function DeleteBuilding(
+  buildingId: number,
+  confirmMessage: string
+) {
+  const res = await fetcher(`/buildings/${buildingId}${confirmMessage}`, {
     method: "DELETE",
   });
   console.log(res.status);
@@ -45,7 +48,7 @@ export async function EditBuilding(
   confirmMessage?: string
 ) {
   console.log(buildingData);
-  const res = await fetcher(`/buildings/edit/${buildingId}`, {
+  const res = await fetcher(`/buildings/edit/${buildingId}${confirmMessage}`, {
     method: "POST",
     // credentials: "include",
     headers: { "Content-Type": "application/json" },

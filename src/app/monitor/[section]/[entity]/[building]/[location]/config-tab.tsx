@@ -9,11 +9,13 @@ import { ExInteractiveChart } from "@/components/chart/example-interactive-chart
 import ConfigDetail from "./config-detail";
 import ConfigEdit from "@/components/modal/config-edit";
 import { ConfigOverview } from "@/types/config-type";
+import { useAuth } from "@/context/auth-context";
 
 export default function ConfigTab({ data }: { data: ConfigOverview }) {
   const [tab, setTab] = useState<string>("detail");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [modalEditOpen, setModalEditOpen] = useState(false);
+  const { isLogin } = useAuth();
 
   const isConfigInactive = false;
 
@@ -39,25 +41,22 @@ export default function ConfigTab({ data }: { data: ConfigOverview }) {
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
-        <div className="flex gap-1">
-          <Button variant="outline" onClick={() => setModalEditOpen(true)}>
-            Edit
-          </Button>
-          <Button variant="outline">Delete</Button>
-        </div>
+        {isLogin && (
+          <div className="flex gap-1">
+            <Button variant="outline" onClick={() => setModalEditOpen(true)}>
+              Edit
+            </Button>
+            <Button variant="outline">Delete</Button>
+          </div>
+        )}
       </div>
       <ConfigEdit
         modalOpen={modalEditOpen}
         onClose={() => setModalEditOpen(false)}
         basicDetails={{
-          entity: "",
           building: data.location.building.name,
           buildingId: data.location.building.id,
-          model: data.accesspoint?.model ?? "",
-          serialNumber: data.accesspoint?.serial ?? "",
-          ethMac: data.accesspoint?.ethMac ?? "",
           ip: data.ip.ip,
-          location: data.location.name,
         }}
       />
       <div>

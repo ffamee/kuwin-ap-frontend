@@ -24,6 +24,7 @@ import { ConfigOverview, StatusState } from "@/types/config-type";
 import { DeleteConfig } from "@/api/config-api";
 import Confirmation from "../modal/confirmation";
 import ConfigEdit from "../modal/config-edit";
+import { useAuth } from "@/context/auth-context";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -62,6 +63,7 @@ export function BuildingCard({
   const [modalOpen, setModalOpen] = useState(false);
   const [modalConfigEditOpen, setModalConfigEditOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
+  const { isLogin } = useAuth();
 
   // Delete Building Part
   const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -92,7 +94,7 @@ export function BuildingCard({
     ip: "",
   });
 
-  console.log(building);
+  // console.log(building);
 
   return (
     <Card key={building.id} className="w-full">
@@ -106,28 +108,32 @@ export function BuildingCard({
             <div className="rounded-2xl bg-muted min-w-16 p-2">
               {configurations.length} APs
             </div>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => {
-                setModalOpen(true);
-              }}
-              className="cursor-pointer"
-            >
-              Add AP
-            </Button>
+            {isLogin && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  setModalOpen(true);
+                }}
+                className="cursor-pointer"
+              >
+                Add AP
+              </Button>
+            )}
             <Link href={`./${entityId}/${building.id}`}>
               <Button size="sm" variant="outline" className="cursor-pointer">
                 Full Details
               </Button>
             </Link>
-            <DeleteComfirm
-              onConfirm={() => {
-                setDeleteId(building.id);
-                handleDeleteBuilding(building.id);
-              }}
-              trigger={<Button className="cursor-pointer">Delete</Button>}
-            />
+            {isLogin && (
+              <DeleteComfirm
+                onConfirm={() => {
+                  setDeleteId(building.id);
+                  handleDeleteBuilding(building.id);
+                }}
+                trigger={<Button className="cursor-pointer">Delete</Button>}
+              />
+            )}
 
             <ApAdding
               modalOpen={modalOpen}
@@ -180,21 +186,25 @@ export function BuildingCard({
           <CollapsibleContent className="transition-[max-height] duration-300 ease-in-out">
             <Separator className="my-4" />
             <div className="w-full flex flex-col">
-              <div className="grid grid-cols-8 font-medium mb-2">
+              <div className="grid grid-cols-10 font-medium mb-2">
                 <div className="flex items-center-safe indent-2">Id</div>
+                <div className="col-span-2 flex items-center-safe">AP Name</div>
                 <div className="flex items-center-safe justify-center-safe">
                   Status
                 </div>
                 <div className="col-span-3 flex items-center-safe">
                   Location
                 </div>
+
                 <div className="items-center-safe">IP Address</div>
                 <div className="flex items-center-safe justify-center-safe">
                   Client
                 </div>
-                <div className="flex items-center-safe justify-center-safe">
-                  Action
-                </div>
+                {isLogin && (
+                  <div className="flex items-center-safe justify-center-safe">
+                    Action
+                  </div>
+                )}
               </div>
               <Separator className="mb-2" />
               {configurations.length ? (
@@ -202,13 +212,20 @@ export function BuildingCard({
                   {configurations.map((config) => (
                     <div
                       key={config.location.name}
-                      className="grid grid-cols-8 mb-2 space-x-2 hover:bg-muted rounded-lg"
+                      className="grid grid-cols-10 mb-2 space-x-2 hover:bg-muted rounded-lg"
                     >
                       <div
                         className="flex items-center-safe whitespace-normal break-words indent-2"
                         title={config.id.toString()}
                       >
                         {config.location.id ?? "-"}
+                      </div>
+                      <div className="col-span-2 flex items-center-safe">
+                        <Link
+                          href={`./${entityId}/${building.id}/${config.location.id}`}
+                        >
+                          {config.accesspoint?.name ?? "-"}
+                        </Link>
                       </div>
 
                       <div
@@ -226,6 +243,7 @@ export function BuildingCard({
                       <div className="col-span-3 flex items-center-safe">
                         {config.location.name}
                       </div>
+
                       <div className="flex items-center-safe">
                         {config.ip.ip ?? "-"}
                       </div>
@@ -235,55 +253,57 @@ export function BuildingCard({
                           Number(config.client6 ?? 0)}
                         <Users size={16} className="mx-2" />
                       </div>
-                      <div className="flex items-center-safe justify-evenly">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="cursor-pointer">
-                              <SquarePen
-                                size={16}
-                                onClick={() => {
-                                  setEditConfigData({
-                                    building: building.name,
-                                    buildingId: building.id,
-                                    ip: config.ip.ip,
-                                  });
-                                  setModalConfigEditOpen(true);
-                                }}
-                              />
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            Edit Access Point
-                          </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link
-                              href={`./${entityId}/${building.id}/${config.location.id}`}
-                            >
+                      {isLogin && (
+                        <div className="flex items-center-safe justify-evenly">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
                               <span className="cursor-pointer">
-                                <ClipboardList size={16} />
+                                <SquarePen
+                                  size={16}
+                                  onClick={() => {
+                                    setEditConfigData({
+                                      building: building.name,
+                                      buildingId: building.id,
+                                      ip: config.ip.ip,
+                                    });
+                                    setModalConfigEditOpen(true);
+                                  }}
+                                />
                               </span>
-                            </Link>
-                          </TooltipTrigger>
-                          <TooltipContent side="top">
-                            Access Point Detail
-                          </TooltipContent>
-                        </Tooltip>
-                        <ConfigEdit
-                          modalOpen={modalConfigEditOpen}
-                          onClose={() => setModalConfigEditOpen(false)}
-                          basicDetails={editConfigData}
-                        />
-                        <DeleteComfirm
-                          onConfirm={() => {
-                            //handleDeleteConfig(config.id);
-                            DeleteConfig(config.id);
-                            onConfigDeleted(config.id);
-                          }}
-                          tooltip="Delete This Config"
-                        />
-                      </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                              Edit Access Point
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Link
+                                href={`./${entityId}/${building.id}/${config.location.id}`}
+                              >
+                                <span className="cursor-pointer">
+                                  <ClipboardList size={16} />
+                                </span>
+                              </Link>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                              Access Point Detail
+                            </TooltipContent>
+                          </Tooltip>
+                          <ConfigEdit
+                            modalOpen={modalConfigEditOpen}
+                            onClose={() => setModalConfigEditOpen(false)}
+                            basicDetails={editConfigData}
+                          />
+                          <DeleteComfirm
+                            onConfirm={() => {
+                              //handleDeleteConfig(config.id);
+                              DeleteConfig(config.id, "");
+                              onConfigDeleted(config.id);
+                            }}
+                            tooltip="Delete This Config"
+                          />
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

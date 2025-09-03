@@ -8,9 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
 import { BuildingOverview } from "@/types/building-type";
-import { CircleAlert, SquarePen, Users, Wifi, WifiOff } from "lucide-react";
+import { SquarePen } from "lucide-react";
 import * as React from "react";
-import SummaryCard from "@/components/card/summary-card";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { BuildingTable } from "@/components/table/building-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-header";
@@ -29,6 +29,7 @@ import DeleteComfirm from "@/components/modal/confirmdelete";
 import ConfigEdit from "@/components/modal/config-edit";
 import { useAuth } from "@/context/auth-context";
 import fetcher from "@/lib/fetcher";
+import BuildingCard from "./building-card";
 
 const colorsMap: Record<StatusState, string> = {
   UP: "bg-green-500",
@@ -303,34 +304,7 @@ export default function BuildingPage({
       <div className="text-left font-bold capitalize text-6xl my-4">
         {data.name}
       </div>
-      <div className="grid grid-cols-4 gap-4">
-        <SummaryCard
-          title="Total Access Points"
-          data={sumData.totalAP}
-          Icon={Wifi}
-          color="text-green-500"
-          description="some description"
-        />
-        <SummaryCard
-          title="Maintain Access Points"
-          data={sumData.totalAPMaintain}
-          Icon={CircleAlert}
-          color="text-yellow-400"
-          description="some description"
-        />
-        <SummaryCard
-          title="Down Access Points"
-          data={sumData.totalAPDown}
-          Icon={WifiOff}
-          color="text-red-500"
-        />
-        <SummaryCard
-          title="Total Users"
-          data={sumData.totalUser}
-          Icon={Users}
-          description="some description"
-        />
-      </div>
+      <BuildingCard sumData={sumData} />
       <Tabs value={tab} onValueChange={handleChange} className="w-full">
         <div className="flex justify-between">
           <TabsList className="grid w-fit h-fit grid-cols-3 border mb-2">

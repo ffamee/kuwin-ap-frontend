@@ -20,6 +20,9 @@ export default function Page() {
 						<div>
 							<Link href="#display">Report</Link>
 						</div>
+						<div>
+							<Link href="./replace/full-detail">Full Detail</Link>
+						</div>
 						<div className="border-2">
 							<Username />
 						</div>

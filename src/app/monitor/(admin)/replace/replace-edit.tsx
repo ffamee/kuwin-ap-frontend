@@ -18,11 +18,12 @@ import Image from "next/image";
 import Form from "next/form";
 import * as React from "react";
 import ReplaceEditAction from "@/lib/actions/replace-edit-action";
-import fetcher from "@/lib/fetcher";
+// import fetcher from "@/lib/fetcher";
 import { toast } from "sonner";
 import { formatDate } from "@/components/date-picker/format-date";
-import { Lifecycle, ReplaceActionState } from "@/types/replace-type";
+import { ReplaceActionState } from "@/types/replace-type";
 import { useSearchParams } from "next/navigation";
+import { useLifecycle } from "@/context/model-group-context";
 
 const initialState: ReplaceActionState = {
 	errors: {
@@ -35,7 +36,8 @@ const initialState: ReplaceActionState = {
 
 export default function EditReplacement() {
 	const searchParams = useSearchParams();
-	const [groups, setGroups] = React.useState<Lifecycle[]>([]);
+	// const [groups, setGroups] = React.useState<Lifecycle[]>([]);
+	const { groups, setGroups } = useLifecycle();
 	const [selected, setSelected] = React.useState<number | null>(null);
 	const fileRef = React.useRef<{
 		getFile: () => File | null;
@@ -52,28 +54,41 @@ export default function EditReplacement() {
 		}
 	}, [searchParams, groups]);
 
+	// React.useEffect(() => {
+	// 	// Fetch lifecycle data from an API or other source
+	// 	const fetchData = async () => {
+	// 		const res = await fetcher("/lifecycles", { credentials: "include" });
+	// 		if (res.ok) {
+	// 			const data: Lifecycle[] = await res.json();
+	// 			// sort the groups with eol or eos equal null first
+	// 			data.sort((a, b) => {
+	// 				if (!a.eol && !a.eos && !b.eol && !b.eos) return a.id - b.id;
+	// 				if (!a.eol && !a.eos) return -1;
+	// 				if (!b.eol && !b.eos) return 1;
+	// 				if ((!a.eol || !a.eos) && (!b.eol || !b.eos)) return a.id - b.id;
+	// 				if (!a.eol || !a.eos) return -1;
+	// 				if (!b.eol || !b.eos) return 1;
+	// 				return a.id - b.id;
+	// 			});
+	// 			setGroups(data);
+	// 			console.log("Lifecycle data fetched:", data);
+	// 		} else throw new Error("Failed to fetch lifecycles");
+	// 	};
+	// 	fetchData();
+	// }, []);
 	React.useEffect(() => {
-		// Fetch lifecycle data from an API or other source
-		const fetchData = async () => {
-			const res = await fetcher("/lifecycles", { credentials: "include" });
-			if (res.ok) {
-				const data: Lifecycle[] = await res.json();
-				// sort the groups with eol or eos equal null first
-				data.sort((a, b) => {
-					if (!a.eol && !a.eos && !b.eol && !b.eos) return a.id - b.id;
-					if (!a.eol && !a.eos) return -1;
-					if (!b.eol && !b.eos) return 1;
-					if ((!a.eol || !a.eos) && (!b.eol || !b.eos)) return a.id - b.id;
-					if (!a.eol || !a.eos) return -1;
-					if (!b.eol || !b.eos) return 1;
-					return a.id - b.id;
-				});
-				setGroups(data);
-				console.log("Lifecycle data fetched:", data);
-			} else throw new Error("Failed to fetch lifecycles");
-		};
-		fetchData();
-	}, []);
+		setGroups((prev) =>
+			prev.sort((a, b) => {
+				if (!a.eol && !a.eos && !b.eol && !b.eos) return a.id - b.id;
+				if (!a.eol && !a.eos) return -1;
+				if (!b.eol && !b.eos) return 1;
+				if ((!a.eol || !a.eos) && (!b.eol || !b.eos)) return a.id - b.id;
+				if (!a.eol || !a.eos) return -1;
+				if (!b.eol || !b.eos) return 1;
+				return a.id - b.id;
+			})
+		);
+	}, [setGroups]);
 
 	// extend formAction to append file into formData
 	// const actionWithBoundData = ReplaceEditAction.bind(
@@ -107,7 +122,7 @@ export default function EditReplacement() {
 			);
 		if (state.success) toast.success(state.message);
 		else if (!!state.message) toast.error(state.message);
-	}, [state]);
+	}, [state, setGroups]);
 
 	const updateDiff = (date: Date) => {
 		const now = moment();
